@@ -1,0 +1,72 @@
+:root { color-scheme: light; font-family: ui-rounded, 'Segoe UI', system-ui, sans-serif; color: #3a302a; background: #eee8e2; font-synthesis: none; }
+body { margin: 0; }
+.commercialization, .commercialization * { box-sizing: border-box; }
+.commercialization { --muted: #84766e; --orange: #ff8757; width: 100%; max-width: 460px; margin: 24px auto; background: #faf3eb; border-radius: 32px; box-shadow: 0 20px 70px #54443514; overflow: clip; }
+.commercialization button { font: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.commercialization button:focus-visible { outline: 3px solid #8e78dc; outline-offset: 4px; }
+.commercialization button:disabled { cursor: default; }
+.commercialization [hidden] { display: none !important; }
+.commercialization .topbar { display: flex; align-items: center; gap: 12px; padding: 24px 24px 0; }
+.commercialization .brand { display: flex; align-items: center; gap: 7px; flex: 1; font-size: 19px; font-weight: 650; letter-spacing: -.5px; }
+.commercialization .brand svg { width: 22px; color: #ff8757; }
+.commercialization .brand b { color: #8f79d9; font-weight: 650; }
+.commercialization .icon-button { width: 36px; height: 36px; padding: 0; display: grid; place-items: center; background: #fff; border: 0; border-radius: 50%; color: #5a4d43; font-size: 21px; flex-shrink: 0; }
+.commercialization .page-content { padding: 0 24px; }
+.commercialization .hero { padding-top: 28px; text-align: center; }
+.commercialization .eyebrow { color: #9278de; background: #eee5ff; border-radius: 30px; display: inline-block; font-size: 10px; font-weight: 750; letter-spacing: 1.4px; padding: 8px 12px; }
+.commercialization h1 { font-size: 34px; line-height: 1.13; margin: 14px 0 10px; font-weight: 750; letter-spacing: -1.3px; }
+.commercialization .hero p { font-size: 13px; color: var(--muted); margin: 0; }
+.commercialization .pet-scene { width: 200px; height: 150px; position: relative; margin: 7px auto 8px; }
+.commercialization .pet { position: absolute; left: 43px; top: 17px; width: 114px; height: 116px; border-radius: 49% 49% 43% 43%; background: radial-gradient(ellipse at 40% 30%, #fffaf0, #f7e5c9); box-shadow: inset -5px -6px 12px #d3b48d23, 0 6px 12px #b59c8230; z-index: 2; }
+.commercialization .ear { position: absolute; width: 30px; height: 33px; top: -2px; border-radius: 50%; background: #fff0d8; z-index: -1; }
+.commercialization .ear.left { left: 6px; transform: rotate(-25deg); }
+.commercialization .ear.right { right: 6px; transform: rotate(25deg); }
+.commercialization .face { display: flex; align-items: center; justify-content: center; gap: 17px; position: absolute; top: 36px; width: 100%; }
+.commercialization .face i { background: #584232; width: 7px; height: 9px; border-radius: 50%; }
+.commercialization .face span { font-size: 22px; line-height: 20px; }
+.commercialization .cheek { position: absolute; top: 56px; background: #f6c4a6; width: 16px; height: 10px; border-radius: 50%; opacity: .8; }
+.commercialization .c1 { left: 16px; } .commercialization .c2 { right: 16px; }
+.commercialization .scarf { position: absolute; width: 110px; height: 21px; top: 76px; left: 2px; background: #c9b6ed; border-radius: 12px; transform: rotate(-4deg); box-shadow: inset 0 -5px 0 #baa3e24d; }
+.commercialization .scarf:after { content: ''; position: absolute; width: 22px; height: 32px; background: #c9b6ed; right: 14px; top: 12px; border-radius: 0 0 5px 5px; transform: rotate(-13deg); }
+.commercialization .cushion { position: absolute; width: 148px; height: 32px; background: #e2d5f6; border-radius: 50%; bottom: 3px; left: 26px; box-shadow: 0 6px 10px #cab8a524; }
+.commercialization .spark { position: absolute; color: #b59adb; font-size: 28px; } .commercialization .s1 { left: 13px; top: 43px; } .commercialization .s2 { right: 17px; top: 17px; font-size: 22px; }
+.commercialization .plan-card { padding: 20px; border: 1.5px solid var(--orange); border-radius: 23px; background: #fffdfb; box-shadow: 0 5px 16px #a1846610; }
+.commercialization .plan-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.commercialization h2 { font-size: 17px; margin: 0; letter-spacing: -.4px; }
+.commercialization .plus-tag { color: #8c72d5; background: #eee5ff; border-radius: 9px; padding: 5px 9px; font-size: 10px; font-weight: 750; letter-spacing: .7px; }
+.commercialization .price { font-size: 47px; font-weight: 750; letter-spacing: -2px; margin: 7px 0 0; }
+.commercialization .price span { font-size: 13px; font-weight: 400; color: var(--muted); letter-spacing: 0; }
+.commercialization .plan-card p { font-size: 12px; color: var(--muted); margin: 4px 0 0; line-height: 1.6; }
+.commercialization .demo-note { display: inline-block; margin-top: 11px; font-size: 10px; font-weight: 600; color: #8b6651; background: #fff0e4; padding: 5px 8px; border-radius: 7px; }
+.commercialization .plan-card .membership-status { color: #416d59; margin-top: 10px; }
+.commercialization .text-button { border: 0; background: none; color: #7854ad; text-decoration: underline; font-size: 12px; padding: 10px 0; min-height: 44px; }
+.commercialization .benefits { margin-top: 25px; }
+.commercialization .benefit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; margin-top: 13px; }
+.commercialization .benefit-card { background: #fffdfb; padding: 15px; border-radius: 19px; }
+.commercialization .benefit-icon { display: grid; place-items: center; width: 35px; height: 35px; border-radius: 12px; margin-bottom: 10px; }
+.commercialization .benefit-icon svg { width: 22px; height: 22px; }
+.commercialization .peach { background: #ffe8da; color: #d68560; } .commercialization .lavender { background: #ede5fa; color: #9377c3; } .commercialization .mint { background: #e4f2e9; color: #6f9f89; } .commercialization .butter { background: #fcf0d8; color: #bda265; }
+.commercialization h3 { font-size: 13px; line-height: 1.35; margin: 0 0 5px; font-weight: 650; }
+.commercialization .benefit-card p { font-size: 11px; line-height: 1.5; color: var(--muted); margin: 0; }
+.commercialization .reassurance { display: flex; align-items: center; gap: 12px; padding: 15px 12px; border: 1px solid #cfe6d9; border-radius: 17px; background: #f1f6ee; margin-top: 17px; }
+.commercialization .reassurance svg { width: 27px; height: 27px; flex-shrink: 0; color: #87b49b; }
+.commercialization .reassurance strong { font-size: 12px; font-weight: 650; }
+.commercialization .reassurance p { color: var(--muted); font-size: 11px; margin: 4px 0 0; }
+.commercialization .feedback { font-size: 12px; line-height: 1.6; color: #506f60; margin: 12px 0; }
+.commercialization .feedback:empty { margin: 16px 0 0; }
+.commercialization .purchase-panel { position: sticky; bottom: 0; background: #fffdf9f5; backdrop-filter: blur(12px); border-radius: 23px 23px 0 0; padding: 16px 24px max(12px, env(safe-area-inset-bottom)); box-shadow: 0 -5px 20px #79665508; }
+.commercialization .primary-button { display: block; width: 100%; padding: 16px 14px; border: 0; border-radius: 28px; background: #ff8757; color: #fff; font-weight: 700; font-size: 15px; box-shadow: 0 5px 12px #ff875733; transition: background .15s; }
+.commercialization .primary-button:hover { background: #f47c4d; }
+.commercialization .primary-button:disabled { color: #356b51; background: #dceee2; box-shadow: none; }
+.commercialization .billing-copy { margin: 10px 0 0; text-align: center; font-size: 10px; line-height: 1.6; color: var(--muted); }
+.commercialization .footer-links { display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 10px; color: #b4a69c; }
+.commercialization .footer-links button { background: none; border: 0; color: #786c64; padding: 10px 0; min-height: 44px; font-size: 11px; }
+.commercialization dialog { position: fixed; width: calc(100% - 32px); max-width: 400px; max-height: 85dvh; overflow: auto; background: #fffaf4; color: #3a302a; border: 0; border-radius: 25px; padding: 28px; box-shadow: 0 20px 90px #35291f33; }
+.commercialization dialog::backdrop { background: #35291f66; backdrop-filter: blur(3px); }
+.commercialization dialog h2 { margin: 20px 0 12px; font-size: 25px; }
+.commercialization dialog p { font-size: 14px; line-height: 1.65; color: #786c64; }
+.commercialization dialog .primary-button { margin-top: 22px; }
+.commercialization .dialog-close { position: absolute; top: 12px; right: 12px; }
+@media (max-width: 480px) { :root { background: #faf3eb; } .commercialization { margin: 0 auto; border-radius: 0; box-shadow: none; } }
+@media (max-width: 350px) { .commercialization .page-content { padding: 0 16px; } .commercialization .plan-card { padding: 16px; } .commercialization .plan-heading h2 { font-size: 15px; } .commercialization .benefit-card { padding: 12px; } .commercialization h1 { font-size: 30px; } }
+@media (prefers-reduced-motion: reduce) { .commercialization * { transition: none !important; } }
