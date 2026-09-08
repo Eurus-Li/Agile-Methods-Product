@@ -1,0 +1,44 @@
+.me, .me * { box-sizing: border-box; }
+.me { --muted: #84766e; --text: #3a302a; --orange: #ff8757; font-family: ui-rounded, 'Segoe UI', system-ui, sans-serif; color: var(--text); width: 100%; max-width: 460px; margin: 24px auto; background: #faf3eb; border-radius: 32px; box-shadow: 0 20px 70px #54443514; overflow: clip; }
+.me button { font: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.me button:focus-visible { outline: 3px solid #8e78dc; outline-offset: 4px; }
+.me [hidden] { display: none !important; }
+.me .topbar { padding: 24px 24px 0; }
+.me h1 { font-size: 22px; margin: 0; font-weight: 750; letter-spacing: -.6px; }
+.me .page-content { padding: 16px 24px 28px; }
+.me .profile-card { display: flex; align-items: center; gap: 14px; background: #fffdfb; border-radius: 20px; padding: 16px; }
+.me .avatar { width: 62px; height: 62px; border-radius: 50%; background: radial-gradient(ellipse at 40% 30%, #fffaf0, #f7e5c9); position: relative; flex-shrink: 0; overflow: hidden; }
+.me .avatar .pet { position: absolute; inset: 0; }
+.me .avatar .ear { position: absolute; width: 16px; height: 18px; top: -3px; border-radius: 50%; background: #fff0d8; }
+.me .avatar .ear.left { left: 4px; transform: rotate(-25deg); } .me .avatar .ear.right { right: 4px; transform: rotate(25deg); }
+.me .avatar .face { display: flex; align-items: center; justify-content: center; gap: 8px; position: absolute; top: 22px; width: 100%; }
+.me .avatar .face i { background: #584232; width: 4px; height: 5px; border-radius: 50%; }
+.me .avatar .face span { font-size: 12px; line-height: 10px; }
+.me .profile-info { flex: 1; min-width: 0; }
+.me .name-row { display: flex; align-items: center; gap: 8px; }
+.me .name-row strong { font-size: 16px; }
+.me .stage-tag { font-size: 10px; font-weight: 700; color: #8c72d5; background: #eee5ff; border-radius: 9px; padding: 3px 8px; }
+.me .hatched-line { display: block; font-size: 11px; color: var(--muted); margin: 3px 0 8px; }
+.me .bond-bar { height: 6px; background: #eee2f7; border-radius: 6px; overflow: hidden; }
+.me .bond-bar i { display: block; height: 100%; background: linear-gradient(90deg, #8f79d9, var(--orange)); }
+.me .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-top: 16px; }
+.me .stat-tile { background: #fffdfb; border-radius: 16px; padding: 13px 8px; text-align: center; }
+.me .stat-tile strong { display: block; font-size: 16px; font-weight: 750; }
+.me .stat-tile span { font-size: 10px; color: var(--muted); }
+.me .about-you, .me .wardrobe { margin-top: 20px; }
+.me .section-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.me .section-heading h2 { font-size: 15px; margin: 0; font-weight: 700; }
+.me .text-button { border: 0; background: none; color: #7854ad; font-size: 12px; padding: 6px 0; }
+.me .unlock-count { font-size: 11px; color: var(--muted); }
+.me .field-row { display: flex; align-items: center; gap: 10px; background: #fffdfb; border-radius: 14px; padding: 12px 14px; margin-bottom: 8px; font-size: 13px; }
+.me .field-row span { color: var(--muted); width: 72px; flex-shrink: 0; }
+.me .field-row b { flex: 1; font-weight: 600; }
+.me .field-row input { flex: 1; border: 1.5px solid #e7ddd0; border-radius: 10px; padding: 6px 9px; font: inherit; font-size: 13px; }
+.me .primary-button.small { border: 0; border-radius: 20px; padding: 10px 16px; background: var(--orange); color: #fff; font-weight: 700; font-size: 12px; margin-top: 4px; }
+.me .wardrobe-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.me .wardrobe-item { background: #fffdfb; border: 2px solid transparent; border-radius: 16px; padding: 12px 4px; display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 10px; color: var(--muted); }
+.me .wardrobe-item.locked { opacity: .55; }
+.me .wardrobe-item.equipped { border-color: var(--orange); color: var(--text); }
+.me .item-icon { font-size: 18px; }
+.me .ghost-button { width: 100%; margin-top: 12px; border: 1.5px solid #e7ddd0; background: none; border-radius: 24px; padding: 12px 14px; font-weight: 700; font-size: 13px; color: var(--text); }
+@media (max-width: 480px) { .me { margin: 0 auto; border-radius: 0; box-shadow: none; } }

@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#faf3eb">
+  <title>Pip Home</title>
+  <link rel="stylesheet" href="./src/home.css">
+</head>
+<body style="margin:0;background:#eee8e2;">
+  <main id="app"></main>
+  <script type="module">
+    import { createHomePage } from './src/home.js';
+    createHomePage(document.querySelector('#app'));
+  </script>
+</body>
+</html>
