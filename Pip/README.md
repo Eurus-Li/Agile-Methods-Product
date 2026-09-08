@@ -80,6 +80,7 @@ PORT=8001 npm run dev
 
 - 修改行为、文案逻辑或本地状态：编辑 `src/js/app.js`。
 - 修改响应式布局或交互样式：编辑 `src/styles/app.css`。
+- Pip 高清图片：`assets/images/pip.jpg`（1536 × 1024），用于首页、回复、个人页和 Plus 页；模板生成脚本会自动用它替代原始画板中的低分辨率缩略图。
 - 更新原始页面设计：替换 `design/exports/` 中相应的 HTML，然后重新生成模板。
 
 重新生成模板前，在项目根目录安装 Python 开发依赖（macOS / Linux）：

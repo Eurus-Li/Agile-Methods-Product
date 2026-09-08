@@ -18,6 +18,9 @@ def extract_image(match):
     ext, encoded = match.groups()
     data = base64.b64decode(encoded)
     name = hashlib.sha256(data).hexdigest()[:16] + '.' + ext.replace('jpeg', 'jpg')
+    # The exported Pip thumbnail is only 74 × 92; use the supplied original.
+    if name == '119bbe39cb82fe1d.png':
+        return 'assets/images/pip.jpg'
     (ASSETS / name).write_bytes(data)
     return 'assets/images/' + name
 
