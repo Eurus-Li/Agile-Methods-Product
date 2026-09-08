@@ -1,0 +1,10 @@
+.DS_Store
+.playwright-mcp/
+node_modules/
+.venv/
+__pycache__/
+*.py[cod]
+*.log
+.env
+.env.*
+!.env.example

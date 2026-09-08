@@ -1,0 +1,16 @@
+{
+  "name": "pip-browser-demo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Pip companion demo built with HTML, CSS and JavaScript",
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/serve.js",
+    "start": "node scripts/serve.js",
+    "check": "node --check src/js/app.js && node --check scripts/serve.js",
+    "build:templates": "python3 scripts/build_demo.py"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
