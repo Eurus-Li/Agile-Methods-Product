@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { addEntry, computeStreak, computeMonthStats, loadEntries, ENTRIES_KEY } from '../src/journal.js';
+import { addEntry, computeStreak, computeMonthStats, loadEntries, ENTRIES_KEY, escapeHtml } from '../src/journal.js';
 
 function memoryStorage() {
   const map = new Map();
@@ -50,4 +50,15 @@ test('malformed storage falls back to an empty list', () => {
   const storage = memoryStorage();
   storage.setItem(ENTRIES_KEY, '{not json');
   assert.deepEqual(loadEntries(storage), []);
+});
+
+test('escapeHtml neutralizes markup so journal text cannot inject elements', () => {
+  const payload = '<img src=x onerror=alert(1)>';
+  const escaped = escapeHtml(payload);
+  assert.equal(escaped.includes('<img'), false);
+  assert.equal(escaped, '&lt;img src=x onerror=alert(1)&gt;');
+});
+
+test('escapeHtml also neutralizes quote-breakout and script-tag payloads', () => {
+  assert.equal(escapeHtml(`"><script>alert(1)</script>`), '&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;');
 });

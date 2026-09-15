@@ -11,6 +11,13 @@ export function moodById(id) { return MOODS.find(m => m.id === id) ?? null; }
 
 function toDateKey(date) { return new Date(date).toISOString().slice(0, 10); }
 
+/** Escapes text before it is interpolated into an innerHTML template string. */
+export function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
 export function loadEntries(storage) {
   try {
     const raw = JSON.parse(storage.getItem(ENTRIES_KEY) ?? '[]');
@@ -200,7 +207,7 @@ export function createJournalPage(root, { storage, now = () => new Date() } = {}
       const mood = moodById(entry.mood);
       return `<button type="button" class="recent-item" data-date="${entry.dateISO}">
         <span class="recent-icon" style="background:${mood.bg}">${mood.emoji}</span>
-        <span class="recent-body"><strong>${mood.label}</strong><p>${entry.text || 'No note'}</p></span>
+        <span class="recent-body"><strong>${mood.label}</strong><p>${escapeHtml(entry.text || 'No note')}</p></span>
         <span class="recent-date">${new Date(entry.dateISO).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })}</span>
       </button>`;
     }).join('') : '<p class="empty-note">No moods logged yet. Tap a day to add one.</p>';
