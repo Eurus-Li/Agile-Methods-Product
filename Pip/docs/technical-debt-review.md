@@ -2,10 +2,14 @@
 
 **Date:** 2026-09-15
 **Scope:** Code introduced for the "5 export pages → runnable browser demo" sprint feature —
-[`src/js/app.js`](src/js/app.js), [`src/styles/app.css`](src/styles/app.css),
-[`scripts/serve.js`](scripts/serve.js), [`scripts/build_demo.py`](scripts/build_demo.py).
+[`src/js/app.js`](../web/src/js/app.js), [`src/styles/app.css`](../web/src/styles/app.css),
+[`scripts/serve.js`](../web/scripts/serve.js), [`scripts/build_demo.py`](../web/scripts/build_demo.py).
 The generated `index.html` is template markup produced by `build_demo.py` and contains no
 logic of its own, so it is not reviewed separately.
+
+> **Note:** this report is a historical snapshot from before the `web/`/`ios/` split (see
+> [decisions.md](decisions.md)). File paths quoted throughout the tables below (e.g. `app.js:1-315`)
+> are relative to what is now `web/`.
 
 ---
 

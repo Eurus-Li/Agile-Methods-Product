@@ -19,9 +19,9 @@ jobs:
       # `npm run check` 目前做的是 `node --check`（语法校验）。等 ESLint 接入后拆成独立的
       # `lint` 步骤；等 src/js 补上单元测试后加一个独立的 `test` 步骤。见 Pip/docs/architecture.md。
       - name: Check
-        working-directory: Pip
+        working-directory: Pip/web
         run: npm run check
-      # TODO: Pip 的 iOS 工程建立后，这里加一个 macos-latest job：
+      # TODO: Pip/ios/ 的 Xcode 工程建立后，这里加一个 macos-latest job：
       #   swift build && swiftlint && swift test（对应 Pip/docs/architecture.md 的 iOS 技术栈章节）
 
   commercialization:

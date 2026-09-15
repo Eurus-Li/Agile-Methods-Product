@@ -19,7 +19,7 @@
 重新讨论：决定接入真实内购时。
 
 ### 2026-09-15 · 设计素材来源
-继续用 Pencil (pen.dev) 出图/出画板，沿用现有 [design/exports/](../design/exports/)。
+继续用 Pencil (pen.dev) 出图/出画板，沿用现有 [design/exports/](../web/design/exports/)。
 重新讨论：协作规模扩大到需要更成熟的多人设计工具时可评估 Figma。
 
 ### 2026-09-15 · 字体

@@ -6,13 +6,13 @@
 
 ## 1. 技术栈
 
-### Web demo（现有，已验证）
+### web/（现有，已验证）
 
-- 原生 HTML / CSS / JS，零依赖、零构建。`npm run dev` 启动 [scripts/serve.js](../scripts/serve.js) 本地静态服务器。
-- 代码：[src/js/app.js](../src/js/app.js)（路由 + 状态 + 交互）、[src/styles/app.css](../src/styles/app.css)。
-- 设计稿来源：[design/exports/](../design/exports/)（Pencil/pen.dev 导出），[scripts/build_demo.py](../scripts/build_demo.py) 负责把导出稿重建成 `index.html` 模板。
+- 原生 HTML / CSS / JS，零依赖、零构建。`npm run dev` 启动 [web/scripts/serve.js](../web/scripts/serve.js) 本地静态服务器。
+- 代码：[web/src/js/app.js](../web/src/js/app.js)（路由 + 状态 + 交互）、[web/src/styles/app.css](../web/src/styles/app.css)。
+- 设计稿来源：[web/design/exports/](../web/design/exports/)（Pencil/pen.dev 导出），[web/scripts/build_demo.py](../web/scripts/build_demo.py) 负责把导出稿重建成 `index.html` 模板。
 
-### iOS App（规划中，代码尚未开始）
+### ios/（规划中，代码尚未开始）
 
 | 项目 | 选型 |
 |---|---|
@@ -33,19 +33,23 @@
 - **ViewModel** — `@Observable` class（不用旧的 `ObservableObject`/`@Published`），持有页面状态和用户操作方法，依赖注入拿 Model/Service。
 - **Model** — 值类型 `struct`，描述领域数据。
 
+工程建在 `ios/`，Xcode 惯例是 `.xcodeproj` 旁边放一个和 App 同名的源码文件夹：
+
 ```
-PipApp/
-├── App/                   # App 入口、启动配置
-├── Features/
-│   ├── Home/{HomeView,HomeViewModel}.swift
-│   ├── Reply/
-│   ├── Journal/
-│   ├── Me/
-│   └── Plus/
-├── Models/                # 领域模型 (struct)
-├── Services/               # 持久化封装，未来的网络层入口
-├── DesignSystem/           # 颜色/字体/间距/可复用组件，对应本文档第 4 节
-└── Resources/
+ios/
+├── PipApp.xcodeproj
+└── PipApp/
+    ├── App/                   # App 入口、启动配置
+    ├── Features/
+    │   ├── Home/{HomeView,HomeViewModel}.swift
+    │   ├── Reply/
+    │   ├── Journal/
+    │   ├── Me/
+    │   └── Plus/
+    ├── Models/                # 领域模型 (struct)
+    ├── Services/              # 持久化封装，未来的网络层入口
+    ├── DesignSystem/          # 颜色/字体/间距/可复用组件，对应本文档第 4 节
+    └── Resources/
 ```
 
 一个 Feature 一个文件夹，View/ViewModel 一一对应。**禁止**把多个页面逻辑塞进一个大文件——参考 [技术债审查](technical-debt-review.md) 里 TD-1 点名的教训（web demo 的 `app.js` 315 行单文件塞了全部页面逻辑），iOS 版本不要重蹈覆辙。
@@ -58,7 +62,7 @@ PipApp/
 
 ## 4. 设计系统 / UI Token
 
-来自 web demo [src/styles/app.css](../src/styles/app.css) 已验证的视觉语言。**任何人（含 AI）新增 UI 时数值必须从这里取，不允许现场发明。**
+来自 web demo [web/src/styles/app.css](../web/src/styles/app.css) 已验证的视觉语言。**任何人（含 AI）新增 UI 时数值必须从这里取，不允许现场发明。**
 
 ### 品牌调性
 

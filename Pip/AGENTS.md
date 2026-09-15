@@ -4,12 +4,14 @@
 
 ## 项目是什么
 
-Pip 是一款心理健康陪伴类产品：养一只虚拟小伙伴，记录每日心情、写 Journal、给 Pip 换装、有一个模拟的 Plus 会员方案。现状：一个交互逻辑已经跑通的 web demo（`index.html`、`src/`）。下一步：做成 iOS 原生 App。**iOS 体验优先，暂不做 Android / 跨平台。**
+Pip 是一款心理健康陪伴类产品：养一只虚拟小伙伴，记录每日心情、写 Journal、给 Pip 换装、有一个模拟的 Plus 会员方案。现状：一个交互逻辑已经跑通的 web demo（[web/](web/)）。下一步：在 [ios/](ios/) 做成 iOS 原生 App。**iOS 体验优先，暂不做 Android / 跨平台。**
+
+`web/` 和 `ios/` 是同一套产品逻辑的两种实现，不是两个产品——改产品逻辑/文案先改 spec，两边实现都要跟着更新；只改某一端的实现细节，不动 spec。
 
 ## 技术栈速览
 
-- **Web demo（现有）：** 原生 HTML/CSS/JS，零依赖、零构建，`npm run dev` 直接跑。
-- **iOS App（规划中，代码尚未开始）：** Swift + SwiftUI + MVVM + SwiftData 本地持久化；无后端；不引入依赖除非必要。
+- **`web/`（现有）：** 原生 HTML/CSS/JS，零依赖、零构建，`cd web && npm run dev` 直接跑。
+- **`ios/`（规划中，代码尚未开始）：** Swift + SwiftUI + MVVM + SwiftData 本地持久化；无后端；不引入依赖除非必要。
 - 完整技术栈、模块划分、数据模型约定、UI 设计 Token → [docs/architecture.md](docs/architecture.md)。
 - 已经拍板 / 明确延后的选型（后端、支付、暗色模式等）→ [docs/decisions.md](docs/decisions.md)，不要重新讨论已经定过的事。
 
@@ -20,11 +22,12 @@ Pip/                     # 本项目根目录（这份 AGENTS.md 所在位置）
 ├── AGENTS.md / CLAUDE.md   # 本文件（唯一规则源），CLAUDE.md 只是指向它的一行
 ├── README.md               # 人类友好的项目介绍 + 怎么跑
 ├── docs/
-│   ├── architecture.md       # 技术栈 + 模块划分 + 接口约定
+│   ├── architecture.md       # 技术栈 + 模块划分 + 接口约定（web 现状 + iOS 目标）
 │   ├── decisions.md          # 决策记录，一条几行
-│   ├── specs/                # 每个功能一份简短 spec
+│   ├── specs/                # 每个功能一份简短 spec，与实现平台无关
 │   └── technical-debt-review.md  # 上一轮技术债/安全审查报告（历史记录，非实时规则）
-└── src/, index.html, design/, assets/, scripts/   # web demo 实际代码与设计素材
+├── web/                     # 现有实现：src/, index.html, design/, assets/, scripts/
+└── ios/                     # 未来实现：SwiftUI 工程，目前只有占位 README
 
 ../Commercialization/    # 仓库里另一个独立产品（Rongrong Plus），与 Pip 无关，不要在这里改它
 ../README.md             # 仓库根 README，列出所有产品目录
