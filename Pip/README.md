@@ -2,6 +2,18 @@
 
 基于五个设计画板实现的原生 HTML、CSS、JavaScript 交互原型，包含 Home、Pip Reply、Journal、Me 和 Plus。支持手机尺寸、键盘操作和浏览器本地保存，无需后端或外部 API。
 
+## 给协作者（vibe coding 团队）
+
+这个仓库同时被人和 AI 编码助手（Claude Code / Codex 等）使用。**任何任务开始前先读 [AGENTS.md](AGENTS.md)**——那是本项目唯一的规则源，Claude Code 会通过 [CLAUDE.md](CLAUDE.md) 自动读到同一份内容。仓库根目录还有一份最简版 [../AGENTS.md](../AGENTS.md)，指路到 `Pip/` 和 `Commercialization/` 各自的规则。
+
+日常开发只需要记住三件事：
+
+1. **做之前先看 [docs/specs/](docs/specs/)**，没有对应 spec 就先写一份简短的再动代码（参考 [mood-checkin.md](docs/specs/mood-checkin.md)）。
+2. **技术/设计选型先查 [docs/decisions.md](docs/decisions.md)**，已经定过的不要重新讨论；新的、会被反复问的问题，做完记得补一条。
+3. **协作是轻量模式**：允许直接推 `main`，靠仓库根目录的 [CI](../.github/workflows/ci.yml) 兜底，没有强制 PR review——但这意味着 push 前自己要确认能跑通、lint 干净（见 [../.github/pull_request_template.md](../.github/pull_request_template.md) 里的 checklist，即使不开 PR 也照着自查）。
+
+技术栈、模块划分、UI 设计 Token 的完整说明在 [docs/architecture.md](docs/architecture.md)。
+
 ## 快速启动
 
 在仓库根目录打开终端，使用 **Node.js 20 或更新版本**运行：
@@ -31,11 +43,18 @@ PORT=8001 npm run dev
 
 ```text
 .
+├── AGENTS.md                  # 唯一的项目规则（AI 助手 / 人都先读这个）
+├── CLAUDE.md                  # 一行：指向 AGENTS.md，供 Claude Code 读取
 ├── index.html                 # 浏览器入口，包含五个页面模板（由脚本生成）
 ├── package.json               # 项目信息和 npm 命令
-├── README.md                  # 项目说明
+├── README.md                  # 项目说明（本文件）
 ├── .gitignore                 # 忽略本地环境、日志和验证截图
 ├── requirements-dev.txt       # 仅重新生成模板时需要的 Python 依赖
+├── docs/
+│   ├── architecture.md        # 技术栈 + 模块划分 + 设计 Token
+│   ├── decisions.md           # 技术/产品决策记录
+│   ├── specs/                 # 每个功能一份简短 spec
+│   └── technical-debt-review.md  # 技术债/安全审查报告（历史记录）
 ├── src/
 │   ├── js/
 │   │   └── app.js             # 页面路由、交互逻辑、状态与本地保存
@@ -52,7 +71,7 @@ PORT=8001 npm run dev
     └── build_demo.py          # 从设计导出重新生成页面模板和图片
 ```
 
-本目录是 `Agile-Methods-Product` 仓库中的独立 Pip demo，与 `Commercialization/` 并列。后续命令均在 `Pip/` 目录执行；本 demo 不依赖 `Commercialization/`。
+本目录是 `Agile-Methods-Product` 仓库中的独立 Pip demo，与 `Commercialization/` 并列。后续命令均在 `Pip/` 目录执行；本 demo 不依赖 `Commercialization/`。仓库共用的 CI（`.github/workflows/ci.yml`）和 PR 模板放在仓库根目录，同时覆盖这两个产品。
 
 ## 常用命令
 
