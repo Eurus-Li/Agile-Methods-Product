@@ -53,4 +53,4 @@ server.on('error', error => {
     : error.message);
   process.exit(1);
 });
-server.listen(port, '127.0.0.1', () => console.log(`Pip demo: http://127.0.0.1:${port}\nPress Ctrl+C to stop.`));
+server.listen(port, '127.0.0.1', () => console.log(`Rongrong demo: http://127.0.0.1:${port}\nPress Ctrl+C to stop.`));

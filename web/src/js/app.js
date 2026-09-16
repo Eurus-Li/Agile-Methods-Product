@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const KEY = 'pip-demo-v1';
+  const KEY = 'rongrong-demo-v1';
   const moods = ['Calm', 'Happy', 'Tired', 'Sad', 'Tense'];
   const colors = { Calm: '#ddebdc', Happy: '#ffe3b5', Tired: '#e6dff4', Sad: '#dce6f2', Tense: '#f4d8d8' };
   const replies = {
@@ -94,10 +94,10 @@
     route = location.hash.slice(1);
     if (!['home', 'reply', 'journal', 'me', 'plus'].includes(route)) { route = 'home'; history.replaceState(null, '', '#home'); }
     app.replaceChildren(document.querySelector(`#page-${route}`).content.cloneNode(true));
-    document.title = `Pip · ${{ home: 'Your little companion', reply: 'Pip heard you', journal: 'Journal', me: 'Me', plus: 'Plus' }[route]}`;
+    document.title = `Rongrong · ${{ home: 'Your little companion', reply: 'Rongrong heard you', journal: 'Journal', me: 'Me', plus: 'Plus' }[route]}`;
     allNamed('Time').forEach(node => { node.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }); });
     for (const [tab, destination] of [['Tab Pip', 'home'], ['Tab Journal', 'journal'], ['Tab Me', 'me']]) {
-      bind(tab, () => navigate(destination), destination === 'home' ? 'Pip home' : destination === 'me' ? 'Me' : 'Journal');
+      bind(tab, () => navigate(destination), destination === 'home' ? 'Rongrong home' : destination === 'me' ? 'Me' : 'Journal');
       if (route === destination || route === 'reply' && destination === 'home') named(tab)?.setAttribute('aria-current', 'page');
     }
     allNamed('Count').filter(node => node.parentElement.dataset.pencilName === 'Streak').forEach(node => node.textContent = streak());
@@ -125,7 +125,7 @@
     bind('Sprite Pip', () => {
       const sprite = named('Sprite Pip'); sprite.classList.remove('petting'); void sprite.offsetWidth; sprite.classList.add('petting');
       text('Line', `That feels nice, ${String(state.nickname).slice(0, 30)} ♡`);
-    }, 'Pet Pip');
+    }, 'Pet Rongrong');
     const accessory = document.createElement('span'); accessory.className = 'outfit'; accessory.textContent = outfits[state.outfit]; accessory.setAttribute('aria-label', state.outfit); named('Stage').append(accessory);
   }
   function setupReply() {
@@ -135,7 +135,7 @@
     text('Label', `Today · ${mood.toLowerCase()}`, moodState);
     text('Emoji', { Calm: '🍃', Happy: '☀️', Tired: '🌙', Sad: '☁️', Tense: '🌧️' }[mood], moodState);
     const sheet = named('Reply Sheet');
-    sheet.setAttribute('role', 'dialog'); sheet.setAttribute('aria-modal', 'true'); sheet.setAttribute('aria-label', 'Pip heard you');
+    sheet.setAttribute('role', 'dialog'); sheet.setAttribute('aria-modal', 'true'); sheet.setAttribute('aria-label', 'Rongrong heard you');
     for (const child of app.firstElementChild.children) if (child !== sheet && child !== named('Scrim')) child.inert = true;
     text('Reply', replies[mood], sheet);
     text('Sub', `Feeling ${mood.toLowerCase()} · ${entry ? 'just now' : 'sample reply'}`, named('Meta', sheet));
@@ -149,8 +149,8 @@
       text('Label', 'Hug received ♡', named('Hug Button', sheet));
       text('Label', `Bond Lv.${level()}`, named('Bond', sheet));
       named('Fill', named('Bond', sheet)).style.width = `${30 + state.bond % 100 * .7}%`;
-      toast('Pip is hugging you right back ♡');
-    }, 'Hug Pip', sheet);
+      toast('Rongrong is hugging you right back ♡');
+    }, 'Hug Rongrong', sheet);
     bind('Save Button', () => {
       if (!entry) { toast('Choose a mood on Home to start your journal.'); return; }
       entry.saved = !entry.saved; save(); updateSaved(); toast(entry.saved ? 'Reply saved to your journal' : 'Reply bookmark removed');
@@ -219,7 +219,7 @@
     const entry = state.entries[key]; openDialog(new Date(key + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }));
     if (!entry) {
       paragraph(key > today ? 'A little space for a day still to come.' : 'No check-in recorded for this day.');
-      if (key === today) dialog.append(button('Check in with Pip', () => navigate('home'), 'primary'));
+      if (key === today) dialog.append(button('Check in with Rongrong', () => navigate('home'), 'primary'));
       return;
     }
     paragraph(entry.mood, dialog, 'entry-mood').style.backgroundColor = colors[entry.mood];
@@ -264,7 +264,7 @@
   function editProfile(field) {
     openDialog(field === 'nickname' ? 'Your nickname' : 'Your birthday');
     const form = document.createElement('form');
-    const label = document.createElement('label'); label.htmlFor = 'profile-value'; label.textContent = field === 'nickname' ? 'What should Pip call you?' : 'Birthday';
+    const label = document.createElement('label'); label.htmlFor = 'profile-value'; label.textContent = field === 'nickname' ? 'What should Rongrong call you?' : 'Birthday';
     const input = document.createElement('input'); input.id = 'profile-value'; input.type = field === 'nickname' ? 'text' : 'date'; input.required = true;
     if (field === 'nickname') input.maxLength = 30; else input.max = today;
     input.value = state[field];
@@ -275,20 +275,20 @@
   }
   function wear(outfit) {
     if (!state.plus && !freeOutfits.includes(outfit)) { navigate('plus'); return; }
-    state.outfit = outfit; save(); if (dialog.open) closeDialog(); render(); toast(`${outfit} on! Visit Pip to see it.`);
+    state.outfit = outfit; save(); if (dialog.open) closeDialog(); render(); toast(`${outfit} on! Visit Rongrong to see it.`);
   }
   function showWardrobe() {
-    openDialog('Pip’s wardrobe');
-    paragraph('Choose a little accessory for Pip.');
+    openDialog('Rongrong’s wardrobe');
+    paragraph('Choose a little accessory for Rongrong.');
     const grid = document.createElement('div'); grid.className = 'wardrobe-grid';
     for (const [name, emoji] of Object.entries(outfits)) grid.append(button(`${emoji} ${name}${name === state.outfit ? ' ✓' : !state.plus && !freeOutfits.includes(name) ? ' · Plus' : ''}`, () => wear(name), ''));
     dialog.append(grid);
   }
   function showSettings() {
     openDialog('Settings');
-    paragraph(`Pip Plus: ${state.plus ? 'demo membership active' : 'free plan'}`);
-    dialog.append(button('Manage Pip Plus', () => navigate('plus')));
-    paragraph('This demo stores your check-ins and profile in this browser. Pip’s replies are preset. No account or payment is connected.', dialog, 'muted');
+    paragraph(`Rongrong Plus: ${state.plus ? 'demo membership active' : 'free plan'}`);
+    dialog.append(button('Manage Rongrong Plus', () => navigate('plus')));
+    paragraph('This demo stores your check-ins and profile in this browser. Rongrong’s replies are preset. No account or payment is connected.', dialog, 'muted');
     dialog.append(button('Reset demo data', () => {
       openDialog('Reset this demo?'); paragraph('This deletes your check-ins, notes, profile changes and demo membership in this browser.');
       dialog.append(button('Delete demo data', () => { state = defaults(); save(); closeDialog(); navigate('home'); toast('Demo reset'); }, 'primary'), button('Keep my data', closeDialog));
@@ -298,16 +298,16 @@
     bind('Close', () => navigate(returnFromPlus), 'Close Plus');
     text('Label', state.plus ? 'Manage demo membership' : 'Try monthly membership', named('Primary Button'));
     bind('Primary Button', () => {
-      openDialog(state.plus ? 'Your demo membership' : 'Try Pip Plus');
+      openDialog(state.plus ? 'Your demo membership' : 'Try Rongrong Plus');
       paragraph(state.plus ? 'All 12 accessories are unlocked in this browser. This is a simulated membership.' : '$4.99 USD / month in the design. Activating this demo unlocks all 12 accessories. No payment, charges or automatic renewal.');
       dialog.append(button(state.plus ? 'End demo membership' : 'Activate free demo', () => {
         state.plus = !state.plus;
         if (!state.plus && !freeOutfits.includes(state.outfit)) state.outfit = 'Crown';
-        save(); closeDialog(); render(); toast(state.plus ? 'Welcome to Pip Plus! All outfits unlocked.' : 'Demo membership ended');
+        save(); closeDialog(); render(); toast(state.plus ? 'Welcome to Rongrong Plus! All outfits unlocked.' : 'Demo membership ended');
       }, 'primary'));
     }, state.plus ? 'Manage demo membership' : 'Try monthly membership');
     bind('Restore demo', () => toast(state.plus ? 'Your demo membership is already active.' : 'No active demo membership in this browser.'), 'Restore demo');
-    bind('Terms', () => { openDialog('Demo terms'); paragraph('Pip is an interactive prototype. The $4.99 monthly price is illustrative. There is no checkout, charge, renewal or real subscription. Demo membership only changes features stored in this browser.'); });
+    bind('Terms', () => { openDialog('Demo terms'); paragraph('Rongrong is an interactive prototype. The $4.99 monthly price is illustrative. There is no checkout, charge, renewal or real subscription. Demo membership only changes features stored in this browser.'); });
     bind('Privacy', () => { openDialog('Demo privacy'); paragraph('Your nickname, birthday, mood check-ins, notes and demo preferences are stored locally in this browser. The demo does not send these to a server. Clear them with Settings → Reset demo data.'); });
   }
   window.addEventListener('hashchange', render);

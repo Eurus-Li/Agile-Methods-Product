@@ -1,45 +1,63 @@
-# Agile-Methods-Product
-Product for mental health
+# Rongrong
 
-协作规则（含 vibe coding / AI 助手约定）见 [AGENTS.md](AGENTS.md)。
+一款心理健康陪伴产品：养一只虚拟小伙伴，记录每日心情、写 Journal、给 Rongrong 换装，并有一个模拟的 Plus 会员方案。当前有一个交互逻辑已经跑通的 **web demo**（[web/](web/)），下一步目标是做成 **iOS 原生 App**（[ios/](ios/)，尚未开始）。
 
-## Demos
+## 快速启动（web demo）
 
-- [Pip browser demo](Pip/README.md): five connected screens for mood check-ins, replies, journaling, profile customization, and simulated Plus membership. Run `cd Pip/web && npm run dev`, then open http://127.0.0.1:8000.
-- [Rongrong Plus](RongrongPlus/README.md): standalone Rongrong Plus commercialization demo.
+```sh
+cd web
+npm run dev
+```
 
-## 怎么给 Coding Agent 下指令（vibe coding 使用者必读）
+打开 **http://127.0.0.1:8000**。项目没有 npm 依赖，无需先执行 `npm install`。`npm start` 与 `npm run dev` 相同，按 `Ctrl+C` 停止服务。
 
-这个仓库的协作模式是人 + AI coding agent（Claude Code / Codex 等）直接写代码：每个任务开一个短分支，做完自己合并回 `main`，不用等审批。Prompt 写得好不好，直接决定 agent 是遵守这个仓库已经定好的架构和规则，还是自己发明一套——尤其因为每个新会话大概率是一个**没有记忆的新 agent 实例**，它唯一能依赖的持久上下文就是仓库里的文件。
+端口被占用时可以指定其他端口：
 
-### 黄金法则
+```sh
+PORT=8001 npm run dev
+```
 
-**每次开新任务，先让 agent 读对应产品自己的 AGENTS.md**（比如 [Pip/AGENTS.md](Pip/AGENTS.md)、[RongrongPlus/README.md](RongrongPlus/README.md)），仓库根目录还有一份最简索引 [AGENTS.md](AGENTS.md)。大部分 agent 工具会自动读这些文件，但在 prompt 里明确点出来，能避免它中途"忘了"或者只读了一半就开始写代码。
+也支持：直接双击 `web/index.html`；VS Code Live Server 打开 `web/index.html`；或 `cd web && python3 -m http.server 8000 --bind 127.0.0.1`。
 
-### 一个好 Prompt 至少包含四块
+### 常用命令（在 `web/` 下执行）
 
-1. **范围** — 在哪个产品、哪个实现里改（`Pip/web`、`Pip/ios`、`RongrongPlus`），不要让 agent 自己猜。
-2. **依据** — 这个功能有没有对应 spec？没有就先让 agent 在 `docs/specs/` 写一份，你确认过再写代码。
-3. **约束** — 提醒 agent 先查 `docs/decisions.md`，已经定过的技术选型不要重新发明。
-4. **验收标准** — 怎么算做完，对应 [.github/pull_request_template.md](.github/pull_request_template.md) 里的 Definition of Done。
+| 命令 | 用途 |
+| --- | --- |
+| `npm run dev` / `npm start` | 启动本地演示服务 |
+| `npm run check` | 检查应用和服务器 JavaScript 语法 |
+| `npm run build:templates` | 根据设计源文件重新生成 `index.html` 和图片 |
 
-### 例子
+## 功能与演示流程
 
-❌ 模糊、容易让 agent 自由发挥：
+1. **Home**：点击 Rongrong 与它互动，选择 Calm、Happy、Tired、Sad 或 Tense 记录当天心情。
+2. **Reply**：查看对应回复、拥抱 Rongrong、收藏回复，再关闭弹层。
+3. **Journal**：切换月份或年份，点击有记录的日期查看回复、保存文字备注，查看月度汇总。
+4. **Me**：修改昵称和生日，选择配饰或打开衣橱；配饰会显示在 Home 的 Rongrong 上。
+5. **Plus**：通过 Home 的 Plus 按钮或锁定配饰进入，模拟开通会员、检查恢复状态或结束会员。
 
-> 帮我在 Pip 里加个提醒功能。
+页面通过 URL hash 导航：`#home`、`#reply`、`#journal`、`#me`、`#plus`。通过 **Me → Settings → Reset demo data** 可以清空演示数据。
 
-✅ 具体、有约束、agent 不容易跑偏：
+## 开发与更新设计
 
-> 在 `Pip/web` 里加一个每日提醒功能。先读 `Pip/AGENTS.md` 和 `Pip/docs/decisions.md`，确认这不违反"暂不接入后端"的决定（提醒应该是纯前端的本地通知/UI 提示，不要引入任何网络请求）。参考 `Pip/docs/specs/mood-checkin.md` 的格式，先写一份 `Pip/docs/specs/daily-reminder.md` 描述交互流程，我确认后再写代码。UI 数值从 `Pip/docs/architecture.md` 的设计 Token 取，不要发明新颜色。写完给纯逻辑部分补单元测试，跑一遍 `npm run check`。
+- 修改行为、文案逻辑或本地状态：编辑 `web/src/js/app.js`。
+- 修改响应式布局或交互样式：编辑 `web/src/styles/app.css`。
+- 更新原始页面设计：替换 `web/design/exports/` 中相应的 HTML，然后在 `web/` 目录跑 `npm run build:templates`（首次需要 `python3 -m pip install -r requirements-dev.txt`）重新生成 `index.html`。手工改 `index.html` 会在下次生成时被覆盖。
 
-### 常见坑
+## 数据与演示范围
 
-- **不要**假设 agent 记得上次对话的约定——约定必须写进 `AGENTS.md`/`docs/`，只停留在聊天记录里等于没有。
-- **不要**用"顺手也把 XX 重构一下"这种模糊授权。大范围改动单独开一个分支说清楚，不要糊进无关任务的分支里一起合并。
-- Agent 生成代码后，**你**要负责看一遍 diff 再合并，不是 agent 自己说"做完了"就代表能合并到 `main`。
-- 如果 agent 的方案明显偏离 `docs/decisions.md`（比如突然引入了后端调用），先停下来问它"这是不是该先更新 decisions.md"，而不是直接接受。
+- 昵称、生日、心情、备注、配饰和模拟会员状态保存在浏览器 `localStorage`，键名 `rongrong-demo-v1`。
+- Rongrong 回复为预设文本；没有接入 AI、账号系统、云端同步或真实支付。
 
-### 推送前自查
+## 协作文件一览
 
-不管有没有开 PR，都照着 [.github/pull_request_template.md](.github/pull_request_template.md) 里的 Definition of Done 清单过一遍——那份清单就是"怎么判断这次任务真的做完了"的标准答案。
+| 文件 | 干什么用 |
+|---|---|
+| [AGENTS.md](AGENTS.md) | 项目规则，AI 编码助手开工前先读 |
+| [docs/design-system.md](docs/design-system.md) | 颜色/字体/间距/组件 Token |
+| [docs/architecture.md](docs/architecture.md) | 技术栈、模块划分、iOS 组件映射 |
+| [docs/decisions.md](docs/decisions.md) | 已经定过的技术/产品选型 |
+| [docs/specs/](docs/specs/) | 每个功能的交互流程 |
+| [docs/technical-debt-review.md](docs/technical-debt-review.md) | 技术债/安全审查记录 |
+| [prototypes/plus-standalone/](prototypes/plus-standalone/README.md) | 早期付费墙原型，已被 web/ 取代，仅供参考 |
+| [.github/workflows/ci.yml](.github/workflows/ci.yml) | 每次 push 自动跑的检查 |
+| [.github/pull_request_template.md](.github/pull_request_template.md) | 合并前的 Definition of Done 清单 |

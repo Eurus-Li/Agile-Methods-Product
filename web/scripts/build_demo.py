@@ -18,9 +18,9 @@ def extract_image(match):
     ext, encoded = match.groups()
     data = base64.b64decode(encoded)
     name = hashlib.sha256(data).hexdigest()[:16] + '.' + ext.replace('jpeg', 'jpg')
-    # The exported Pip thumbnail is only 74 × 92; use the supplied original.
+    # The exported Rongrong thumbnail is only 74 × 92; use the supplied original.
     if name == '119bbe39cb82fe1d.png':
-        return 'assets/images/pip.jpg'
+        return 'assets/images/rongrong.jpg'
     (ASSETS / name).write_bytes(data)
     return 'assets/images/' + name
 
@@ -38,15 +38,15 @@ document = '''<!doctype html>
 <html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#FBF3EC">
-<title>Pip · Your little companion</title>
+<title>Rongrong · Your little companion</title>
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="src/styles/app.css">
 <script src="src/js/app.js" defer></script>
 </head><body>
-<main id="app" aria-label="Pip companion"></main>
+<main id="app" aria-label="Rongrong companion"></main>
 <div id="toast" role="status" aria-live="polite"></div>
 <dialog id="dialog" aria-labelledby="dialog-title"></dialog>
-<noscript>Please enable JavaScript to use the Pip demo.</noscript>
+<noscript>Please enable JavaScript to use the Rongrong demo.</noscript>
 ''' + '\n'.join(templates) + '\n</body></html>\n'
 (ROOT / 'index.html').write_text(document, encoding='utf-8')
 print(f'Built index.html ({len(document):,} characters) and local image assets.')

@@ -51,7 +51,7 @@ iOS 17+。
 重新讨论：上架前按目标用户设备/系统分布数据重新评估。
 
 ### 2026-09-15 · 状态字段设计
-iOS Model 字段语义对应 web demo `pip-demo-v1`（nickname/birthday/outfit/plus/entries/bond/started）。
+iOS Model 字段语义对应 web demo `rongrong-demo-v1`（nickname/birthday/outfit/plus/entries/bond/started）。
 理由：复用已验证的产品逻辑，不重新设计数据结构。
 重新讨论：产品功能有实质性变化（如多用户/多宠物）时。
 

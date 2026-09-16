@@ -1,19 +1,21 @@
-# Rongrong Plus
+# Rongrong Plus (standalone prototype — superseded)
 
-This folder contains the standalone, all-English **Rongrong Plus commercialization demo** for Rongrong. Other product features can live in sibling folders at the repository root.
+> **This prototype is superseded.** It was an early, standalone demo of the Plus paywall flow before Rongrong's main `web/` implementation had a built-in Plus screen. `web/` now has its own integrated Plus flow (see [`../../docs/specs/plus-membership.md`](../../docs/specs/plus-membership.md)) and is the one to build on. This folder is kept only as a reference for its membership-state unit tests (date boundaries, corrupt storage, storage failures) — do not add new features here.
+
+This folder contains the standalone, all-English **Rongrong Plus commercialization demo** for Rongrong.
 
 ## Run locally
 
 Install Node.js 20 or later, then from the repository root run:
 
 ```sh
-cd RongrongPlus
+cd prototypes/plus-standalone
 node server.js
 ```
 
 Open **http://localhost:3000**. No package installation, API key, or build step is needed. Use an HTTP server; opening `index.html` directly with `file://` does not support the module entry point reliably.
 
-Run tests from inside the `RongrongPlus` folder:
+Run tests from inside this folder:
 
 ```sh
 node --test tests/*.test.js

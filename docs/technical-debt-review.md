@@ -7,8 +7,9 @@
 The generated `index.html` is template markup produced by `build_demo.py` and contains no
 logic of its own, so it is not reviewed separately.
 
-> **Note:** this report is a historical snapshot from before the `web/`/`ios/` split (see
-> [decisions.md](decisions.md)). File paths quoted throughout the tables below (e.g. `app.js:1-315`)
+> **Note:** this report is a historical snapshot from before the `web/`/`ios/` split and before the
+> demo's mascot/product name was standardized to "Rongrong" (it was called "Pip" at review time —
+> see [decisions.md](decisions.md)). File paths quoted throughout the tables below (e.g. `app.js:1-315`)
 > are relative to what is now `web/`.
 
 ---
@@ -18,7 +19,7 @@ logic of its own, so it is not reviewed separately.
 | # | Location | Problem | Why it's technical debt | Future impact | Recommended refactor | Severity | Est. effort |
 |---|---|---|---|---|---|---|---|
 | **TD-1** | `app.js:1-315` (whole file) | Single IIFE holds state management, routing, rendering, DOM helpers, and every page's business logic (~40 functions), with no module boundaries | Violates separation of concerns; nobody can understand a slice without loading the whole file | Every new page/feature inserts more branches into the same file — merge conflicts and regression risk grow linearly | Split into `state.js` (state + persistence), `router.js`, `dom.js` (`named`/`actionable`/`button` helpers), `pages/*.js` (one setup function per page) | **High** | 10–14h |
-| **TD-2** | Whole `src/`, contrast with [`RongrongPlus/tests/`](../../RongrongPlus/tests/commercialization.test.js) | `streak()`, `level()`, `mostFrequent()`, `dateKey()`, and the load-time state merge/validation logic (`app.js:21-29`) are pure functions with **zero unit tests** | The sibling RongrongPlus project already proves this class of logic deserves tests (7 cases covering date boundaries/corrupt data) — this one has none | Month/year-boundary bugs, DST edge cases, or the "streak counts from yesterday if today has no entry" logic can silently break with no regression signal | Extract these pure functions (exportable once modularized) and cover them with `node --test`, mirroring the existing RongrongPlus test pattern | **High** | 5–7h |
+| **TD-2** | Whole `src/`, contrast with [`prototypes/plus-standalone/tests/`](../prototypes/plus-standalone/tests/commercialization.test.js) | `streak()`, `level()`, `mostFrequent()`, `dateKey()`, and the load-time state merge/validation logic (`app.js:21-29`) are pure functions with **zero unit tests** | The sibling plus-standalone prototype already proves this class of logic deserves tests (7 cases covering date boundaries/corrupt data) — this one has none | Month/year-boundary bugs, DST edge cases, or the "streak counts from yesterday if today has no entry" logic can silently break with no regression signal | Extract these pure functions (exportable once modularized) and cover them with `node --test`, mirroring the existing plus-standalone test pattern | **High** | 5–7h |
 | **TD-3** | `app.js:144, 151, 247` | `named('Fill', named('Bond', sheet)).style.width = ...` — a **two-level string DOM lookup with no null guard**, unlike the `text()` helper which does guard (`if (element) ...`) | A design-tool layer rename/removal throws an uncaught `TypeError` at runtime instead of degrading gracefully | One rename in the Pencil export breaks a UI flow at runtime with an error message that gives no clue which element is missing | Wrap `named()` in a guarded accessor that warns (rather than throws) on a miss, and audit all call sites | **Medium** | 3–5h |
 | **TD-4** | `app.js:144/151/247`, `app.js:302/310` | The bond-fill-width formula `30 + state.bond % 100 * .7` is duplicated verbatim 3×; the `$4.99` price string is hardcoded in two separate dialog strings; the dialog-construction boilerplate (`openDialog` + `paragraph` + `button` + `dialog.append`) repeats ~8× | Classic copy-paste duplication — fixing one copy and missing another is easy | Next price change or formula tweak will likely miss one of the duplicates, producing a user-visible inconsistency | Extract `bondFillWidth()`, hoist the price into a constant, wrap the repeated pattern in a `confirmDialog(title, body[], actionLabel, onConfirm)` helper | **Medium** | 2–3h |
 | **TD-5** | `app.js:93-109` (`render()`) | One function does: route parsing + fallback, template cloning, `document.title` mapping, clock text refresh, tab binding, streak calculation, and a 4-way dispatch to page setup functions | Classic "does everything" function — violates single responsibility | Testing "title mapping" or "route fallback" in isolation requires running the entire render pipeline | Split into `resolveRoute()`, `renderTemplate()`, `bindTabs()`, `dispatchPageSetup()`; `render()` only orchestrates | **Medium** | 3–4h |
@@ -74,8 +75,8 @@ The codebase is a **pure static frontend + zero-dependency local file server** �
 
 ### PBI-2 — Add unit tests for core business logic
 - **Description:** Cover `streak()`, `level()`, `mostFrequent()`, `dateKey()`, and the load/merge/validation logic with unit tests.
-- **Impact:** Prevents silent regressions in date-boundary logic (month/year rollover, DST); brings this project in line with the testing standard already set by the RongrongPlus project.
-- **Remediation:** Mirror [`RongrongPlus/tests/commercialization.test.js`](../../RongrongPlus/tests/commercialization.test.js) using `node --test`; export the pure functions if needed.
+- **Impact:** Prevents silent regressions in date-boundary logic (month/year rollover, DST); brings this project in line with the testing standard already set by the plus-standalone prototype.
+- **Remediation:** Mirror [`prototypes/plus-standalone/tests/commercialization.test.js`](../prototypes/plus-standalone/tests/commercialization.test.js) using `node --test`; export the pure functions if needed.
 - **Severity:** High
 - **Effort:** 5–7h
 - **Acceptance criteria:** New `tests/app.test.js` covers at minimum: consecutive/broken streaks, cross-month level calculation, `mostFrequent` ties, rejection of corrupt localStorage data; `npm test` wired into `package.json`.

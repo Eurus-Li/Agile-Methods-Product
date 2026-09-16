@@ -1,8 +1,8 @@
 {
-  "name": "pip-browser-demo",
+  "name": "rongrong-browser-demo",
   "version": "0.1.0",
   "private": true,
-  "description": "Pip companion demo built with HTML, CSS and JavaScript",
+  "description": "Rongrong companion demo built with HTML, CSS and JavaScript",
   "type": "module",
   "scripts": {
     "dev": "node scripts/serve.js",

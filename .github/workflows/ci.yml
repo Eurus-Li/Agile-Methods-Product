@@ -6,25 +6,25 @@ on:
     branches: [main]
 
 jobs:
-  pip:
-    name: Pip (lint + typecheck + test)
+  web:
+    name: web (lint + typecheck + test)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-      # 现状：Pip 是零依赖的纯 JS/CSS/HTML，没有 TypeScript，也还没有独立的 ESLint 配置。
+      # 现状：web/ 是零依赖的纯 JS/CSS/HTML，没有 TypeScript，也还没有独立的 ESLint 配置。
       # `npm run check` 目前做的是 `node --check`（语法校验）。等 ESLint 接入后拆成独立的
-      # `lint` 步骤；等 src/js 补上单元测试后加一个独立的 `test` 步骤。见 Pip/docs/architecture.md。
+      # `lint` 步骤；等 src/js 补上单元测试后加一个独立的 `test` 步骤。见 docs/architecture.md。
       - name: Check
-        working-directory: Pip/web
+        working-directory: web
         run: npm run check
-      # TODO: Pip/ios/ 的 Xcode 工程建立后，这里加一个 macos-latest job：
-      #   swift build && swiftlint && swift test（对应 Pip/docs/architecture.md 的 iOS 技术栈章节）
+      # TODO: ios/ 的 Xcode 工程建立后，这里加一个 macos-latest job：
+      #   swift build && swiftlint && swift test（对应 docs/architecture.md 的 iOS 技术栈章节）
 
-  rongrong-plus:
-    name: RongrongPlus (lint + typecheck + test)
+  plus-standalone:
+    name: prototypes/plus-standalone (lint + typecheck + test)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,5 +32,5 @@ jobs:
         with:
           node-version: "20"
       - name: Test
-        working-directory: RongrongPlus
+        working-directory: prototypes/plus-standalone
         run: npm test
