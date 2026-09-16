@@ -4,13 +4,13 @@
 
 ## 给协作者（vibe coding 团队）
 
-这个仓库同时被人和 AI 编码助手（Claude Code / Codex 等）使用。**任何任务开始前先读 [AGENTS.md](AGENTS.md)**——那是本项目唯一的规则源，Claude Code 会通过 [CLAUDE.md](CLAUDE.md) 自动读到同一份内容。仓库根目录还有一份最简版 [../AGENTS.md](../AGENTS.md)，指路到 `Pip/` 和 `Commercialization/` 各自的规则。
+这个仓库同时被人和 AI 编码助手（Claude Code / Codex 等）使用。**任何任务开始前先读 [AGENTS.md](AGENTS.md)**——那是本项目唯一的规则源，Claude Code 会通过 [CLAUDE.md](CLAUDE.md) 自动读到同一份内容。仓库根目录还有一份最简版 [../AGENTS.md](../AGENTS.md)，指路到 `Pip/` 和 `RongrongPlus/` 各自的规则。
 
 日常开发只需要记住三件事：
 
 1. **做之前先看 [docs/specs/](docs/specs/)**，没有对应 spec 就先写一份简短的再动代码（参考 [mood-checkin.md](docs/specs/mood-checkin.md)）。
 2. **技术/设计选型先查 [docs/decisions.md](docs/decisions.md)**，已经定过的不要重新讨论；新的、会被反复问的问题，做完记得补一条。
-3. **协作是轻量模式**：允许直接推 `main`，靠仓库根目录的 [CI](../.github/workflows/ci.yml) 兜底，没有强制 PR review——但这意味着 push 前自己要确认能跑通、lint 干净（见 [../.github/pull_request_template.md](../.github/pull_request_template.md) 里的 checklist，即使不开 PR 也照着自查）。
+3. **每个任务开一个短分支，做完自己合并**：不用等审批，小改动确认 [CI](../.github/workflows/ci.yml) 绿了就能立刻合到 `main`——但这意味着合并前自己要走一遍 [../.github/pull_request_template.md](../.github/pull_request_template.md) 里的 checklist，不管有没有开 PR。
 
 技术栈、模块划分、UI 设计 Token 的完整说明在 [docs/architecture.md](docs/architecture.md)。
 
@@ -39,7 +39,7 @@ Pip/
 └── ios/                       # 未来实现：SwiftUI 原生 App（尚未开始，见 ios/README.md）
 ```
 
-`web/` 和 `ios/` 是同一套产品逻辑的两种实现，不是两个不同产品——`docs/` 下的 spec/decisions/architecture 对两者都适用。仓库共用的 CI（`../.github/workflows/ci.yml`）和 PR 模板放在仓库根目录，同时覆盖 Pip 和 `Commercialization/`。
+`web/` 和 `ios/` 是同一套产品逻辑的两种实现，不是两个不同产品——`docs/` 下的 spec/decisions/architecture 对两者都适用。仓库共用的 CI（`../.github/workflows/ci.yml`）和 PR 模板放在仓库根目录，同时覆盖 Pip 和 `RongrongPlus/`。
 
 ## 快速启动（web demo）
 

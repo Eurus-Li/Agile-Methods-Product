@@ -29,10 +29,10 @@ Pip/                     # 本项目根目录（这份 AGENTS.md 所在位置）
 ├── web/                     # 现有实现：src/, index.html, design/, assets/, scripts/
 └── ios/                     # 未来实现：SwiftUI 工程，目前只有占位 README
 
-../Commercialization/    # 仓库里另一个独立产品（Rongrong Plus），与 Pip 无关，不要在这里改它
+../RongrongPlus/         # 仓库里另一个独立产品（Rongrong Plus 商业化 demo），与 Pip 无关，不要在这里改它
 ../README.md             # 仓库根 README，列出所有产品目录
 ../AGENTS.md             # 仓库级最简索引，指向各产品自己的 AGENTS.md
-../.github/              # 仓库共用的 CI + PR 模板，同时覆盖 Pip 和 Commercialization
+../.github/              # 仓库共用的 CI + PR 模板，同时覆盖 Pip 和 RongrongPlus
 ```
 
 ## 开工前必读
@@ -43,10 +43,11 @@ Pip/                     # 本项目根目录（这份 AGENTS.md 所在位置）
 
 ## 协作规则（Git / vibe coding）
 
-- 允许直接推 `main`，不强制 PR review。**CI 是唯一的安全网**：push 前确保本地能跑通、lint 干净。CI 变红是最高优先级，先修红再叠新代码。
-- 改动大、或会碰到多人共用的文件（数据模型、DesignSystem、路由/导航层）时，开个分支自己合并，或至少在团队渠道说一声，降低并行 AI 生成代码互相冲突的概率。
+- **每个任务开一个短生命周期分支**（如 `feat/daily-reminder`、`fix/streak-boundary`），做完自己合并回 `main`。不用等其他人审批；小改动做完确认 CI 绿了就可以立刻合并、删分支。
+- **CI 在分支 push 时就跑**（不是等合并到 main 才跑），把它当合并前的把关，不是合并后的补救。CI 变红先修红，不在红的分支上继续叠代码。
+- 改动大、或会碰到多人共用的文件（数据模型、DesignSystem、路由/导航层）时，除了开分支，最好再在团队渠道说一声，降低并行 AI 生成代码在同一批文件上互相冲突的概率。
 - Commit message 用 Conventional Commits：`feat:` / `fix:` / `refactor:` / `docs:` / `chore:`。
-- 提交前的 Definition of Done：能跑、lint 过、涉及的纯逻辑函数有单元测试、UI 数值来自设计 Token、隐含的技术决定已经补进 `docs/decisions.md`。
+- 合并前的 Definition of Done：能跑、lint 过、涉及的纯逻辑函数有单元测试、UI 数值来自设计 Token、隐含的技术决定已经补进 `docs/decisions.md`。
 
 ## 给 AI 助手的具体约定
 

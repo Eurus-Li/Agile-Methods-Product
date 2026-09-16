@@ -1,6 +1,6 @@
 ## 这个改动做了什么
 
-<!-- 一两句话，注明是 Pip/ 还是 Commercialization/ 的改动，链接对应的 spec（Pip/docs/specs/）如果有的话 -->
+<!-- 一两句话，注明是 Pip/ 还是 RongrongPlus/ 的改动，链接对应的 spec（Pip/docs/specs/）如果有的话 -->
 
 ## Definition of Done
 

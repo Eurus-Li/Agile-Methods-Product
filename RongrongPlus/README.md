@@ -1,4 +1,4 @@
-# Commercialization
+# Rongrong Plus
 
 This folder contains the standalone, all-English **Rongrong Plus commercialization demo** for Rongrong. Other product features can live in sibling folders at the repository root.
 
@@ -7,13 +7,13 @@ This folder contains the standalone, all-English **Rongrong Plus commercializati
 Install Node.js 20 or later, then from the repository root run:
 
 ```sh
-cd Commercialization
+cd RongrongPlus
 node server.js
 ```
 
 Open **http://localhost:3000**. No package installation, API key, or build step is needed. Use an HTTP server; opening `index.html` directly with `file://` does not support the module entry point reliably.
 
-Run tests from inside the `Commercialization` folder:
+Run tests from inside the `RongrongPlus` folder:
 
 ```sh
 node --test tests/*.test.js

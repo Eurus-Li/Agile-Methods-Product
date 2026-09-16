@@ -2,7 +2,6 @@ name: CI
 
 on:
   push:
-    branches: [main]
   pull_request:
     branches: [main]
 
@@ -24,8 +23,8 @@ jobs:
       # TODO: Pip/ios/ 的 Xcode 工程建立后，这里加一个 macos-latest job：
       #   swift build && swiftlint && swift test（对应 Pip/docs/architecture.md 的 iOS 技术栈章节）
 
-  commercialization:
-    name: Commercialization (lint + typecheck + test)
+  rongrong-plus:
+    name: RongrongPlus (lint + typecheck + test)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -33,5 +32,5 @@ jobs:
         with:
           node-version: "20"
       - name: Test
-        working-directory: Commercialization
+        working-directory: RongrongPlus
         run: npm test
