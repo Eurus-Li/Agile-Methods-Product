@@ -1,0 +1,2 @@
+# Only used to regenerate index.html from design/exports/.
+beautifulsoup4>=4.12,<5

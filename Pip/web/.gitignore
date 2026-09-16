@@ -1,0 +1,16 @@
+.DS_Store
+.playwright-mcp/
+node_modules/
+.venv/
+__pycache__/
+*.py[cod]
+*.log
+.env
+.env.*
+!.env.example
+
+# 未来 iOS 工程（Xcode/SwiftPM）产物，提前占位
+DerivedData/
+*.xcuserstate
+.swiftpm/
+.build/
