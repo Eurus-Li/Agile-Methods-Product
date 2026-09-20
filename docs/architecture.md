@@ -81,3 +81,7 @@ ios/
 
 - 每次 push 到 `main` 自动跑 build + lint + test（web demo 现在是 `npm run check`；iOS 工程建立后加 `swift build` + `swiftlint` + `swift test`）。
 - 纯函数逻辑必须有单元测试（对应 [技术债审查](technical-debt-review.md) TD-2 的教训）；UI/snapshot 测试原型阶段不强制。
+
+## 6. 皮肤数据扩展
+Web 皮肤目录和纯逻辑位于 `web/src/js/skins.js`；通过经典脚本加载以兼容直接打开 HTML。`skin` / `ownedSkins` 加入现有状态，读取时补默认、去重并清理未知 ID。
+iOS 尚无工程；未来 Model / SwiftData 增加同名语义字段，旧记录迁移至 cream / [cream]。Plus 结束不清理皮肤购买记录。见 [规格](specs/pet-skins.md)。

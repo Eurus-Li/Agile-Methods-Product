@@ -55,9 +55,25 @@ PORT=8001 npm run dev
 | [AGENTS.md](AGENTS.md) | 项目规则，AI 编码助手开工前先读 |
 | [docs/design-system.md](docs/design-system.md) | 颜色/字体/间距/组件 Token |
 | [docs/architecture.md](docs/architecture.md) | 技术栈、模块划分、iOS 组件映射 |
+| [docs/changelog.md](docs/changelog.md) | 开发日志与功能更新记录 |
 | [docs/decisions.md](docs/decisions.md) | 已经定过的技术/产品选型 |
 | [docs/specs/](docs/specs/) | 每个功能的交互流程 |
 | [docs/technical-debt-review.md](docs/technical-debt-review.md) | 技术债/安全审查记录 |
 | [prototypes/plus-standalone/](prototypes/plus-standalone/README.md) | 早期付费墙原型，已被 web/ 取代，仅供参考 |
 | [.github/workflows/ci.yml](.github/workflows/ci.yml) | 每次 push 自动跑的检查 |
 | [.github/pull_request_template.md](.github/pull_request_template.md) | 合并前的 Definition of Done 清单 |
+
+## Commercialization：宠物皮肤
+
+Home 的 **Skins** 按钮、Me 衣橱或 Plus 页的 **Explore pet skins** 可打开商店。预览后确认模拟购买，皮肤立即应用到 Home，可与配饰叠加使用。
+
+| 皮肤 | 一次性示例价格 | 外观 |
+| --- | --- | --- |
+| Classic Cream | 免费 | 原始奶油色 |
+| Mint Cloud | US$0.99 | 薄荷色与叶子 |
+| Cherry Blossom | US$1.99 | 樱花粉与花朵 |
+| Starlight | US$2.99 | 薰衣草色与月亮星星 |
+
+皮肤独立于 US$4.99/月的 Plus 配饰会员；结束会员不影响已购皮肤。**所有交易均为本地模拟，不会真实扣款。** `skin` 和 `ownedSkins` 存入现有 localStorage，刷新后保留，重置演示数据会清除。旧数据自动补充免费默认皮肤。
+
+运行 `npm test` 验证皮肤定价、购买和穿戴逻辑。产品规格见 [pet-skins.md](docs/specs/pet-skins.md)。

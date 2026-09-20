@@ -40,3 +40,6 @@ plus: boolean
 
 - 技术决策：[decisions.md](../decisions.md) "支付 / IAP 方案"（暂缓选型）、"后端 / 账号系统"
 - 安全注意事项：[technical-debt-review.md](../technical-debt-review.md) PBI-9
+
+## 皮肤单购边界
+Plus 解锁的是 12 件配饰，不包含单独定价的宠物皮肤。Plus 页面提供皮肤商店入口；单购皮肤在结束会员后保留，参见 [pet-skins.md](pet-skins.md)。

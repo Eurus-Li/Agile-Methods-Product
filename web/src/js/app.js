@@ -1,5 +1,6 @@
 (() => {
   'use strict';
+  const skins = globalThis.RongrongSkins;
   const KEY = 'rongrong-demo-v1';
   const moods = ['Calm', 'Happy', 'Tired', 'Sad', 'Tense'];
   const colors = { Calm: '#ddebdc', Happy: '#ffe3b5', Tired: '#e6dff4', Sad: '#dce6f2', Tense: '#f4d8d8' };
@@ -16,7 +17,7 @@
   const dialog = document.querySelector('#dialog');
   const dateKey = (date = new Date()) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
   const today = dateKey();
-  const defaults = () => ({ nickname: 'Emma', birthday: '2000-09-15', outfit: 'Crown', plus: false, entries: {}, bond: 0, started: today });
+  const defaults = () => ({ nickname: 'Emma', birthday: '2000-09-15', outfit: 'Crown', skin: 'cream', ownedSkins: ['cream'], plus: false, entries: {}, bond: 0, started: today });
   let state = defaults();
   try {
     const saved = JSON.parse(localStorage.getItem(KEY));
@@ -27,6 +28,7 @@
       state.bond = Number.isFinite(state.bond) ? Math.max(0, state.bond) : 0;
     }
   } catch { /* A fresh session also works when storage is unavailable. */ }
+  state = skins.normalize(state);
   let route = 'home';
   let returnFromPlus = 'home';
   let selectedDate = today;
@@ -126,6 +128,9 @@
       const sprite = named('Sprite Pip'); sprite.classList.remove('petting'); void sprite.offsetWidth; sprite.classList.add('petting');
       text('Line', `That feels nice, ${String(state.nickname).slice(0, 30)} ♡`);
     }, 'Pet Rongrong');
+    applySkin(named('Sprite Pip'), skins.find(state.skin));
+    const skinControl = button(`Skins · ${skins.find(state.skin).name}`, showSkins, 'skin-shortcut');
+    named('Stage').append(skinControl);
     const accessory = document.createElement('span'); accessory.className = 'outfit'; accessory.textContent = outfits[state.outfit]; accessory.setAttribute('aria-label', state.outfit); named('Stage').append(accessory);
   }
   function setupReply() {
@@ -260,6 +265,7 @@
       actionable(node, () => wear(outfit), `Wear ${outfit}${!state.plus && !freeOutfits.includes(outfit) ? ', Plus' : ''}`);
     }
     bind('Open Wardrobe', showWardrobe, 'Open wardrobe');
+    named('Dressing Room').append(button('Explore pet skins', showSkins));
   }
   function editProfile(field) {
     openDialog(field === 'nickname' ? 'Your nickname' : 'Your birthday');
@@ -280,9 +286,58 @@
   function showWardrobe() {
     openDialog('Rongrong’s wardrobe');
     paragraph('Choose a little accessory for Rongrong.');
+    dialog.append(button('Explore pet skins · one-time demo purchases', showSkins));
     const grid = document.createElement('div'); grid.className = 'wardrobe-grid';
     for (const [name, emoji] of Object.entries(outfits)) grid.append(button(`${emoji} ${name}${name === state.outfit ? ' ✓' : !state.plus && !freeOutfits.includes(name) ? ' · Plus' : ''}`, () => wear(name), ''));
     dialog.append(grid);
+  }
+  function applySkin(node, skin) {
+    if (!node) return;
+    node.dataset.skin = skin.id;
+    node.classList.add('skin-art');
+    node.setAttribute('aria-label', `Rongrong wearing ${skin.name}${node.getAttribute('role') === 'button' ? ', pet Rongrong' : ''}`);
+    if (skin.motif) {
+      const motif = document.createElement('span'); motif.className = 'skin-motif';
+      motif.textContent = skin.motif; motif.setAttribute('aria-hidden', 'true'); node.append(motif);
+    }
+  }
+  function skinPreview(skin) {
+    const art = document.createElement('div'); art.className = 'skin-preview'; art.setAttribute('role', 'img');
+    applySkin(art, skin); return art;
+  }
+  function showSkins() {
+    openDialog('A little more you');
+    paragraph('Pet skins · one-time purchases');
+    paragraph('Demo only — no real charges. Skins are separate from Plus and stay unlocked in this browser when membership ends.', dialog, 'muted');
+    const grid = document.createElement('div'); grid.className = 'skin-grid';
+    for (const skin of skins.catalog) {
+      const owned = state.ownedSkins.includes(skin.id), equipped = state.skin === skin.id;
+      const card = document.createElement('section'); card.className = 'skin-card';
+      card.append(skinPreview(skin));
+      paragraph(skin.name, card, 'skin-name');
+      paragraph(skin.description, card, 'muted');
+      paragraph(`${skins.price(skin)}${skin.cents ? ' · one-time' : ''}`, card);
+      paragraph(equipped ? '✓ Equipped' : owned ? 'Owned' : 'Locked · preview available', card, 'muted');
+      const action = button(equipped ? 'Equipped' : owned ? 'Wear skin' : 'Preview skin', () => owned ? wearSkin(skin.id) : previewSkin(skin), 'secondary');
+      action.disabled = equipped; action.setAttribute('aria-label', `${action.textContent}: ${skin.name}`);
+      card.append(action); grid.append(card);
+    }
+    dialog.append(grid);
+  }
+  function wearSkin(id) {
+    state = skins.equip(state, id); save(); closeDialog(); render();
+    toast(`${skins.find(state.skin).name} equipped`);
+  }
+  function previewSkin(skin) {
+    openDialog(skin.name);
+    const art = skinPreview(skin); art.classList.add('skin-detail'); dialog.append(art);
+    paragraph(skin.description);
+    paragraph(`${skins.price(skin)} · one-time. Not a subscription. Plus does not include this skin.`);
+    paragraph('Demo only: confirming unlocks and equips this skin in this browser. No payment is taken.', dialog, 'muted');
+    dialog.append(button(`Simulate purchase · ${skins.price(skin)}`, () => {
+      state = skins.purchase(state, skin.id); save(); closeDialog(); render();
+      toast(`${skin.name} unlocked in demo · no charge`);
+    }, 'primary'), button('Back to skins', showSkins));
   }
   function showSettings() {
     openDialog('Settings');
@@ -290,12 +345,17 @@
     dialog.append(button('Manage Rongrong Plus', () => navigate('plus')));
     paragraph('This demo stores your check-ins and profile in this browser. Rongrong’s replies are preset. No account or payment is connected.', dialog, 'muted');
     dialog.append(button('Reset demo data', () => {
-      openDialog('Reset this demo?'); paragraph('This deletes your check-ins, notes, profile changes and demo membership in this browser.');
+      openDialog('Reset this demo?'); paragraph('This deletes your check-ins, notes, profile changes, purchased skins and demo membership in this browser.');
       dialog.append(button('Delete demo data', () => { state = defaults(); save(); closeDialog(); navigate('home'); toast('Demo reset'); }, 'primary'), button('Keep my data', closeDialog));
     }));
   }
   function setupPlus() {
     bind('Close', () => navigate(returnFromPlus), 'Close Plus');
+    const skinOffer = document.createElement('section'); skinOffer.className = 'skin-offer';
+    paragraph('Make Rongrong your own', skinOffer);
+    paragraph(`Pet skins · ${skins.catalog.filter(skin => skin.cents).map(skins.price).join(' / ')} one-time. Sold separately from Plus.`, skinOffer, 'muted');
+    skinOffer.append(button('Explore pet skins', showSkins));
+    named('Content').append(skinOffer);
     text('Label', state.plus ? 'Manage demo membership' : 'Try monthly membership', named('Primary Button'));
     bind('Primary Button', () => {
       openDialog(state.plus ? 'Your demo membership' : 'Try Rongrong Plus');

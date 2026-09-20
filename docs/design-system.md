@@ -90,3 +90,7 @@ Phase 1 不做，两套实现目前都只有浅色模式。以后要做的话先
 - **Web（CSS）**：用 CSS 自定义属性命名，前缀跟 token 名一致，例如 `--color-accent-primary`、`--radius-pill`。
 - **iOS（SwiftUI）**：Asset Catalog 里的 Color Set 用同样的语义名（`background.base` → `Color("BackgroundBase")`），不要另起一套命名。
 - 不管哪个平台，新增 UI 前先看这份文档有没有现成 token；没有的话先在这里加一行，再写代码，不要反过来先写死在代码里。
+
+## 12. 皮肤展示
+复用原宠物图片，以 CSS 混合底色与 emoji 主题装饰呈现皮肤。Cream 无混合；Mint 使用 `mood.calm`；Cherry 使用 `mood.tense`；Starlight 使用 `mood.tired`。使用 multiply 混合，主题装饰仅为外观，不改变心情语义。
+皮肤卡预览高度 128px、详情预览 192px；装饰字号 22px、内边距 12px；卡片网格最小列宽 128px。沿用现有卡片圆角 18px、间距 12px、正文 14px。
