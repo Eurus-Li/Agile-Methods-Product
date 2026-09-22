@@ -7,3 +7,5 @@
 开始这个目录下的工作前，先看 [../AGENTS.md](../AGENTS.md)。
 
 Release 1.1 的活动推荐已定义于 [活动规格](../docs/specs/mood-activities.md)，Web 先实现。未来 Reply 模块复用固定目录 ID、心情映射和选择规则；SwiftData 增加可空 activityId，旧记录默认 nil。
+
+活动确认反馈：按活动规格显示短暂的小狗开心动画与选择文字，使用系统 accessibilityReduceMotion 决定是否关闭位移/缩放；不新增持久化字段或 Bond 奖励。

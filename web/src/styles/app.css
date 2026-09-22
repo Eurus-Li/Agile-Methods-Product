@@ -103,3 +103,23 @@ dialog textarea { resize: vertical; min-height: 90px; }
 .activity-selected:empty { display: none; }
 .activity-steps { font-size: 14px; padding-left: 24px; }
 .activity-steps li { margin: 12px 0; }
+
+.activity-celebration { position: relative; padding: 24px 12px; display: grid; place-items: center; }
+.celebration-pet { width: min(192px, 100%); height: 192px; transform-origin: center bottom; }
+.celebration-accessory { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); font-size: 22px; }
+.celebration-hearts { position: absolute; top: 12px; color: var(--color-accent-primary); font-size: 22px; pointer-events: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .celebration-pet { animation: activity-happy-hop .5s ease-in-out 3; }
+  .celebration-hearts { animation: activity-happy-hearts .5s ease-out 3; }
+}
+@keyframes activity-happy-hop {
+  0%, 100% { transform: translateY(0) rotate(0) scale(1); }
+  20% { transform: translateY(0) rotate(-5deg) scale(1.04, .96); }
+  50% { transform: translateY(-12px) rotate(5deg) scale(.96, 1.04); }
+  80% { transform: translateY(0) rotate(-5deg) scale(1.04, .96); }
+}
+@keyframes activity-happy-hearts {
+  from { transform: translateY(0); opacity: 0; }
+  50% { opacity: 1; }
+  to { transform: translateY(-24px); opacity: 0; }
+}

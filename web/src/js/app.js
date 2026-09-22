@@ -214,8 +214,8 @@
         for (const instruction of activity.steps) { const step = document.createElement('li'); step.textContent = instruction; steps.append(step); }
         dialog.append(steps);
         const select = button(entry.activityId === activity.id ? 'Selected activity' : 'Select activity', () => {
-          Object.assign(entry, activities.select(entry, activity.id)); save(); updateSelection(); closeDialog();
-          toast(`Selected: ${activity.name}`);
+          Object.assign(entry, activities.select(entry, activity.id)); save(); updateSelection();
+          showActivityCelebration(activity);
         }, 'primary');
         select.disabled = entry.activityId === activity.id;
         dialog.append(select, button('Back to activities', closeDialog));
@@ -223,6 +223,20 @@
       cards.append(card);
     }
     updateSelection(); section.append(cards); sheet.append(section);
+  }
+  function showActivityCelebration(activity) {
+    // Keep the card as the return target, not the detail button being removed.
+    const returnFocus = lastFocus;
+    openDialog('A happy little hop!');
+    lastFocus = returnFocus;
+    const stage = document.createElement('div'); stage.className = 'activity-celebration'; stage.setAttribute('aria-hidden', 'true');
+    const pet = skinPreview(skins.find(state.skin)); pet.classList.add('celebration-pet');
+    const accessory = document.createElement('span'); accessory.className = 'celebration-accessory'; accessory.textContent = outfits[state.outfit]; pet.append(accessory);
+    const hearts = document.createElement('span'); hearts.className = 'celebration-hearts'; hearts.textContent = '♡  ♥  ♡';
+    stage.append(pet, hearts); dialog.append(stage);
+    paragraph('Rongrong is happy to spend this little moment with you.');
+    paragraph(`Selected: ${activity.name}`, dialog, 'activity-status').setAttribute('role', 'status');
+    const back = button('Back to activities', closeDialog, 'primary'); dialog.append(back); back.focus();
   }
   function setupJournal() {
     bind('Month', () => { calendarMode = 'month'; render(); }, 'Month view', named('Switch'));
