@@ -130,10 +130,11 @@
       const sprite = named('Sprite Pip'); sprite.classList.remove('petting'); void sprite.offsetWidth; sprite.classList.add('petting');
       text('Line', `That feels nice, ${String(state.nickname).slice(0, 30)} ♡`);
     }, 'Pet Rongrong');
-    applySkin(named('Sprite Pip'), skins.find(state.skin));
+    const homePet = named('Sprite Pip');
+    setupCutoutPet(homePet);
+    named('Stage').classList.add('home-pet-scene');
     const skinControl = button(`Skins · ${skins.find(state.skin).name}`, showSkins, 'skin-shortcut');
     named('Stage').append(skinControl);
-    const accessory = document.createElement('span'); accessory.className = 'outfit'; accessory.textContent = outfits[state.outfit]; accessory.setAttribute('aria-label', state.outfit); named('Stage').append(accessory);
     if (route === 'home') {
       const chosen = activities.find(existing?.activityId);
       named('Content').append(button(chosen ? `Your activity · ${chosen.name}` : 'Explore activities for your mood', () => {
@@ -231,11 +232,7 @@
     lastFocus = returnFocus;
     const stage = document.createElement('div'); stage.className = 'activity-celebration'; stage.setAttribute('aria-hidden', 'true');
     const pet = document.createElement('div'); pet.className = 'celebration-pet';
-    applySkin(pet, skins.find(state.skin));
-    const dog = document.createElement('img'); dog.className = 'celebration-dog'; dog.src = 'assets/images/rongrong-cutout.png'; dog.alt = '';
-    const tint = document.createElement('span'); tint.className = 'celebration-tint';
-    pet.prepend(dog, tint);
-    const accessory = document.createElement('span'); accessory.className = 'celebration-accessory'; accessory.textContent = outfits[state.outfit]; pet.append(accessory);
+    setupCutoutPet(pet);
     const hearts = document.createElement('span'); hearts.className = 'celebration-hearts'; hearts.textContent = '♡  ♥  ♡';
     stage.append(pet, hearts); dialog.append(stage);
     paragraph('Rongrong is happy to spend this little moment with you.');
@@ -373,6 +370,15 @@
       const motif = document.createElement('span'); motif.className = 'skin-motif';
       motif.textContent = skin.motif; motif.setAttribute('aria-hidden', 'true'); node.append(motif);
     }
+  }
+  function setupCutoutPet(node) {
+    if (!node) return;
+    node.classList.add('cutout-pet');
+    applySkin(node, skins.find(state.skin));
+    const dog = document.createElement('img'); dog.className = 'celebration-dog'; dog.src = 'assets/images/rongrong-cutout.png'; dog.alt = ''; dog.draggable = false;
+    const tint = document.createElement('span'); tint.className = 'celebration-tint'; tint.setAttribute('aria-hidden', 'true');
+    const accessory = document.createElement('span'); accessory.className = 'celebration-accessory'; accessory.textContent = outfits[state.outfit]; accessory.setAttribute('aria-hidden', 'true');
+    node.prepend(dog, tint); node.append(accessory);
   }
   function skinPreview(skin) {
     const art = document.createElement('div'); art.className = 'skin-preview'; art.setAttribute('role', 'img');

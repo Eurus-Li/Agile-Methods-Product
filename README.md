@@ -30,7 +30,7 @@ PORT=8001 npm run dev
 
 ## 功能与演示流程
 
-1. **Home**：点击 Rongrong 与它互动，选择 Calm、Happy、Tired、Sad 或 Tense 记录当天心情。
+1. **Home**：点击去背的 Rongrong 与它互动，小狗和配饰会轻跳，后方奶油色窗光/植物插画保持固定；选择 Calm、Happy、Tired、Sad 或 Tense 记录当天心情。
 2. **Reply**：查看对应回复、拥抱 Rongrong、收藏回复；浏览三个心情推荐活动，查看时间与步骤，再选择一项。Home 可再次打开当天活动，Journal 可查看历史日期的活动。
 3. **Journal**：切换月份或年份，点击有记录的日期查看回复、保存文字备注，查看月度汇总。
 4. **Me**：修改昵称和生日，选择配饰或打开衣橱；配饰会显示在 Home 的 Rongrong 上。
