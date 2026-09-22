@@ -20,7 +20,7 @@ jobs:
       - name: Check
         working-directory: web
         run: npm run check
-      - name: Test pet skin logic
+      - name: Test activity and pet skin logic
         working-directory: web
         run: npm test
       # TODO: ios/ 的 Xcode 工程建立后，这里加一个 macos-latest job：

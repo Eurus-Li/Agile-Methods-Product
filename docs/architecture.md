@@ -85,3 +85,9 @@ ios/
 ## 6. 皮肤数据扩展
 Web 皮肤目录和纯逻辑位于 `web/src/js/skins.js`；通过经典脚本加载以兼容直接打开 HTML。`skin` / `ownedSkins` 加入现有状态，读取时补默认、去重并清理未知 ID。
 iOS 尚无工程；未来 Model / SwiftData 增加同名语义字段，旧记录迁移至 cream / [cream]。Plus 结束不清理皮肤购买记录。见 [规格](specs/pet-skins.md)。
+
+## 7. 心情活动（Release 1.1）
+
+`web/src/js/activities.js` 提供固定目录、五种心情到三个活动的映射，以及纯函数 recommend / normalizeEntry / select / changeMood；经典脚本先于 app.js 加载，支持直接打开 HTML。app.js 负责卡片、原生详情 dialog 与保存。模板生成脚本同步加载此模块。
+
+`entries[dateKey].activityId` 为可空目录 ID。旧记录及无效/不属于当前推荐的 ID 归一化为 null；同心情重打卡保留、改心情清空。按日期隔离，不增加 Bond。iOS 工程尚未创建；建立 SwiftData 模型时以可空字段和旧记录 nil 默认值迁移，复用目录 ID 与映射，详见 [规格](specs/mood-activities.md)。

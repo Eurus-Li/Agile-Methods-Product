@@ -1,6 +1,7 @@
 (() => {
   'use strict';
   const skins = globalThis.RongrongSkins;
+  const activities = globalThis.RongrongActivities;
   const KEY = 'rongrong-demo-v1';
   const moods = ['Calm', 'Happy', 'Tired', 'Sad', 'Tense'];
   const colors = { Calm: '#ddebdc', Happy: '#ffe3b5', Tired: '#e6dff4', Sad: '#dce6f2', Tense: '#f4d8d8' };
@@ -29,6 +30,7 @@
     }
   } catch { /* A fresh session also works when storage is unavailable. */ }
   state = skins.normalize(state);
+  state.entries = Object.fromEntries(Object.entries(state.entries).map(([key, entry]) => [key, activities.normalizeEntry(entry)]));
   let route = 'home';
   let returnFromPlus = 'home';
   let selectedDate = today;
@@ -79,7 +81,7 @@
     dialog.showModal();
   }
   dialog.addEventListener('click', event => { if (event.target === dialog) { const r = dialog.getBoundingClientRect(); if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) closeDialog(); } });
-  dialog.addEventListener('close', () => { if (lastFocus?.isConnected) lastFocus.focus(); });
+  dialog.addEventListener('close', () => { if (!dialog.open && lastFocus?.isConnected) lastFocus.focus(); });
   function navigate(next) {
     if (dialog.open) closeDialog();
     if (next === 'plus' && route !== 'plus') returnFromPlus = route === 'reply' ? 'home' : route;
@@ -119,7 +121,7 @@
       tile.setAttribute('aria-pressed', String(existing?.mood === mood));
       actionable(tile, () => {
         const previous = state.entries[today];
-        state.entries[today] = { mood, note: previous?.note || '', saved: previous?.saved || false, hugged: previous?.hugged || false, created: new Date().toISOString() };
+        state.entries[today] = activities.changeMood({ ...previous, note: previous?.note || '', saved: previous?.saved || false, hugged: previous?.hugged || false, created: previous?.created || new Date().toISOString() }, mood);
         if (!previous) state.bond += 15;
         selectedDate = today; save(); navigate('reply');
       }, `Feeling ${mood.toLowerCase()}`);
@@ -132,18 +134,25 @@
     const skinControl = button(`Skins · ${skins.find(state.skin).name}`, showSkins, 'skin-shortcut');
     named('Stage').append(skinControl);
     const accessory = document.createElement('span'); accessory.className = 'outfit'; accessory.textContent = outfits[state.outfit]; accessory.setAttribute('aria-label', state.outfit); named('Stage').append(accessory);
+    if (route === 'home') {
+      const chosen = activities.find(existing?.activityId);
+      named('Content').append(button(chosen ? `Your activity · ${chosen.name}` : 'Explore activities for your mood', () => {
+        if (!existing) { toast('Choose a mood first to find three activities for you.'); named('Calm', named('Quick Moods'))?.focus(); return; }
+        selectedDate = today; navigate('reply');
+      }));
+    }
   }
   function setupReply() {
     const entry = state.entries[selectedDate] || state.entries[today];
     const mood = entry?.mood || 'Sad';
     const moodState = named('Mood State');
-    text('Label', `Today · ${mood.toLowerCase()}`, moodState);
+    text('Label', `${selectedDate === today ? 'Today' : selectedDate} · ${mood.toLowerCase()}`, moodState);
     text('Emoji', { Calm: '🍃', Happy: '☀️', Tired: '🌙', Sad: '☁️', Tense: '🌧️' }[mood], moodState);
     const sheet = named('Reply Sheet');
     sheet.setAttribute('role', 'dialog'); sheet.setAttribute('aria-modal', 'true'); sheet.setAttribute('aria-label', 'Rongrong heard you');
     for (const child of app.firstElementChild.children) if (child !== sheet && child !== named('Scrim')) child.inert = true;
     text('Reply', replies[mood], sheet);
-    text('Sub', `Feeling ${mood.toLowerCase()} · ${entry ? 'just now' : 'sample reply'}`, named('Meta', sheet));
+    text('Sub', `Feeling ${mood.toLowerCase()} · ${entry ? selectedDate === today ? 'today' : selectedDate : 'sample reply'}`, named('Meta', sheet));
     text('Label', `Bond Lv.${level()}`, named('Bond', sheet));
     text('Gain', entry ? '♡ Together' : 'Preview', named('Bond', sheet));
     named('Fill', named('Bond', sheet)).style.width = `${30 + state.bond % 100 * .7}%`;
@@ -162,15 +171,58 @@
     }, 'Save reply', sheet);
     function updateSaved() { named('Save Button', sheet).setAttribute('aria-pressed', String(!!entry?.saved)); named('Save Button', sheet).style.backgroundColor = entry?.saved ? '#ffe3d3' : '#fbf3ec'; }
     updateSaved();
+    if (entry) setupActivities(entry, sheet);
     requestAnimationFrame(() => named('Close', sheet)?.focus());
     sheet.addEventListener('keydown', event => {
       if (event.key === 'Escape') { event.preventDefault(); navigate('home'); }
       if (event.key === 'Tab') {
-        const items = [...sheet.querySelectorAll('[tabindex="0"]')];
+        const items = [...sheet.querySelectorAll('[tabindex="0"], button:not(:disabled)')];
         if (event.shiftKey && document.activeElement === items[0]) { event.preventDefault(); items.at(-1).focus(); }
         else if (!event.shiftKey && document.activeElement === items.at(-1)) { event.preventDefault(); items[0].focus(); }
       }
     });
+  }
+  function setupActivities(entry, sheet) {
+    const section = document.createElement('section'); section.className = 'activity-section';
+    section.setAttribute('aria-labelledby', 'activities-title');
+    const heading = document.createElement('h2'); heading.id = 'activities-title'; heading.textContent = 'A little something for you';
+    section.append(heading);
+    paragraph(`Three ideas for feeling ${entry.mood.toLowerCase()}. Pick what suits you, at your own pace.`, section);
+    const status = paragraph('', section, 'activity-status'); status.setAttribute('role', 'status');
+    const cards = document.createElement('div'); cards.className = 'activity-cards';
+    const updateSelection = () => {
+      const selected = activities.find(entry.activityId);
+      status.textContent = selected ? `Selected: ${selected.name}` : 'No activity selected yet';
+      for (const card of cards.children) {
+        const chosen = card.dataset.activityId === entry.activityId;
+        card.dataset.selected = String(chosen);
+        card.querySelector('.activity-selected').textContent = chosen ? '✓ Selected' : '';
+        card.querySelector('button').setAttribute('aria-label', `View details: ${activities.find(card.dataset.activityId).name}${chosen ? ', selected' : ''}`);
+      }
+    };
+    for (const activity of activities.recommend(entry.mood)) {
+      const card = document.createElement('article'); card.className = 'activity-card'; card.dataset.activityId = activity.id;
+      const title = document.createElement('h3'); title.textContent = activity.name; card.append(title);
+      paragraph(`${activity.minutes} min · ${entry.mood}`, card, 'activity-meta');
+      paragraph(activity.description, card);
+      paragraph('', card, 'activity-selected');
+      card.append(button('View details', () => {
+        openDialog(activity.name);
+        paragraph(`${activity.minutes} min · At your own pace`, dialog, 'activity-meta');
+        paragraph(activity.description);
+        const steps = document.createElement('ol'); steps.className = 'activity-steps';
+        for (const instruction of activity.steps) { const step = document.createElement('li'); step.textContent = instruction; steps.append(step); }
+        dialog.append(steps);
+        const select = button(entry.activityId === activity.id ? 'Selected activity' : 'Select activity', () => {
+          Object.assign(entry, activities.select(entry, activity.id)); save(); updateSelection(); closeDialog();
+          toast(`Selected: ${activity.name}`);
+        }, 'primary');
+        select.disabled = entry.activityId === activity.id;
+        dialog.append(select, button('Back to activities', closeDialog));
+      }));
+      cards.append(card);
+    }
+    updateSelection(); section.append(cards); sheet.append(section);
   }
   function setupJournal() {
     bind('Month', () => { calendarMode = 'month'; render(); }, 'Month view', named('Switch'));
@@ -230,6 +282,9 @@
     paragraph(entry.mood, dialog, 'entry-mood').style.backgroundColor = colors[entry.mood];
     paragraph(replies[entry.mood]);
     if (entry.saved) paragraph('♡ Saved reply', dialog, 'muted');
+    const chosen = activities.find(entry.activityId);
+    paragraph(chosen ? `Selected activity: ${chosen.name}` : 'No activity selected for this day.', dialog, 'activity-meta');
+    dialog.append(button('View mood activities', () => { selectedDate = key; navigate('reply'); }));
     const label = document.createElement('label'); label.htmlFor = 'entry-note'; label.textContent = 'A little note about your day';
     const input = document.createElement('textarea'); input.id = 'entry-note'; input.maxLength = 1000; input.value = entry.note || ''; input.placeholder = 'What would you like to remember?';
     dialog.append(label, input, button('Save note', () => { entry.note = input.value.trim(); save(); closeDialog(); toast('Your note is saved'); }, 'primary'));

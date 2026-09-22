@@ -16,12 +16,13 @@
 2. 用户点选一个 → 写入当天记录（若当天已有记录，覆盖 mood，保留已有的 note/saved/hugged 状态）→ 跳转到 Reply 页。
 3. Reply 页展示对应文案（五条固定文案之一）、当前 Bond 等级条、Hug 按钮、Save（收藏）按钮。
 4. 首次打卡当天 bond +15；Hug 按钮首次点击 +5，重复点击不再加分。
-5. 关闭 Reply 或点击遮罩 → 回到 Home。
+5. Reply 展示三个对应心情的活动卡；详情、选择及迁移规则见 [活动规格](mood-activities.md)。同心情重打卡保留 activityId，改心情时清空。
+6. 关闭 Reply 或点击遮罩 → 回到 Home。
 
 ## 数据字段
 
 ```
-entries[dateKey]: { mood, note, saved, hugged, created }
+entries[dateKey]: { mood, note, saved, hugged, created, activityId }
 bond: number（用于计算 Lv. = 7 + floor(bond / 100)）
 ```
 

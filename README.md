@@ -24,13 +24,14 @@ PORT=8001 npm run dev
 | 命令 | 用途 |
 | --- | --- |
 | `npm run dev` / `npm start` | 启动本地演示服务 |
+| `npm test` | 验证活动推荐、选择与皮肤纯逻辑 |
 | `npm run check` | 检查应用和服务器 JavaScript 语法 |
 | `npm run build:templates` | 根据设计源文件重新生成 `index.html` 和图片 |
 
 ## 功能与演示流程
 
 1. **Home**：点击 Rongrong 与它互动，选择 Calm、Happy、Tired、Sad 或 Tense 记录当天心情。
-2. **Reply**：查看对应回复、拥抱 Rongrong、收藏回复，再关闭弹层。
+2. **Reply**：查看对应回复、拥抱 Rongrong、收藏回复；浏览三个心情推荐活动，查看时间与步骤，再选择一项。Home 可再次打开当天活动，Journal 可查看历史日期的活动。
 3. **Journal**：切换月份或年份，点击有记录的日期查看回复、保存文字备注，查看月度汇总。
 4. **Me**：修改昵称和生日，选择配饰或打开衣橱；配饰会显示在 Home 的 Rongrong 上。
 5. **Plus**：通过 Home 的 Plus 按钮或锁定配饰进入，模拟开通会员、检查恢复状态或结束会员。
@@ -77,3 +78,7 @@ Home 的 **Skins** 按钮、Me 衣橱或 Plus 页的 **Explore pet skins** 可�
 皮肤独立于 US$4.99/月的 Plus 配饰会员；结束会员不影响已购皮肤。**所有交易均为本地模拟，不会真实扣款。** `skin` 和 `ownedSkins` 存入现有 localStorage，刷新后保留，重置演示数据会清除。旧数据自动补充免费默认皮肤。
 
 运行 `npm test` 验证皮肤定价、购买和穿戴逻辑。产品规格见 [pet-skins.md](docs/specs/pet-skins.md)。
+
+## Release 1.1：心情活动
+
+五种心情各推荐三个免费活动。卡片 → **View details** → **Select activity**；关闭详情不会选择活动。每个日期保留一项选择，同心情重新打卡保留，改心情清空。选择只保存于本机，不提供计时或完成奖励。规格见 [mood-activities.md](docs/specs/mood-activities.md)。

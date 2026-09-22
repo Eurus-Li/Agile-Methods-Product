@@ -42,6 +42,7 @@ document = '''<!doctype html>
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="src/styles/app.css">
 <script src="src/js/skins.js" defer></script>
+<script src="src/js/activities.js" defer></script>
 <script src="src/js/app.js" defer></script>
 </head><body>
 <main id="app" aria-label="Rongrong companion"></main>

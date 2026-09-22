@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "node scripts/serve.js",
     "start": "node scripts/serve.js",
-    "check": "node --check src/js/app.js && node --check src/js/skins.js && node --check scripts/serve.js",
+    "check": "node --check src/js/app.js && node --check src/js/skins.js && node --check src/js/activities.js && node --check scripts/serve.js",
     "build:templates": "python3 scripts/build_demo.py",
     "test": "node --test"
   },
