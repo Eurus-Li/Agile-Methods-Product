@@ -67,6 +67,7 @@
 
 - 服装/配饰用 emoji 直接表示，不做自定义插画资源。
 - 需要线性图标（设置/关闭等）：web 用简单 stroke SVG（1.5px 描边、圆头），iOS 优先用 SF Symbols。
+- Quick Moods 使用同一只 Rongrong 的五张柔和手绘表情头像，奶油色纸纹底，沿用原 44×44px 圆形尺寸；文件 `mood-{calm,happy,tired,sad,tense}-painted.png`。文字标签与 aria 心情名称保留，不单靠表情传递状态。
 
 ## 8. 核心组件
 

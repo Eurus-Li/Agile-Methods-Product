@@ -21,6 +21,7 @@ button:disabled { cursor: default; opacity: .65; }
 .screen [data-pencil-name="Bubble"] { max-width: calc(100% - 24px); left: 12px !important; }
 .screen [data-pencil-name="Bubble"] [data-pencil-name="Line"] { white-space: normal !important; }
 .screen [data-pencil-name="Quick Moods"] { gap: 7px !important; }
+.mood-portrait { display: block; width: 44px; height: 44px; flex-shrink: 0; object-fit: cover; border-radius: 50%; }
 .screen [data-pencil-name="Quick Moods"] > * { min-width: 0; transition: background .2s, transform .2s; }
 .screen [data-pencil-name="Quick Moods"] > *:hover { transform: translateY(-3px); }
 .screen [data-pencil-name="Quick Moods"] > [aria-pressed="true"] { background: #ffe3d3 !important; outline: 1.5px solid #ff8a5b; }

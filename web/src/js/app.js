@@ -118,6 +118,9 @@
     if (existing) text('Prompt', `Today: ${existing.mood.toLowerCase()} · check in again?`);
     for (const mood of moods) {
       const tile = named(mood, named('Quick Moods'));
+      const portrait = document.createElement('img'); portrait.className = 'mood-portrait';
+      portrait.src = `assets/images/mood-${mood.toLowerCase()}-painted.png`; portrait.alt = ''; portrait.draggable = false;
+      tile.firstElementChild.replaceWith(portrait);
       tile.setAttribute('aria-pressed', String(existing?.mood === mood));
       actionable(tile, () => {
         const previous = state.entries[today];

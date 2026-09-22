@@ -1,5 +1,11 @@
 # 开发日志
 
+## 2026-09-22 · 五种心情手绘头像
+
+- Calm / Happy / Tired / Sad / Tense 替换为与首页 Rongrong 一致的奶油色手绘小狗表情。
+- 保留原圆形尺寸、标签、键盘操作与打卡/活动推荐行为，Home 与 Reply 使用同一组头像。
+- 素材路径与内置 image_gen 提示词见 [mood-portrait-assets.md](mood-portrait-assets.md)。
+
 ## 2026-09-22 · Home 去背小狗与独立插画场景
 
 - Home 点按小狗改用透明角色层，配饰随角色轻跳，背景与地面阴影固定。
