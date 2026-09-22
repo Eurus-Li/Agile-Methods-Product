@@ -105,7 +105,14 @@ dialog textarea { resize: vertical; min-height: 90px; }
 .activity-steps li { margin: 12px 0; }
 
 .activity-celebration { position: relative; padding: 24px 12px; display: grid; place-items: center; }
+.activity-celebration::before { content: ''; position: absolute; bottom: 24px; width: 96px; height: 12px; border-radius: 50%; background: #3A302B26; }
 .celebration-pet { width: min(192px, 100%); height: 192px; transform-origin: center bottom; }
+.celebration-pet.skin-art { background: none; }
+.celebration-dog { display: block; width: 100%; height: 100%; object-fit: contain; }
+.celebration-tint { position: absolute; inset: 0; mask: url('../../assets/images/rongrong-cutout.png') center / contain no-repeat; mix-blend-mode: multiply; pointer-events: none; }
+.celebration-pet[data-skin="mint"] .celebration-tint { background: var(--skin-mint); }
+.celebration-pet[data-skin="cherry"] .celebration-tint { background: var(--skin-cherry); }
+.celebration-pet[data-skin="starlight"] .celebration-tint { background: var(--skin-starlight); }
 .celebration-accessory { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); font-size: 22px; }
 .celebration-hearts { position: absolute; top: 12px; color: var(--color-accent-primary); font-size: 22px; pointer-events: none; }
 @media (prefers-reduced-motion: no-preference) {

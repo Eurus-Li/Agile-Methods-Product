@@ -81,4 +81,4 @@ Home 的 **Skins** 按钮、Me 衣橱或 Plus 页的 **Explore pet skins** 可�
 
 ## Release 1.1：心情活动
 
-五种心情各推荐三个免费活动。卡片 → **View details** → **Select activity**；关闭详情不会选择活动。确认选择后，Rongrong 会轻跳、摇摆并飘出爱心，短暂庆祝后停下；支持系统减弱动态效果。每个日期保留一项选择，同心情重新打卡保留，改心情清空。选择只保存于本机，不提供计时或完成奖励。规格见 [mood-activities.md](docs/specs/mood-activities.md)。
+五种心情各推荐三个免费活动。卡片 → **View details** → **Select activity**；关闭详情不会选择活动。确认选择后，去背后的 Rongrong 会独立轻跳、摇摆并飘出爱心，背景保持固定，短暂庆祝后停下；支持系统减弱动态效果。每个日期保留一项选择，同心情重新打卡保留，改心情清空。选择只保存于本机，不提供计时或完成奖励。规格见 [mood-activities.md](docs/specs/mood-activities.md)。

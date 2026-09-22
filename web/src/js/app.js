@@ -230,7 +230,11 @@
     openDialog('A happy little hop!');
     lastFocus = returnFocus;
     const stage = document.createElement('div'); stage.className = 'activity-celebration'; stage.setAttribute('aria-hidden', 'true');
-    const pet = skinPreview(skins.find(state.skin)); pet.classList.add('celebration-pet');
+    const pet = document.createElement('div'); pet.className = 'celebration-pet';
+    applySkin(pet, skins.find(state.skin));
+    const dog = document.createElement('img'); dog.className = 'celebration-dog'; dog.src = 'assets/images/rongrong-cutout.png'; dog.alt = '';
+    const tint = document.createElement('span'); tint.className = 'celebration-tint';
+    pet.prepend(dog, tint);
     const accessory = document.createElement('span'); accessory.className = 'celebration-accessory'; accessory.textContent = outfits[state.outfit]; pet.append(accessory);
     const hearts = document.createElement('span'); hearts.className = 'celebration-hearts'; hearts.textContent = '♡  ♥  ♡';
     stage.append(pet, hearts); dialog.append(stage);
