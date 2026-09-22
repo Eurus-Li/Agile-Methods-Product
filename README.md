@@ -30,7 +30,7 @@ PORT=8001 npm run dev
 
 ## 功能与演示流程
 
-1. **Home**：点击去背的 Rongrong 与它互动，小狗和配饰会轻跳，后方奶油色窗光/植物插画保持固定；选择 Calm、Happy、Tired、Sad 或 Tense 记录当天心情。
+1. **Home**：点击去背的 Rongrong 与它互动，小狗和配饰会轻跳，后方奶油色窗光/植物插画保持固定；通过五张同风格手绘头像选择 Calm、Happy、Tired、Sad 或 Tense，记录当天心情。
 2. **Reply**：查看对应回复、拥抱 Rongrong、收藏回复；浏览三个心情推荐活动，查看时间与步骤，再选择一项。Home 可再次打开当天活动，Journal 可查看历史日期的活动。
 3. **Journal**：切换月份或年份，点击有记录的日期查看回复、保存文字备注，查看月度汇总。
 4. **Me**：修改昵称和生日，选择配饰或打开衣橱；配饰会显示在 Home 的 Rongrong 上。
@@ -40,14 +40,14 @@ PORT=8001 npm run dev
 
 ## 开发与更新设计
 
-- 修改行为、文案逻辑或本地状态：编辑 `web/src/js/app.js`。
+- 修改页面交互或本地状态：编辑 `web/src/js/app.js`；活动目录与推荐规则在 `web/src/js/activities.js`，皮肤规则在 `web/src/js/skins.js`。
 - 修改响应式布局或交互样式：编辑 `web/src/styles/app.css`。
 - 更新原始页面设计：替换 `web/design/exports/` 中相应的 HTML，然后在 `web/` 目录跑 `npm run build:templates`（首次需要 `python3 -m pip install -r requirements-dev.txt`）重新生成 `index.html`。手工改 `index.html` 会在下次生成时被覆盖。
 
 ## 数据与演示范围
 
-- 昵称、生日、心情、备注、配饰和模拟会员状态保存在浏览器 `localStorage`，键名 `rongrong-demo-v1`。
-- Rongrong 回复为预设文本；没有接入 AI、账号系统、云端同步或真实支付。
+- 昵称、生日、心情、备注、每日活动选择、配饰、皮肤及其购买记录和模拟会员状态保存在浏览器 `localStorage`，键名 `rongrong-demo-v1`。
+- Rongrong 回复为预设文本；运行时没有接入 AI、账号系统、云端同步或真实支付。
 
 ## 协作文件一览
 
@@ -59,6 +59,9 @@ PORT=8001 npm run dev
 | [docs/changelog.md](docs/changelog.md) | 开发日志与功能更新记录 |
 | [docs/decisions.md](docs/decisions.md) | 已经定过的技术/产品选型 |
 | [docs/specs/](docs/specs/) | 每个功能的交互流程 |
+| [docs/pet-animation-asset.md](docs/pet-animation-asset.md) | 去背角色、首页背景及生成提示词 |
+| [docs/mood-portrait-assets.md](docs/mood-portrait-assets.md) | 五种手绘心情头像、素材路径及提示词 |
+| [docs/verification.md](docs/verification.md) | 自动检查命令、浏览器验收步骤与已知范围 |
 | [docs/technical-debt-review.md](docs/technical-debt-review.md) | 技术债/安全审查记录 |
 | [prototypes/plus-standalone/](prototypes/plus-standalone/README.md) | 早期付费墙原型，已被 web/ 取代，仅供参考 |
 | [.github/workflows/ci.yml](.github/workflows/ci.yml) | 每次 push 自动跑的检查 |
@@ -82,3 +85,11 @@ Home 的 **Skins** 按钮、Me 衣橱或 Plus 页的 **Explore pet skins** 可�
 ## Release 1.1：心情活动
 
 五种心情各推荐三个免费活动。卡片 → **View details** → **Select activity**；关闭详情不会选择活动。确认选择后，去背后的 Rongrong 会独立轻跳、摇摆并飘出爱心，背景保持固定，短暂庆祝后停下；支持系统减弱动态效果。每个日期保留一项选择，同心情重新打卡保留，改心情清空。选择只保存于本机，不提供计时或完成奖励。规格见 [mood-activities.md](docs/specs/mood-activities.md)。
+
+## 视觉素材与动画
+
+首页与活动确认视窗使用透明小狗图层；皮肤着色限制在角色轮廓内，配饰跟随角色运动。首页的窗光/植物背景和地面阴影保持固定。动画为 CSS 整体位移、旋转与伸缩，尚未实现耳朵、尾巴或四肢的骨骼动画。系统开启减弱动态效果时保留静态角色与文字反馈。
+
+手绘头像、去背小狗与场景为开发时使用内置 image_gen 制作的本地素材；打开 demo 不调用生成服务。素材路径和提示词见上方协作文件。运行时由 app.js 应用新的角色层与头像，重新生成 HTML 模板后仍会生效。
+
+体验活动：选择心情 → View details → Select activity → 开心反馈 → Back to activities。刷新后保留活动选择，但不会重播庆祝。更新后若浏览器仍显示旧素材，可用 macOS 的 ⌘ Shift R 强制刷新。

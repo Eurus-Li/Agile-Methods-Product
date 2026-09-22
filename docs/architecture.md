@@ -79,7 +79,7 @@ ios/
 
 ## 5. CI / 质量门槛
 
-- 每次 push 到 `main` 自动跑 build + lint + test（web demo 现在是 `npm run check`；iOS 工程建立后加 `swift build` + `swiftlint` + `swift test`）。
+- 每个分支 push 和面向 main 的 PR 自动运行 CI。Web 当前执行 `npm run check`（JavaScript 语法检查，尚非完整 lint/typecheck）和 `npm test`；独立 Plus 原型运行其测试。当前 Web 零构建；iOS 工程和对应检查尚未建立。
 - 纯函数逻辑必须有单元测试（对应 [技术债审查](technical-debt-review.md) TD-2 的教训）；UI/snapshot 测试原型阶段不强制。
 
 ## 6. 皮肤数据扩展
@@ -91,3 +91,9 @@ iOS 尚无工程；未来 Model / SwiftData 增加同名语义字段，旧记录
 `web/src/js/activities.js` 提供固定目录、五种心情到三个活动的映射，以及纯函数 recommend / normalizeEntry / select / changeMood；经典脚本先于 app.js 加载，支持直接打开 HTML。app.js 负责卡片、原生详情 dialog 与保存。模板生成脚本同步加载此模块。
 
 `entries[dateKey].activityId` 为可空目录 ID。旧记录及无效/不属于当前推荐的 ID 归一化为 null；同心情重打卡保留、改心情清空。按日期隔离，不增加 Bond。iOS 工程尚未创建；建立 SwiftData 模型时以可空字段和旧记录 nil 默认值迁移，复用目录 ID 与映射，详见 [规格](specs/mood-activities.md)。
+
+## 8. 角色分层与手绘头像
+
+`app.js` 的 `setupCutoutPet` 共用于 Home 与活动庆祝：透明 PNG、同轮廓皮肤着色遮罩、主题装饰和配饰组成可动画的角色层。Home 的 `home-pet-scene` 使用独立背景图片；地面阴影不参与角色变换。`showActivityCelebration` 负责确认反馈及关闭后的焦点恢复，不增加持久化字段。
+
+`setupHome` 在 Home / Reply 的 Quick Moods 中加载五张 `mood-*-painted.png`，沿用心情标签与 aria-pressed。这些是运行时增强，不直接改动原 Pencil 导出；模板重建仍会加载 app.js 与 app.css。素材来源分别见 [角色/场景](pet-animation-asset.md)、[心情头像](mood-portrait-assets.md)。视觉参数见设计系统，验收步骤见 [verification.md](verification.md)。

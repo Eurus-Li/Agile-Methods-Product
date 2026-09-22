@@ -12,7 +12,7 @@
 
 ## 核心交互流程
 
-1. Home 页展示 5 个心情选项：Calm / Happy / Tired / Sad / Tense（对应色值见 [architecture.md](../architecture.md#色彩)）。
+1. Home 页展示同一只 Rongrong 的 5 张手绘表情头像及对应文字选项：Calm / Happy / Tired / Sad / Tense（对应色值见 [design-system.md](../design-system.md)）。
 2. 用户点选一个 → 写入当天记录（若当天已有记录，覆盖 mood，保留已有的 note/saved/hugged 状态）→ 跳转到 Reply 页。
 3. Reply 页展示对应文案（五条固定文案之一）、当前 Bond 等级条、Hug 按钮、Save（收藏）按钮。
 4. 首次打卡当天 bond +15；Hug 按钮首次点击 +5，重复点击不再加分。
