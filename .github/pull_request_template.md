@@ -1,16 +1,16 @@
-## 这个改动做了什么
+## What this change does
 
-<!-- 一两句话，链接对应的 spec（docs/specs/）如果有的话 -->
+<!-- One or two sentences; link the corresponding spec (docs/specs/) if there is one -->
 
 ## Definition of Done
 
-- [ ] 本地跑通，走查过改动路径
-- [ ] CI 通过（对应目录下的 lint/test）
-- [ ] 涉及的纯逻辑函数有单元测试
-- [ ] UI 改动：数值取自 `docs/design-system.md` 的设计 Token，没有现场发明新值
-- [ ] 如果这个改动隐含了技术/产品决策：已经补进 `docs/decisions.md`
-- [ ] 相关 `docs/specs/` 已更新（如适用）
+- [ ] Runs locally; the changed paths were walked through
+- [ ] CI passes (lint/test for the affected directories)
+- [ ] Pure logic functions touched have unit tests
+- [ ] UI changes: values come from the design tokens in `docs/design-system.md`; no new values invented on the spot
+- [ ] If this change implies a technical/product decision: it has been added to `docs/decisions.md`
+- [ ] Relevant `docs/specs/` updated (if applicable)
 
-## 关联 spec / decision（如有）
+## Related spec / decision (if any)
 
-<!-- 例如：docs/specs/mood-checkin.md，或 docs/decisions.md 里的某一条 -->
+<!-- e.g. docs/specs/mood-checkin.md, or an entry in docs/decisions.md -->

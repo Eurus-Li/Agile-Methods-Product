@@ -1,46 +1,46 @@
-# Spec: 心情打卡（Mood Check-in）
+# Spec: Mood Check-in
 
-**状态:** 已在 web demo 验证 · **对应 iOS 模块:** `Features/Home`, `Features/Reply`
+**Status:** Verified in the web demo · **iOS modules:** `Features/Home`, `Features/Reply`
 
-## 目标
+## Goal
 
-用户每天在 Home 页选一个心情，Rongrong 给出对应的安慰/回应文案，形成"每天来看看 Rongrong"的核心循环。
+Each day the user picks a mood on the Home page and Rongrong responds with matching comforting copy, forming the core "come see Rongrong every day" loop.
 
-## 用户故事
+## User story
 
-作为用户，我想快速记录今天的心情并得到一句贴心的回应，这样我能感觉到被看见，而不用写很长的日记。
+As a user, I want to quickly log today's mood and get a caring response, so that I feel seen without having to write a long journal entry.
 
-## 核心交互流程
+## Core interaction flow
 
-1. Home 页展示同一只 Rongrong 的 5 张手绘表情头像及对应文字选项：Calm / Happy / Tired / Sad / Tense（对应色值见 [design-system.md](../design-system.md)）。
-2. 用户点选一个 → 写入当天记录（若当天已有记录，覆盖 mood，保留已有的 note/saved/hugged 状态）→ 跳转到 Reply 页。
-3. Reply 页展示对应文案（五条固定文案之一）、当前 Bond 等级条、Hug 按钮、Save（收藏）按钮。
-4. 首次打卡当天 bond +15；Hug 按钮首次点击 +5，重复点击不再加分。
-5. Reply 展示三个对应心情的活动卡；详情、选择及迁移规则见 [活动规格](mood-activities.md)。同心情重打卡保留 activityId，改心情时清空。
-6. 关闭 Reply 或点击遮罩 → 回到 Home。
-7. Home 小狗为透明角色层，置于固定的奶油色手绘窗光与植物场景前。点击或键盘 Enter/Space 抚摸时只让角色及配饰轻跳，背景与地面阴影不动；保留当前皮肤，遵循减弱动态效果设置，不新增数据或奖励。
+1. The Home page shows 5 hand-painted expression portraits of the same Rongrong with matching text options: Calm / Happy / Tired / Sad / Tense (color values in [design-system.md](../design-system.md)).
+2. The user taps one → today's record is written (if today already has a record, overwrite mood and keep the existing note/saved/hugged state) → navigate to the Reply page.
+3. The Reply page shows the matching copy (one of five fixed messages), the current Bond level bar, a Hug button and a Save (bookmark) button.
+4. The first check-in of the day gives bond +15; the first tap of Hug gives +5, and repeated taps add nothing.
+5. Reply shows three activity cards for the mood; details, selection and migration rules are in the [activity spec](mood-activities.md). Re-checking in with the same mood keeps activityId; changing the mood clears it.
+6. Closing Reply or tapping the backdrop → back to Home.
+7. The Home dog is a transparent character layer in front of a fixed cream hand-painted window-light and plant scene. Petting it by tap or keyboard Enter/Space makes only the character and accessories hop; the background and ground shadow stay still. The current skin is kept, the reduce-motion setting is respected, and no data or rewards are added.
 
-## 数据字段
+## Data fields
 
 ```
 entries[dateKey]: { mood, note, saved, hugged, created, activityId }
-bond: number（用于计算 Lv. = 7 + floor(bond / 100)）
+bond: number (used to compute Lv. = 7 + floor(bond / 100))
 ```
 
-## 边界情况
+## Edge cases
 
-- 同一天重复打卡：更新 mood，不重复加 bond。
-- 心情记录的 key 必须是 `yyyy-MM-dd` 格式，非法/损坏数据要在读取时被拒绝而不是崩溃。
-- 从 Journal 点开某天进 Reply 时，用该天的记录而非"今天"的记录。
+- Checking in again on the same day: update mood, don't add bond again.
+- Mood record keys must be in `yyyy-MM-dd` format; invalid/corrupted data must be rejected on read rather than crash.
+- When opening a day from Journal into Reply, use that day's record, not "today's".
 
-## 验收标准
+## Acceptance criteria
 
-- [ ] 5 种心情都能选中并正确高亮（颜色 + `aria`/`accessibility` 状态双重表达，不只靠颜色）。
-- [ ] Reply 文案与 mood 一一对应，且 Bond 等级/进度条随 bond 值实时更新。
-- [ ] 重复打卡不重复计入当日 bond 奖励。
-- [ ] Hug 按钮幂等（多次点击只加一次分）。
+- [ ] All 5 moods can be selected and are highlighted correctly (expressed both by color and by `aria`/`accessibility` state, not color alone).
+- [ ] Reply copy maps one-to-one to mood, and the Bond level/progress bar updates live with the bond value.
+- [ ] Repeated check-ins don't count the daily bond reward again.
+- [ ] The Hug button is idempotent (multiple taps add points only once).
 
-## 关联
+## Related
 
-- 设计 Token：[architecture.md 第 4 节](../architecture.md#4-设计系统--ui-token)
-- 已知技术债参考（避免在 iOS 版本重犯）：[technical-debt-review.md](../technical-debt-review.md) TD-3（无保护的状态查找）、TD-4（重复的 bond 进度公式）
+- Design tokens: [architecture.md section 4](../architecture.md#4-design-system--ui-tokens)
+- Known technical debt to reference (to avoid repeating it in the iOS version): [technical-debt-review.md](../technical-debt-review.md) TD-3 (unguarded state lookup), TD-4 (duplicated bond progress formula)

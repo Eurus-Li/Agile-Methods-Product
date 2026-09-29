@@ -1,61 +1,61 @@
-# 开发日志
+# Development Log
 
-## 2026-09-22 · 协作文档同步
+## 2026-09-22 · Collaboration docs sync
 
-- README 汇总活动选择、角色分层动画、手绘心情头像、素材入口与本地数据范围。
-- 架构文档补充运行时素材替换与共用角色图层，修正 CI 的实际检查范围。
-- 活动规格统一为选择后先庆祝、关闭后返回卡片；补充 iOS 尚未实现的视觉对齐约定。
-- 新增浏览器验收清单与已验证/尚未覆盖范围，便于后续协作复验。
+- README summarizes activity selection, layered character animation, hand-painted mood portraits, asset entry points and local data scope.
+- Architecture doc adds runtime asset replacement and the shared character layer, and corrects the actual scope of CI checks.
+- Activity spec unified to: celebrate first after selecting, return to the cards after closing; adds visual alignment conventions for the not-yet-implemented iOS side.
+- New browser acceptance checklist plus verified / not-yet-covered scope, to make later re-verification easier for collaborators.
 
-## 2026-09-22 · 五种心情手绘头像
+## 2026-09-22 · Hand-painted portraits for five moods
 
-- Calm / Happy / Tired / Sad / Tense 替换为与首页 Rongrong 一致的奶油色手绘小狗表情。
-- 保留原圆形尺寸、标签、键盘操作与打卡/活动推荐行为，Home 与 Reply 使用同一组头像。
-- 素材路径与内置 image_gen 提示词见 [mood-portrait-assets.md](mood-portrait-assets.md)。
+- Calm / Happy / Tired / Sad / Tense replaced with cream hand-painted dog expressions consistent with Rongrong on the home screen.
+- Keeps the original circular size, labels, keyboard operation and check-in / activity recommendation behavior; Home and Reply use the same set of portraits.
+- Asset paths and built-in image_gen prompts are in [mood-portrait-assets.md](mood-portrait-assets.md).
 
-## 2026-09-22 · Home 去背小狗与独立插画场景
+## 2026-09-22 · Home cutout dog and separate illustrated scene
 
-- Home 点按小狗改用透明角色层，配饰随角色轻跳，背景与地面阴影固定。
-- 增加奶油色手绘窗光与边角植物背景，保留纸张/笔触纹理，不使用纯色舞台。
-- 与活动庆祝共用去背角色构建和皮肤轮廓着色；沿用键盘操作与减弱动态效果支持。
+- Tapping the dog on Home now uses a transparent character layer; accessories hop with the character while the background and ground shadow stay fixed.
+- Adds a cream hand-painted window-light and corner-plant background that keeps the paper/brush texture instead of a solid-color stage.
+- Shares the cutout character construction and skin outline tinting with the activity celebration; keeps keyboard operation and reduce-motion support.
 
-## 2026-09-22 · 修正庆祝动画的角色分层
+## 2026-09-22 · Fix character layering in the celebration animation
 
-- 使用保留 alpha 的小狗去背 PNG，替代庆祝视窗中整张照片的变换。背景和地面阴影固定，只有角色与配饰运动。
-- 皮肤颜色使用小狗轮廓遮罩，避免矩形色块；原 JPG 和其他页面素材保持不变。
-- 素材来源、生成方式与提示词记录于 [pet-animation-asset.md](pet-animation-asset.md)。
+- Uses an alpha-preserving cutout PNG of the dog instead of transforming the whole photo in the celebration dialog. The background and ground shadow are fixed; only the character and accessories move.
+- Skin color uses the dog's outline mask to avoid rectangular color blocks; the original JPG and other page assets are unchanged.
+- Asset source, generation method and prompts are recorded in [pet-animation-asset.md](pet-animation-asset.md).
 
-## 2026-09-22 · 活动选择：Rongrong 开心动画
+## 2026-09-22 · Activity selection: happy Rongrong animation
 
-- 确认 Select activity 后，当前弹窗展示小狗轻跳、摇摆、起落伸缩及爱心上浮；当前皮肤与配饰保持一致。
-- 使用原图片与 CSS transform 动画，播放三次后归位；不切换照片、不添加依赖或持久化状态、不增加 Bond。
-- 可随时关闭，焦点返回原活动卡；减弱动态效果下显示静态确认。更新活动规格和设计动效参数，iOS 后续实现遵循相同反馈语义。
+- After confirming Select activity, the current dialog shows the dog hopping, swaying, squashing/stretching, and hearts floating up; the current skin and accessories stay consistent.
+- Uses the original image with CSS transform animation, returning to rest after three plays; no photo swap, no added dependencies or persisted state, no added Bond.
+- Can be closed at any time, with focus returning to the original activity card; under reduce motion a static confirmation is shown. Activity spec and design motion parameters updated; the later iOS implementation follows the same feedback semantics.
 
-## 2026-09-22 · Release 1.1：心情活动推荐
+## 2026-09-22 · Release 1.1: mood activity recommendations
 
-- 五种心情各展示三个免费活动，卡片包含名称、简介、预计时间；详情显示可执行步骤，确认后选定一项。
-- Home 可再次打开当天推荐，Journal 可打开历史日期的推荐；选择按日期本地保存，可替换，改心情自动清空。
-- 推荐和选择纯逻辑独立于 DOM；兼容旧数据与无效 ID，不改变会员或 Bond 奖励。
-- 同步活动规格、心情规格、架构、决策、README、iOS 迁移约定与模板生成入口。
-- 新增 6 项活动单元测试，与原有 6 项皮肤测试一并纳入分支 CI；12 项测试及 JS 语法检查通过。
-- Chromium 实测五种心情、取消/焦点返回、选定/替换、刷新、历史日期隔离与 320/390/768px 布局；修正长 Reply 弹层的顶部可达性。
-- 本次实现 Web demo；iOS 工程仍未建立，未加入计时器或活动完成奖励。
+- Each of the five moods shows three free activities; cards include name, summary and estimated time; details show actionable steps, and one can be selected after confirming.
+- Home can reopen today's recommendations and Journal can open recommendations for past dates; selections are saved locally per date, can be replaced, and are cleared automatically when the mood changes.
+- Recommendation and selection pure logic is independent of the DOM; compatible with old data and invalid IDs; membership and Bond rewards unchanged.
+- Synced the activity spec, mood spec, architecture, decisions, README, iOS migration conventions and the template generation entry point.
+- Added 6 activity unit tests, included in branch CI alongside the existing 6 skin tests; all 12 tests and the JS syntax check pass.
+- Tested in Chromium: all five moods, cancel / focus return, select / replace, refresh, per-date isolation for past dates, and 320/390/768px layouts; fixed top reachability of long Reply sheets.
+- This release implements the web demo; the iOS project has not been created yet, and no timer or activity completion reward was added.
 
-## 2026-09-20 · Commercialization：宠物皮肤与分档定价
+## 2026-09-20 · Commercialization: pet skins and tiered pricing
 
-### 新增功能
-- 在主应用 Home、Me 衣橱和 Plus 页面提供皮肤商店入口。
-- 默认 Classic Cream 免费；Mint Cloud US$0.99、Cherry Blossom US$1.99、Starlight US$2.99，均为一次性示例价格。
-- 支持外观预览、二次确认模拟购买、穿戴切换，以及 Equipped / Owned / Locked 状态提示。
-- 皮肤采用现有宠物素材、主题底色和装饰，可与现有配饰同时使用。
-- 购买和穿戴状态保存在本地，刷新后保留；旧数据自动补充默认皮肤并清理无效皮肤 ID。
-- 皮肤单购独立于 Plus 会员；结束会员不影响已购皮肤，重置演示数据会清除购买记录。
+### New features
+- Skin shop entry points on Home, the Me wardrobe and the Plus page of the main app.
+- Classic Cream is free by default; Mint Cloud US$0.99, Cherry Blossom US$1.99, Starlight US$2.99, all sample one-time prices.
+- Supports appearance preview, simulated purchase with a second confirmation, switching the worn skin, and Equipped / Owned / Locked status labels.
+- Skins use the existing pet asset, theme background colors and decorations, and can be combined with existing accessories.
+- Purchase and worn state are saved locally and persist across refreshes; old data is automatically backfilled with the default skin and invalid skin IDs are cleaned up.
+- Individual skin purchases are separate from Plus membership; ending the membership does not affect purchased skins, and resetting demo data clears purchase records.
 
-### 文档与验证
-- 同步 README、皮肤规格、Plus 权益边界、数据模型、视觉规范与产品决策。
-- 增加 6 项皮肤逻辑测试并接入 CI，覆盖迁移、无效数据、定价、权限、重复购买与持久化。
-- 本地皮肤测试通过；浏览器已验证取消购买、确认购买、刷新保留、结束会员后的穿戴状态和手机尺寸显示。
+### Docs and verification
+- Synced README, skin spec, Plus entitlement boundaries, data model, visual spec and product decisions.
+- Added 6 skin logic tests wired into CI, covering migration, invalid data, pricing, permissions, repeat purchases and persistence.
+- Local skin tests pass; browser-verified cancelling a purchase, confirming a purchase, persistence across refresh, worn state after ending membership, and phone-size display.
 
-### 演示范围
-- 无真实支付、扣款或自动续费；购买状态仅在当前浏览器保存。
-- 本次修改主实现 `web/`，未修改旧独立付费墙原型；iOS 工程尚未开始。
+### Demo scope
+- No real payments, charges or auto-renewal; purchase state is saved only in the current browser.
+- This change modified the main implementation `web/`, not the old standalone paywall prototype; the iOS project has not started yet.

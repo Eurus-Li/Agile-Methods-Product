@@ -1,45 +1,45 @@
-# Spec: Plus 会员（Paywall）
+# Spec: Plus Membership (Paywall)
 
-**状态:** 已在 web demo 验证（本地模拟，非真实支付）· **对应 iOS 模块:** `Features/Plus`
+**Status:** Verified in the web demo (simulated locally, no real payment) · **iOS module:** `Features/Plus`
 
-## 目标
+## Goal
 
-展示会员权益、提供一个"激活/结束 demo 会员"的模拟流程，用于验证付费墙的信息架构和转化文案，**不接入真实支付**。
+Show the membership benefits and provide a simulated "activate / end demo membership" flow, to validate the paywall's information architecture and conversion copy. **No real payment is integrated.**
 
-## 用户故事
+## User story
 
-作为用户，我想知道 Plus 能解锁什么、多少钱，并且能在不被真的扣费的情况下体验会员解锁后的样子。
+As a user, I want to know what Plus unlocks and how much it costs, and to experience what membership unlocks without actually being charged.
 
-## 核心交互流程
+## Core interaction flow
 
-1. 入口：Home 的 Plus 按钮，或点击一件被锁定的服装。
-2. 展示价格（$4.99 USD/月，仅展示用途，见下方"重要限制"）、权益列表、"demo preview" 标注。
-3. 点击主按钮 → 弹窗二次确认 → 确认后翻转本地 `plus` 状态为 true，解锁全部服装。
-4. 已是会员时，主按钮文案变为"管理会员"，可以结束 demo 会员（同样是本地状态翻转）。
-5. Terms / Privacy / Restore 均为纯信息展示或读取本地状态，不发起任何网络请求。
+1. Entry points: the Plus button on Home, or tapping a locked outfit.
+2. Show the price ($4.99 USD/month, for display only; see "Important limitations" below), the benefits list and a "demo preview" label.
+3. Tap the primary button → confirmation dialog → after confirming, flip the local `plus` state to true and unlock all outfits.
+4. For existing members, the primary button copy changes to "Manage membership", and the demo membership can be ended (also a local state flip).
+5. Terms / Privacy / Restore are purely informational or read local state; they make no network requests.
 
-## 数据字段
+## Data fields
 
 ```
 plus: boolean
 ```
 
-## 重要限制（必须在 UI 文案里保留）
+## Important limitations (must be kept in UI copy)
 
-- 明确标注"demo / 无真实扣费"，不能让用户误以为发生了真实交易。
-- **不能**把这里的 `plus` 布尔值当作生产环境的付费凭证——本地状态可被用户任意修改。真实上线前必须替换为服务端签发/校验的 entitlement，见 [decisions.md](../decisions.md) "后端 / 账号系统" 一条与 [technical-debt-review.md](../technical-debt-review.md) PBI-9。
+- Clearly label it "demo / no real charge", so users never think a real transaction happened.
+- The `plus` boolean here must **not** be treated as proof of payment in production — local state can be modified freely by the user. Before real launch it must be replaced with a server-issued/verified entitlement; see the "Backend / account system" entry in [decisions.md](../decisions.md) and PBI-9 in [technical-debt-review.md](../technical-debt-review.md).
 
-## 验收标准
+## Acceptance criteria
 
-- [ ] 未订阅/已订阅两种状态下，锁定服装的视觉区分明确（不仅靠颜色）。
-- [ ] 激活/取消都需要二次确认弹窗，不能一次点击直接生效。
-- [ ] 所有价格/权益文案与 [architecture.md](../architecture.md) 设计 Token 一致，没有重复维护的价格字符串（对应 technical-debt-review.md TD-4）。
-- [ ] 页面任何地方都不会声称"已扣费"或"已续订"。
+- [ ] In both unsubscribed and subscribed states, locked outfits are clearly distinguished visually (not by color alone).
+- [ ] Both activating and cancelling require a confirmation dialog; a single tap must not take effect directly.
+- [ ] All price/benefit copy is consistent with the design tokens in [architecture.md](../architecture.md), with no duplicated price strings (see technical-debt-review.md TD-4).
+- [ ] Nowhere on the page claims "charged" or "renewed".
 
-## 关联
+## Related
 
-- 技术决策：[decisions.md](../decisions.md) "支付 / IAP 方案"（暂缓选型）、"后端 / 账号系统"
-- 安全注意事项：[technical-debt-review.md](../technical-debt-review.md) PBI-9
+- Technical decisions: [decisions.md](../decisions.md) "Payments / IAP" (choice deferred), "Backend / account system"
+- Security notes: [technical-debt-review.md](../technical-debt-review.md) PBI-9
 
-## 皮肤单购边界
-Plus 解锁的是 12 件配饰，不包含单独定价的宠物皮肤。Plus 页面提供皮肤商店入口；单购皮肤在结束会员后保留，参见 [pet-skins.md](pet-skins.md)。
+## Boundary with individual skin purchases
+Plus unlocks the 12 accessories and does not include the separately priced pet skins. The Plus page provides an entry to the skin shop; individually purchased skins are kept after the membership ends. See [pet-skins.md](pet-skins.md).

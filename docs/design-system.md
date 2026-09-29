@@ -1,100 +1,100 @@
 # Rongrong Design System
 
-只有一个产品：**Rongrong**。这份文档是它的视觉规范唯一来源，覆盖现在所有实现（`web/`、`prototypes/plus-standalone/`、以后的 `ios/`），不管代码架构最后怎么整合。**颜色/字体/间距/圆角/阴影/动效数值都从这里取，不允许现场发明。**
+There is only one product: **Rongrong**. This document is the single source of truth for its visual specs, covering every current implementation (`web/`, `prototypes/plus-standalone/`, and the future `ios/`), however the code architecture ends up being integrated. **All color / typography / spacing / radius / shadow / motion values come from here; do not invent them on the spot.**
 
-## 0. 现状：还有一处没对齐的漂移
+## 0. Current state: one remaining drift
 
-`web/`（主实现）和 `prototypes/plus-standalone/`（早期付费墙原型，已被 `web/` 内置的 Plus 流程取代）曾经是独立开发的两份代码，吉祥物名字已经统一成 "Rongrong"（`web/` 之前叫 "Pip"，现已改名），但配色和字体还没对齐，如实记录，不隐藏：
+`web/` (the main implementation) and `prototypes/plus-standalone/` (an early paywall prototype, superseded by the Plus flow built into `web/`) were once developed as two separate codebases. The mascot name has been unified as "Rongrong" (`web/` used to call it "Pip" and has been renamed), but colors and fonts have not been aligned yet. This is recorded honestly rather than hidden:
 
-| 项 | web/（权威值） | prototypes/plus-standalone/ |
+| Item | web/ (authoritative) | prototypes/plus-standalone/ |
 |---|---|---|
-| 主背景色 | `#EEE5DF` | `#EEE8E2` |
-| 主字体栈 | `Nunito, ui-rounded, 'Arial Rounded MT Bold', system-ui` | `ui-rounded, 'Segoe UI', system-ui` |
-| 主橘色 | `#FF8A5B` | `#FF8757` |
+| Main background | `#EEE5DF` | `#EEE8E2` |
+| Main font stack | `Nunito, ui-rounded, 'Arial Rounded MT Bold', system-ui` | `ui-rounded, 'Segoe UI', system-ui` |
+| Main orange | `#FF8A5B` | `#FF8757` |
 
-`web/` 的 Token 提取更完整（含心情色、组件映射、无障碍说明），本文档以它为权威值。`prototypes/plus-standalone/` 已经是不再新增功能的参考原型，不用专门排期去改，如果哪天顺手碰到那份样式代码再对齐到本文档的值即可。
+`web/` has the more complete token extraction (including mood colors, component mapping and accessibility notes), so this document treats it as authoritative. `prototypes/plus-standalone/` is a reference prototype that no longer gets new features, so there is no need to schedule work to fix it; if someone happens to touch its styles, align them to the values here.
 
-## 1. 品牌调性
+## 1. Brand tone
 
-温暖、松弛、治愈系的陪伴产品——奶油色基底 + 一个暖橘主色 + 五种柔和马卡龙心情色 + 一个薰衣草紫的 "Plus" 点缀色。圆润、低对比度、无锐角。
+A warm, relaxed, soothing companion product: a cream base + one warm orange primary + five soft macaron mood colors + a lavender "Plus" accent. Rounded, low contrast, no sharp corners.
 
-## 2. 色彩 Token
+## 2. Color tokens
 
-| Token | Hex | 用途 |
+| Token | Hex | Usage |
 |---|---|---|
-| `background.base` | `#EEE5DF` | 整体背景 |
-| `background.screen` | `#FBF3EC` | 单屏背景（手机） |
-| `text.primary` | `#3A302B` | 主文字 |
-| `text.muted` | `#897567` | 次要说明文字 |
-| `accent.primary` | `#FF8A5B` | 主按钮、选中态、强调元素 |
-| `accent.primaryFocus` | `#B56B42` | 焦点/可访问性描边 |
-| `accent.plus` | 文字 `#775797` / 底色 `#EDE0FA` | "Plus" 会员相关标签、按钮 |
-| `surface.card` | `#FBF3EC` | 卡片/瓦片背景 |
-| `surface.secondaryButton` | `#F2E5DB` | 次级按钮背景 |
-| `mood.calm` | `#DDEBDC` | 心情——平静 |
-| `mood.happy` | `#FFE3B5` | 心情——开心 |
-| `mood.tired` | `#E6DFF4` | 心情——疲惫 |
-| `mood.sad` | `#DCE6F2` | 心情——难过 |
-| `mood.tense` | `#F4D8D8` | 心情——紧张 |
-| `toast.background` | `#3A302B` | Toast 提示背景 |
+| `background.base` | `#EEE5DF` | Overall background |
+| `background.screen` | `#FBF3EC` | Single-screen background (phone) |
+| `text.primary` | `#3A302B` | Primary text |
+| `text.muted` | `#897567` | Secondary description text |
+| `accent.primary` | `#FF8A5B` | Primary buttons, selected state, emphasis |
+| `accent.primaryFocus` | `#B56B42` | Focus / accessibility outline |
+| `accent.plus` | Text `#775797` / background `#EDE0FA` | "Plus" membership tags and buttons |
+| `surface.card` | `#FBF3EC` | Card / tile background |
+| `surface.secondaryButton` | `#F2E5DB` | Secondary button background |
+| `mood.calm` | `#DDEBDC` | Mood: calm |
+| `mood.happy` | `#FFE3B5` | Mood: happy |
+| `mood.tired` | `#E6DFF4` | Mood: tired |
+| `mood.sad` | `#DCE6F2` | Mood: sad |
+| `mood.tense` | `#F4D8D8` | Mood: tense |
+| `toast.background` | `#3A302B` | Toast background |
 
-心情色是产品语义的一部分，不要因为视觉好看调整，改动需要过对应产品的 `decisions.md`。
+Mood colors are part of the product semantics; do not tweak them for looks. Changes must go through the product's `decisions.md`.
 
-## 3. 字体与字号
+## 3. Typography
 
-- 字体栈：`Nunito, ui-rounded, 'Arial Rounded MT Bold', system-ui, sans-serif`。
-- iOS Phase 1 默认用系统 **SF Rounded**（性能好、自动支持 Dynamic Type），不内嵌自定义字体。
-- 弹窗标题 22pt Bold · 正文 14–15pt Regular · 说明小字 11–12pt · 数字强调（Lv./streak）15–17pt Bold。
+- Font stack: `Nunito, ui-rounded, 'Arial Rounded MT Bold', system-ui, sans-serif`.
+- iOS Phase 1 uses the system **SF Rounded** by default (good performance, automatic Dynamic Type support); no embedded custom fonts.
+- Dialog title 22pt Bold · Body 14–15pt Regular · Captions 11–12pt · Numeric emphasis (Lv./streak) 15–17pt Bold.
 
-## 4. 间距与圆角
+## 4. Spacing and corner radius
 
-- 间距按 4pt 基准网格取值（4/8/12/16/24）。
-- 主按钮圆角 24–28pt（pill），次按钮/卡片/Dialog 18–26pt，日历格/图标按钮圆形。
+- Spacing follows a 4pt base grid (4/8/12/16/24).
+- Primary button radius 24–28pt (pill); secondary buttons / cards / dialogs 18–26pt; calendar cells / icon buttons are circular.
 
-## 5. 阴影
+## 5. Shadows
 
-低不透明度、带主色调的彩色阴影（`text.primary` 加透明度），不用系统默认纯黑阴影。卡片量级 `0 24px 80px rgba(100,75,57,0.15)`，Dialog 更重一档。
+Low-opacity, tinted shadows (`text.primary` with transparency), not the system default pure black. Card level `0 24px 80px rgba(100,75,57,0.15)`; dialogs one step heavier.
 
-## 6. 动效
+## 6. Motion
 
-- 交互反馈"有弹性但不夸张"：轻微弹跳类动画 0.5s；Bottom Sheet 从底部滑入+淡入 0.25s ease-out；常规状态切换 0.2s ease。
-- 必须响应系统"减弱动态效果"设置（web: `prefers-reduced-motion`；iOS: `accessibilityReduceMotion`），为真时关闭非必要动画。
-- 活动选择庆祝：小狗轻跳周期 0.5s，播放 3 次后归位；位移 12px，左右旋转 5deg，落地压缩/起跳拉伸幅度 4%。爱心上浮 24px、同样播放 3 次。复用 192px 皮肤详情预览、22px 装饰字号、12/24px 间距与主橘色；配饰随小狗一起运动。减弱动态效果下无位移、旋转或缩放。
-- 庆祝角色使用 `rongrong-cutout.png` 的真实 alpha 透明轮廓，皮肤色通过相同 alpha 遮罩叠加，背景不参与变换。独立地面阴影宽度为角色宽度的一半、高 12px，`text.primary` 15% 透明度，椭圆，固定在舞台底部 24px。
-- Home 同样使用透明角色和轮廓着色，背景为固定的奶油色手绘窗光/植物场景 `rongrong-home-scene.png`；沿用 Stage 尺寸、原角色 210×262px 定位，场景圆角 24px，配饰字号沿用原 Home 38px、顶部 12px，跟随角色运动。保留原 Aura 与地面阴影层。
+- Interaction feedback is "bouncy but not over the top": light bounce animations 0.5s; bottom sheets slide up + fade in 0.25s ease-out; regular state changes 0.2s ease.
+- Must respect the system "reduce motion" setting (web: `prefers-reduced-motion`; iOS: `accessibilityReduceMotion`); when true, turn off non-essential animation.
+- Activity selection celebration: the dog hops on a 0.5s cycle, plays 3 times, then returns to rest; 12px translation, 5deg rotation left/right, 4% squash on landing / stretch on takeoff. Hearts float up 24px, also 3 times. Reuses the 192px skin detail preview, 22px decoration font size, 12/24px spacing and the main orange; accessories move with the dog. Under reduce motion there is no translation, rotation or scaling.
+- The celebration character uses the real alpha outline of `rongrong-cutout.png`; the skin color is overlaid through the same alpha mask, and the background is not transformed. A separate ground shadow is half the character's width, 12px tall, `text.primary` at 15% opacity, elliptical, fixed 24px from the bottom of the stage.
+- Home likewise uses the transparent character with outline tinting; the background is the fixed cream hand-painted window-light/plant scene `rongrong-home-scene.png`. It keeps the Stage dimensions and the original 210×262px character positioning, a 24px scene corner radius, and the original Home accessory font size of 38px with 12px top offset, moving with the character. The original Aura and ground shadow layers are kept.
 
-## 7. 图标
+## 7. Icons
 
-- 服装/配饰用 emoji 直接表示，不做自定义插画资源。
-- 需要线性图标（设置/关闭等）：web 用简单 stroke SVG（1.5px 描边、圆头），iOS 优先用 SF Symbols。
-- Quick Moods 使用同一只 Rongrong 的五张柔和手绘表情头像，奶油色纸纹底，沿用原 44×44px 圆形尺寸；文件 `mood-{calm,happy,tired,sad,tense}-painted.png`。文字标签与 aria 心情名称保留，不单靠表情传递状态。
+- Outfits / accessories are represented directly with emoji; no custom illustration assets.
+- Where line icons are needed (settings / close, etc.): web uses simple stroke SVGs (1.5px stroke, round caps); iOS prefers SF Symbols.
+- Quick Moods use five soft hand-painted expression portraits of the same Rongrong on a cream paper texture, keeping the original 44×44px circular size; files `mood-{calm,happy,tired,sad,tense}-painted.png`. Text labels and aria mood names are kept; state is never conveyed by expression alone.
 
-## 8. 核心组件
+## 8. Core components
 
-| 组件 | 要点 |
+| Component | Key points |
 |---|---|
-| 主按钮 | 圆角 pill、`accent.primary` 底色、禁用态降透明度 |
-| 次按钮 | `surface.secondaryButton` 底色 |
-| 心情/选项格 | 选中态用对应语义色底色+描边，同时要有文字/label 兜底（不能只靠颜色） |
-| 底部弹层（Sheet） | 从底部滑入，焦点管理，Escape/滑动可关闭 |
-| 信息弹窗（Dialog） | 视内容量选原生 dialog/alert/sheet |
-| Toast | 底部浮层，3 秒自动消失 |
-| 底部 Tab | 当前项高亮用 `accent.primary` |
+| Primary button | Pill radius, `accent.primary` background, reduced opacity when disabled |
+| Secondary button | `surface.secondaryButton` background |
+| Mood / option tile | Selected state uses the matching semantic color background + outline, with a text/label fallback (never color alone) |
+| Bottom sheet | Slides up from the bottom, focus management, dismissible via Escape / swipe |
+| Info dialog | Native dialog / alert / sheet depending on content size |
+| Toast | Bottom overlay, auto-dismisses after 3 seconds |
+| Bottom tab bar | Current item highlighted with `accent.primary` |
 
-## 9. 无障碍
+## 9. Accessibility
 
-所有可交互元素要有文字化的可访问名称（`aria-label` / `accessibilityLabel`）；支持系统字号缩放（Dynamic Type）；遵循动效减弱设置；语义信息（心情、状态）不能只靠颜色传达。
+Every interactive element needs a textual accessible name (`aria-label` / `accessibilityLabel`); support system text scaling (Dynamic Type); respect reduce motion; semantic information (mood, status) must not be conveyed by color alone.
 
 ## 10. Dark Mode
 
-Phase 1 不做，两套实现目前都只有浅色模式。以后要做的话先在这里定 dark 变体的值，再回头改代码。
+Not in Phase 1; both implementations currently only have a light mode. If it is added later, define the dark variant values here first, then change the code.
 
-## 11. 平台映射
+## 11. Platform mapping
 
-- **Web（CSS）**：用 CSS 自定义属性命名，前缀跟 token 名一致，例如 `--color-accent-primary`、`--radius-pill`。
-- **iOS（SwiftUI）**：Asset Catalog 里的 Color Set 用同样的语义名（`background.base` → `Color("BackgroundBase")`），不要另起一套命名。
-- 不管哪个平台，新增 UI 前先看这份文档有没有现成 token；没有的话先在这里加一行，再写代码，不要反过来先写死在代码里。
+- **Web (CSS)**: name CSS custom properties with the same prefix as the token name, e.g. `--color-accent-primary`, `--radius-pill`.
+- **iOS (SwiftUI)**: Color Sets in the Asset Catalog use the same semantic names (`background.base` → `Color("BackgroundBase")`); don't invent a separate naming scheme.
+- On any platform, check this document for an existing token before adding UI; if there isn't one, add a row here first and then write the code, not the other way round with values hard-coded first.
 
-## 12. 皮肤展示
-复用原宠物图片，以 CSS 混合底色与 emoji 主题装饰呈现皮肤。Cream 无混合；Mint 使用 `mood.calm`；Cherry 使用 `mood.tense`；Starlight 使用 `mood.tired`。使用 multiply 混合，主题装饰仅为外观，不改变心情语义。
-皮肤卡预览高度 128px、详情预览 192px；装饰字号 22px、内边距 12px；卡片网格最小列宽 128px。沿用现有卡片圆角 18px、间距 12px、正文 14px。
+## 12. Skin display
+Reuses the original pet image, presenting skins with a CSS blend color and emoji theme decorations. Cream has no blend; Mint uses `mood.calm`; Cherry uses `mood.tense`; Starlight uses `mood.tired`. Uses multiply blending; theme decorations are cosmetic only and do not change mood semantics.
+Skin card preview height 128px, detail preview 192px; decoration font size 22px, padding 12px; card grid minimum column width 128px. Keeps the existing card radius 18px, spacing 12px, body 14px.
