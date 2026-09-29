@@ -1,32 +1,32 @@
-# Spec: 星愿转盘（独立预览）
+# Spec: Wishing Wheel
 
-状态：本地可交互预览，未合入 main；支付全部模拟。
+Status: interactive web demo approved for repository publication; all payments are simulated.
 
-## 流程与定价
-独立 web/wheel.html，现有皮肤商店提供入口。充值预设 $1/$5/$10，支持 $1–$100 自定义金额、最多两位小数，1 USD = 100 星币。单笔最多 $100，在输入框与纯逻辑 topUpCoins/topUp 内校验，累计余额不受单笔上限约束。当前无后端；真实支付上线时必须在服务端再次校验同一限制。
-本期七抽阶梯：$1、$2、$3、$4、$6、$8、$10；集齐原价合计 $34。此阶梯为预览暂定方案。抽中即移出奖池，最多抽七次；集齐后停止抽奖和充值。
-抽奖前确认本次与下次价格；余额不足不扣款、不增加次数。取消充值/抽奖均不修改数据。次数跨刷新保留，不按天或充值重置。
+## Flow and pricing
+`web/wheel.html` is accessible from the skin shop. Preset top-ups are $1/$5/$10; custom amounts allow $1–$100 with at most two decimal places. $1 equals 100 coins. Both UI and pure transaction logic enforce the per-transaction maximum; cumulative balance is not capped at $100. There is no backend; real payments must repeat validation server-side.
+The seven draw prices are $1/$2/$3/$4/$6/$8/$10 ($34 total). Prices remain subject to product validation. A collected reward leaves the pool. After seven rewards, drawing and top-ups stop. Confirm current and next prices before drawing. Insufficient funds and cancellation never deduct coins or advance progress. Progress persists across reloads.
 
-## 七件奖品
-Pistachio Picnic 普通 32%；Cocoa Cloud 普通 25%；Silver Mist 稀有 18%；蜂蜜甜梦 稀有 12%；极光圆舞曲 史诗 7%；蜜桃假日 史诗 4%；星穹之冠 传说 2%。
-七件为独立抽奖专属皮肤 ID，与原有直购皮肤不重合。初始权重合计 100；已拥有的奖品被排除，当前概率=单件权重/剩余权重总和。页面同时展示初始与当前概率；最后一件概率 100%。无重复、无返币机制。
-转盘等宽七格仅用于展示位置，实际概率以文字为准。中奖结果对应转盘最终指向。
-抽中后加入 ownedSkins，可在本页或 Home 穿戴。原四款直购皮肤和会员不变；主商店只显示已获得的转盘专属皮肤。
+## Seven prizes
+| Skin | Rarity | Initial probability |
+| --- | --- | --- |
+| Pistachio Picnic | Common | 32% |
+| Cocoa Cloud | Common | 25% |
+| Silver Mist | Rare | 18% |
+| Honey Dream | Rare | 12% |
+| Aurora Waltz | Epic | 7% |
+| Peach Picnic | Epic | 4% |
+| Celestial Crown | Legendary | 2% |
 
-## 数据与可靠性
-现有 rongrong-demo-v1 新增 wheel { balance, draws, toppedUp, history }，整数计币，默认余额为零，最近七条历史。draws 由已拥有的本期奖品数量校正。
-扣币与奖励一次性保存后播放动画，刷新不吞奖。每次写入前读取最新数据，通过 Web Locks 串行同源转盘操作（不支持时本地同步操作）；不是生产支付凭据。
-存储不可用时禁止充值/抽奖，不假称成功。旧记录保留心情等字段，新增钱包补默认。重置原应用数据一并清除转盘记录。减弱动态时跳过旋转动画。
-iOS 尚无工程，未来遵循同一产品规格。
+Exclusive reward IDs are separate from direct purchases. Current probability is the remaining item's weight divided by the total remaining weight; the last item has 100% probability. Display both initial and current odds. Equal visual wheel sectors do not represent probabilities. The final pointer matches the result. No duplicates or duplicate refunds.
+Awards join `ownedSkins` and may be equipped here or on Home. Original direct purchases remain permanently owned, independent of Plus, at their original prices. The shop shows exclusive skins only when owned. Recolored Pistachio/Cocoa/Silver rewards retain the legacy wish-mint/wish-cherry/wish-starlight IDs, keeping previous ownership, history and draw progress. Direct purchases do not count toward wheel progress.
 
-## 验收
-七件唯一、概率边界与重新归一化、价格阶梯、余额不足、七连抽不重复/集齐关闭、充值白名单、保存恢复、穿戴与取消操作、手机与桌面布局。
+## Persistence and reliability
+Extend `rongrong-demo-v1` with `wheel { balance, draws, toppedUp, history }`. Coins are integers, default balance is zero, history holds up to seven records, and draw count derives from owned pool items. Save deduction and award together before animation. Read fresh state before transactions and serialize same-origin wheel writes with Web Locks when supported; otherwise use synchronous local operations. This is not a production payment ledger.
+If storage fails, block transactions without reporting success. Preserve existing mood and journal fields. Resetting app data clears wallet and ownership. Reduced motion skips spinning. iOS has no implementation yet and should follow the same spec later.
 
-## 手机页面与导航
-界面全部英文。沿用主应用390px宽度/844px最大高度、移动端430px最大宽与100dvh、奶油色与底部圆角导航。
-wheel.html#wheel为抽奖页；#wallet 独立充值页；#wardrobe 为穿戴、收藏及折叠抽奖历史；#odds 为独立规则页。底部 Wheel/Wardrobe/Wallet 导航、顶部余额入口、规则返回均支持键盘与浏览器前进后退。
-余额不足→确认未扣款→Wallet；充值确认成功→Wheel；中奖→立即穿戴或查看衣橱→Wardrobe；See on Home 返回现有主应用。手机页内容区独立滚动，导航固定可见；对话框限制85dvh。
-蜜桃皮肤浅橘色 #FFD9BD 同步至转盘、衣橱和主页。
+## Mobile pages and navigation
+All interface copy is English. Match the main app's 390px phone shell, up to 844px height; mobile uses 100dvh and up to 430px width. `#wheel`, `#wallet`, `#wardrobe`, `#odds` are separate views. Fixed Wheel/Wardrobe/Wallet tabs, header balance entry, odds/back links and browser history support navigation.
+Insufficient funds lead to Wallet; confirmed top-ups return to Wheel; result actions equip or open Wardrobe. See on Home returns to the original app. Contents scroll independently; dialogs are limited to 85dvh. Peach Picnic uses pale orange #FFD9BD throughout.
 
-## 直购与转盘区分
-原直购皮肤保持一次购买、永久解锁，无期限、不受 Plus 结束影响；模拟版本记录限当前浏览器，重置数据会清除。转盘原三款重复配色替换为 Pistachio Picnic（浅黄绿）、Cocoa Cloud（可可棕）、Silver Mist（银灰），概率与阶梯价格不变。保持已有奖励 ID 兼容历史，替换后仍拥有且不重复抽取；直购皮肤不计入转盘进度。
+## Acceptance
+Verify unique rewards, weighted boundaries and updated odds, price progression, insufficient funds, completion, top-up limits, save/reload, ownership and equipping, cancellation and mobile navigation. Direct purchases must stay wearable after drawing, reload and membership cancellation. Demo ownership is local to the current browser and lasts until its saved data is reset.

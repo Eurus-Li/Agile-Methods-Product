@@ -1,19 +1,19 @@
 # Spec: Pet skins / Commercialization
 
-**状态:** Web 本地模拟；iOS 工程尚未开始，未来实现遵循本规格。
+**Status:** Simulated locally on web; the iOS project has not started, and the future implementation follows this spec.
 
-## 目标与定价
-免费陪伴功能不变。皮肤仅改变外观，可与现有配饰同时使用。
-Classic Cream 免费；Mint Cloud US$0.99；Cherry Blossom US$1.99；Starlight US$2.99。
-全部付费皮肤为一次性模拟购买，独立于 US$4.99/月的 Plus 配饰会员。
+## Goal and pricing
+The free companion features are unchanged. Skins only change appearance and can be combined with the existing accessories.
+Classic Cream is free; Mint Cloud US$0.99; Cherry Blossom US$1.99; Starlight US$2.99.
+All paid skins are simulated one-time purchases, separate from the US$4.99/month Plus accessory membership.
 
-## 交互
-Home、Me 衣橱、Plus 页面均有皮肤商店入口。每张卡显示宠物预览、名称、描述、价格与 Equipped / Owned / Locked 状态。
-锁定皮肤可先预览；必须点击标有价格的确认按钮才模拟解锁并穿戴。取消不更改数据，不发生真实扣费。
-已拥有皮肤可以直接穿戴。返回 Home 或关闭商店即可看到效果，刷新后保留。Plus 结束不移除单购皮肤。
+## Interaction
+Home, the Me wardrobe and the Plus page all have a skin shop entry point. Each card shows a pet preview, name, description, price and Equipped / Owned / Locked status.
+Locked skins can be previewed first; the user must tap a confirm button showing the price to simulate unlocking and wearing it. Cancelling changes no data, and no real charge happens.
+Owned skins can be worn directly. Going back to Home or closing the shop shows the effect, and it persists across refresh. Ending Plus does not remove individually purchased skins.
 
-## 数据与验收
-`skin: string` 默认 `cream`；`ownedSkins: string[]` 默认 `['cream']`，均保存在现有本地状态。
-旧数据无新字段时补默认值；过滤未知 ID、重复 ID；未拥有的已选皮肤回退默认。
-重置数据删除所有模拟购买。存储不可用时仅当前会话有效。皮肤不影响心情、亲密度和配饰权益。
-测试覆盖旧数据迁移、坏数据回退、购买幂等性、未拥有皮肤不可穿戴、会员状态独立。
+## Data and acceptance
+`skin: string` defaults to `cream`; `ownedSkins: string[]` defaults to `['cream']`; both are saved in the existing local state.
+When old data lacks the new fields, defaults are filled in; unknown and duplicate IDs are filtered out; a selected skin that isn't owned falls back to the default.
+Resetting data deletes all simulated purchases. When storage is unavailable, changes only last for the current session. Skins don't affect mood, bond or accessory entitlements.
+Tests cover old-data migration, fallback for bad data, purchase idempotency, unowned skins not being wearable, and independence from membership status.

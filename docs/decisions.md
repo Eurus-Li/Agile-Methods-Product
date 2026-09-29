@@ -1,76 +1,76 @@
 # Decisions
 
-重要决策记录，一条几行。目的是不让每一次新的 vibe coding 对话重新讨论已经定过的事。**改变下面任何一条结论前，先改这里，再改代码。**
+A log of important decisions, a few lines each. The goal is to keep every new vibe-coding session from reopening things that have already been settled. **Before changing any conclusion below, change it here first, then change the code.**
 
 ---
 
-### 2026-09-15 · 平台策略
-只做 iOS 原生（SwiftUI），暂不做 Android / 跨平台框架。
-理由：iOS 体验优先，原型阶段先把一端打磨扎实。
-重新讨论：需要验证 Android 需求，或团队扩员正式做双端时。
+### 2026-09-15 · Platform strategy
+Native iOS only (SwiftUI); no Android / cross-platform framework for now.
+Rationale: the iOS experience comes first; during the prototype phase, polish one platform properly.
+Revisit: when Android demand needs validating, or when the team grows to build both platforms for real.
 
-### 2026-09-15 · 后端 / 账号系统
-暂不引入后端，数据全部本地持久化（SwiftData）。
-理由：原型阶段避免过早投入基础设施成本。
-重新讨论：需要多设备同步、真实账号、或**引入真实支付前必须先解决这条**（否则重演 [技术债审查](technical-debt-review.md) PBI-9 的"客户端自证付费"问题）。
+### 2026-09-15 · Backend / account system
+No backend for now; all data is persisted locally (SwiftData).
+Rationale: avoid investing in infrastructure too early during the prototype phase.
+Revisit: when multi-device sync or real accounts are needed, or **this must be resolved before introducing real payments** (otherwise we repeat the "client self-certifies payment" problem from PBI-9 in the [technical debt review](technical-debt-review.md)).
 
-### 2026-09-15 · 支付 / IAP 方案
-暂不选型（候选 RevenueCat vs 自建 StoreKit），不影响原型开发。
-重新讨论：决定接入真实内购时。
+### 2026-09-15 · Payments / IAP
+Not chosen yet (candidates: RevenueCat vs. in-house StoreKit); does not affect prototype development.
+Revisit: when deciding to integrate real in-app purchases.
 
-### 2026-09-15 · 设计素材来源
-继续用 Pencil (pen.dev) 出图/出画板，沿用现有 [design/exports/](../web/design/exports/)。
-重新讨论：协作规模扩大到需要更成熟的多人设计工具时可评估 Figma。
+### 2026-09-15 · Design asset source
+Keep using Pencil (pen.dev) for mockups/artboards, continuing with the existing [design/exports/](../web/design/exports/).
+Revisit: Figma can be evaluated when collaboration grows enough to need a more mature multi-user design tool.
 
-### 2026-09-15 · 字体
-Phase 1 用系统 SF Rounded，不内嵌自定义 Nunito 字体。
-理由：原生渲染性能好、自动支持 Dynamic Type，无需打包字体。
-重新讨论：品牌辨识度需求变强时可随时切换，风险低。
+### 2026-09-15 · Fonts
+Phase 1 uses the system SF Rounded; no embedded custom Nunito font.
+Rationale: good native rendering performance, automatic Dynamic Type support, no font bundling needed.
+Revisit: can be switched at any time if brand recognition needs grow; low risk.
 
 ### 2026-09-15 · Dark Mode
-Phase 1 只做浅色模式，跟随 web demo。
-重新讨论：产品形态稳定、准备正式上架前补齐。
+Phase 1 is light mode only, matching the web demo.
+Revisit: add it once the product shape is stable and before the official App Store launch.
 
-### 2026-09-15 · 测试策略
-纯逻辑函数强制单元测试；UI/snapshot 测试原型阶段不强制。
-理由：吸取 web demo 审查中核心逻辑零覆盖的教训，但高频改版期间 UI 测试维护成本会超过收益。
-重新讨论：迭代频率下降、产品形态稳定后补 UI 测试。
+### 2026-09-15 · Testing strategy
+Unit tests are mandatory for pure logic functions; UI/snapshot tests are not required during the prototype phase.
+Rationale: learn from the web demo review, where core logic had zero coverage, but during frequent redesigns UI test maintenance costs outweigh the benefits.
+Revisit: add UI tests once iteration slows and the product shape stabilizes.
 
-### 2026-09-15 · Git 协作模式
-每个任务开一个短生命周期分支，做完自己合并回 `main`；不强制等他人审批，小改动可以立刻合并。CI 在分支 push 时就跑（不等合并到 main），作为合并前的把关。
-理由：团队规模小、用 AI vibe coding 并行改代码，直接共用 `main` 容易让人拉到半成品作为下一个任务的起点；短分支 + 自merge 保留了速度，同时让 `main` 始终可运行。也更贴近仓库历史上已经在用的方式（`codex/*`、`feature/*` 分支 + PR 合并）。
-重新讨论：团队扩大到需要外部 review、或分支长期不合并开始腐化时。
+### 2026-09-15 · Git collaboration model
+Open a short-lived branch for each task and merge it back into `main` yourself when done; approval from others is not required, and small changes can be merged immediately. CI runs on branch push (without waiting for a merge into main) as the gate before merging.
+Rationale: the team is small and uses AI vibe coding to change code in parallel; sharing `main` directly makes it easy for someone to pull half-finished work as the starting point for their next task. Short branches + self-merge keep the speed while keeping `main` always runnable. It is also closer to how the repo history already works (`codex/*`, `feature/*` branches + PR merges).
+Revisit: when the team grows enough to need external review, or when branches stay unmerged long enough to rot.
 
-### 2026-09-15 · 崩溃报告 / 分析
-暂不接入（候选 Sentry / Firebase Crashlytics / TelemetryDeck）。
-重新讨论：开始邀请外部用户测试或准备上架时。
+### 2026-09-15 · Crash reporting / analytics
+Not integrated for now (candidates: Sentry / Firebase Crashlytics / TelemetryDeck).
+Revisit: when starting to invite external user testing or preparing for the App Store.
 
-### 2026-09-15 · 最低支持系统版本
-iOS 17+。
-理由：直接用最新 SwiftUI API（`@Observable`、SwiftData、Swift Testing），加快原型开发速度。
-重新讨论：上架前按目标用户设备/系统分布数据重新评估。
+### 2026-09-15 · Minimum supported OS version
+iOS 17+.
+Rationale: use the latest SwiftUI APIs directly (`@Observable`, SwiftData, Swift Testing) to speed up prototyping.
+Revisit: re-evaluate against target user device/OS distribution data before launch.
 
-### 2026-09-15 · 状态字段设计
-iOS Model 字段语义对应 web demo `rongrong-demo-v1`（nickname/birthday/outfit/plus/entries/bond/started）。
-理由：复用已验证的产品逻辑，不重新设计数据结构。
-重新讨论：产品功能有实质性变化（如多用户/多宠物）时。
+### 2026-09-15 · State field design
+iOS Model field semantics mirror the web demo's `rongrong-demo-v1` (nickname/birthday/outfit/plus/entries/bond/started).
+Rationale: reuse the validated product logic instead of redesigning the data structure.
+Revisit: when product features change substantially (e.g. multiple users / multiple pets).
 
 ---
 
-## 怎么新增一条决定
+## How to add a decision
 
-1. 确认这是"多人会反复问/AI 会反复重新决定"级别的问题，不是一次性实现细节。
-2. 按上面的格式加一条：日期 · 主题 / 决定 / 理由 / 重新讨论条件，2-4 行说完。
-3. 如果这条决定影响 [architecture.md](architecture.md) 里已经写死的内容，同步更新，不要让两份文档互相矛盾。
+1. Confirm this is a question "many people will keep asking / AI will keep re-deciding", not a one-off implementation detail.
+2. Add an entry in the format above: date · topic / decision / rationale / revisit conditions, in 2–4 lines.
+3. If the decision affects something already fixed in [architecture.md](architecture.md), update it too so the two documents don't contradict each other.
 
-### 2026-09-20 · 皮肤单购
-保留免费默认皮肤，增加三个分档单购皮肤；价格为示例 USD 一次性价格。购买仍为本地模拟，独立于 Plus 配饰会员。
-理由：验证外观商品的分档定价，保留免费陪伴功能。重新讨论：真实支付上线或定价验证后。
+### 2026-09-20 · Individual skin purchases
+Keep a free default skin and add three tiered, individually purchased skins; prices are sample one-time USD prices. Purchases are still simulated locally and are separate from the Plus accessory membership.
+Rationale: validate tiered pricing for cosmetic items while keeping the free companion features. Revisit: after real payments launch or pricing is validated.
 
-### 2026-09-22 · Release 1.1 心情活动
-使用固定本地目录，五种心情各推荐三个活动，不引入 AI 推荐或后端。每个日期只保存一个 activityId；改心情清空选择，同心情保留，选择无 Bond 奖励，所有活动免费。
-理由：先验证推荐 → 详情 → 选择的完整 Web 流程，并保持旧数据兼容。重新讨论：有个性化推荐、计时或完成记录需求时；iOS 工程建立后按同一规格实现。
+### 2026-09-22 · Release 1.1 mood activities
+Use a fixed local catalog, with three recommended activities for each of the five moods; no AI recommendations or backend. Each date stores only one activityId; changing the mood clears the selection, the same mood keeps it, selections give no Bond reward, and all activities are free.
+Rationale: first validate the full web flow of recommend → details → select while keeping old data compatible. Revisit: when there is a need for personalized recommendations, timers or completion records; once the iOS project exists, implement it following the same spec.
 
-### 2026-09-29 · 星愿转盘预览
-独立本地预览：七件专属皮肤不放回抽样，已获得项移出奖池，剩余权重归一化；集齐停止抽奖。1 USD=100 星币；七抽暂定 $1/$2/$3/$4/$6/$8/$10，总计 $34。所有充值为模拟，原直购保留。
-理由：按用户追加的七件不重复规则验证转盘与穿戴，预览完成后再决定是否合入 main；价格阶梯仍可调整。
+### 2026-09-29 · Wishing Wheel
+Use seven exclusive skins sampled without replacement; remove owned items and renormalize remaining weights. Stop drawing and top-ups when complete. $1 equals 100 coins; seven draws cost $1/$2/$3/$4/$6/$8/$10, totaling $34. Top-ups are simulated and limited to $100 per transaction in local logic; production payments require server validation. Keep direct purchases permanent and independent of Plus.
+Rationale: validate the requested collection and outfit flow with separate mobile pages. The user approved publishing the preview to the repository. Revisit pricing after validation; no real payment integration is included.

@@ -1,54 +1,48 @@
-# Web 验证与演示清单
+# Web Verification and Demo Checklist
 
-## 自动检查
+## Automated checks
 
-在仓库根目录运行：
+Run from the repo root:
 
 ```sh
 npm --prefix web run check
 npm --prefix web test
 ```
 
-目前 12 项单元测试：6 项活动逻辑、6 项皮肤逻辑。check 是 JavaScript 语法检查；没有完整 ESLint、TypeScript 检查或 iOS 测试。分支 push 会执行 CI，合并前确认通过。
+There are currently 12 unit tests: 6 for activity logic and 6 for skin logic. check is a JavaScript syntax check; there is no full ESLint, TypeScript check or iOS test. CI runs on branch push; confirm it passes before merging.
 
-## 本地启动
+## Running locally
 
 ```sh
 cd web
 npm run dev
 ```
 
-访问 http://127.0.0.1:8000；端口占用时可用 `PORT=8011 npm run dev` 并访问对应端口。素材更新后可强制刷新。持久化数据仅属于当前浏览器和 origin，不同端口不会共享记录。
+Visit http://127.0.0.1:8000; if the port is in use, run `PORT=8011 npm run dev` and visit that port. Force-refresh after assets are updated. Persisted data belongs only to the current browser and origin, so different ports don't share records.
 
-## 浏览器验收
+## Browser acceptance
 
-| 操作 | 预期结果 |
+| Action | Expected result |
 | --- | --- |
-| 打开 Home | 奶油色窗光/植物背景、透明小狗、五张手绘表情头像 |
-| 点击小狗或聚焦后 Enter / Space | 小狗与配饰轻跳，场景和阴影固定，有抚摸文字反馈 |
-| 切换四种皮肤 | 角色颜色/主题对应，去背区域不出现矩形底色 |
-| 分别选择五种心情 | 保存当天心情，Reply 显示对应回应和恰好三个推荐活动 |
-| View details 后关闭或 Escape | 可看到时间与步骤，不改变已选活动，不播放庆祝 |
-| Select activity | 保存选择，弹窗显示小狗轻跳三次及选择文字，不额外增加 Bond |
-| Back to activities 或 Escape | 回到活动卡，显示 Selected，焦点回到原卡片按钮 |
-| 改选另一活动后刷新 | 新选择保留，刷新不重播庆祝 |
-| 同心情重复打卡 / 改为其他心情 | 前者保留活动，后者清空；不重复增加当天打卡奖励 |
-| Journal 打开历史日期的活动 | 操作该日期的活动，不覆盖今天的记录 |
-| 系统开启减弱动态效果 | 无小狗位移/旋转/缩放，保留静态角色和确认文字 |
-| 320 / 390 / 768px 视口 | 无横向溢出，长 Reply 与详情可滚动，关闭按钮可达 |
+| Open Home | Cream window-light/plant background, transparent dog, five hand-painted expression portraits |
+| Tap the dog, or focus it and press Enter / Space | The dog and accessories hop lightly, the scene and shadow stay fixed, and there is petting text feedback |
+| Switch between the four skins | Character color/theme matches, and no rectangular background color appears in the cutout area |
+| Select each of the five moods | Today's mood is saved; Reply shows the matching response and exactly three recommended activities |
+| Close View details or press Escape | Time and steps are visible; the selected activity doesn't change and no celebration plays |
+| Select activity | Selection is saved; the dialog shows the dog hopping three times plus the selection text, with no extra Bond |
+| Back to activities or Escape | Returns to the activity cards showing Selected, with focus back on the original card button |
+| Switch to another activity, then refresh | The new selection is kept and the celebration does not replay on refresh |
+| Re-check in with the same mood / change to another mood | The former keeps the activity, the latter clears it; the daily check-in reward is not added again |
+| Open a past date's activities from Journal | Acts on that date's activity without overwriting today's record |
+| System reduce motion on | No dog translation/rotation/scaling; the static character and confirmation text remain |
+| 320 / 390 / 768px viewports | No horizontal overflow; long Reply and details scroll; the close button is reachable |
 
-## 已验证范围与限制
+## Verified scope and limitations
 
-2026-09-22 已在本地 Chromium 验证上述功能，纯逻辑测试与相应功能分支 CI 通过。浏览器检查使用临时 Playwright 脚本，不属于仓库 CI；表格是后续人工复验步骤。未声称完成 Safari、真实 iPhone 或 iOS 原生验证。
+On 2026-09-22 the features above were verified in local Chromium, and the pure logic tests and the corresponding feature-branch CI passed. The browser checks used a temporary Playwright script that is not part of the repo's CI; the table is for later manual re-verification. Safari, real iPhone, or native iOS verification is not claimed.
 
-动画目前是去背角色整体的 CSS 变换，不是骨骼动画；选择活动不代表完成活动，不含计时器、完成奖励或真实支付。视觉素材生成只发生在开发阶段，demo 运行时使用本地文件。
+The animation is currently a CSS transform of the whole cutout character, not skeletal animation; selecting an activity doesn't mean completing it, and there is no timer, completion reward or real payment. Visual assets were generated only during development; the demo uses local files at runtime.
 
-## Mobile Wishing Wheel preview
-- Wallet: verify $1/$5/$10 presets, Custom, blank/negative/100.01/1.001 rejection, and $100 acceptance. Confirm $1.23 yields exactly 123 coins and returns to Wheel. Cancel must leave the balance unchanged.
-- Wheel: confirm odds link opens the separate Odds & Rules page; browser back and the bottom tabs work. Insufficient balance leads to Wallet without deducting coins.
-- Wardrobe: check pale peach (#FFD9BD), owned/locked labels, two-column collection, equip and Home synchronization.
-- Mobile: 390px / 320px widths, short viewports, fixed bottom tabs and scrollable content, no horizontal overflow; dialog scrolls at large text sizes.
-- Current automated suite: 22 tests pass. Browser verified custom over-limit rejection, decimal coin conversion, and top-up return navigation.
-
-### 转盘配色与永久直购回归
-2026-09-29：24 项测试通过。原直购价格与所有权不变；验证抽满七奖、保存恢复、Plus 取消后仍能穿戴全部直购皮肤。旧转盘奖励 ID 保留，换色后仍计入已拥有并排除后续抽奖。
+## Wishing Wheel verification — 2026-09-29
+24 web logic tests cover the seven-item exclusive pool, weighted boundaries, renormalized probabilities, no duplicates, seven prices, insufficient funds, completion, migration, equipping, recharge presets, precise custom coin conversion and the $100 per-transaction cap. Regression checks preserve direct-purchase ownership after all draws, reload and Plus cancellation, and preserve recolored legacy rewards without awarding duplicates.
+Browser checks during preview verified page navigation, custom $1.23 confirming 123 coins and returning to Wheel, and rejection of $100.01. The implementation remains a local payment simulation. Browser storage reset clears ownership and wallet records.
