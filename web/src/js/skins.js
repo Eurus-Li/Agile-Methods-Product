@@ -4,10 +4,17 @@
     { id: 'cream', name: 'Classic Cream', cents: 0, motif: '', description: 'Your original soft little companion.' },
     { id: 'mint', name: 'Mint Cloud', cents: 99, motif: '🍃', description: 'A fresh mint tint and a little leaf.' },
     { id: 'cherry', name: 'Cherry Blossom', cents: 199, motif: '🌸', description: 'Rosy fluff with a spring blossom.' },
-    { id: 'starlight', name: 'Starlight', cents: 299, motif: '🌙 ✨', description: 'Lavender fluff with moon and stars.' }
+    { id: 'starlight', name: 'Starlight', cents: 299, motif: '🌙 ✨', description: 'Lavender fluff with moon and stars.' },
+    { id: 'wish-mint', name: 'Pistachio Picnic', drawOnly: true, motif: '🌿', tone: 'pistachio', description: 'A little wish from the exclusive wheel collection.' },
+    { id: 'wish-cherry', name: 'Cocoa Cloud', drawOnly: true, motif: '☁️', tone: 'cocoa', description: 'A little wish from the exclusive wheel collection.' },
+    { id: 'wish-starlight', name: 'Silver Mist', drawOnly: true, motif: '✦', tone: 'silver', description: 'A little wish from the exclusive wheel collection.' },
+    { id: 'wish-honey', name: 'Honey Dream', drawOnly: true, motif: '🍯', tone: 'honey', description: 'A little wish from the exclusive wheel collection.' },
+    { id: 'wish-aurora', name: 'Aurora Waltz', drawOnly: true, motif: '🦋', tone: 'aurora', description: 'A little wish from the exclusive wheel collection.' },
+    { id: 'wish-peach', name: 'Peach Picnic', drawOnly: true, motif: '🍑', tone: 'peach', description: 'A little wish from the exclusive wheel collection.' },
+    { id: 'wish-celestial', name: 'Celestial Crown', drawOnly: true, motif: '💎', tone: 'celestial', description: 'A little wish from the exclusive wheel collection.' }
   ].map(Object.freeze));
   const find = id => catalog.find(skin => skin.id === id);
-  const price = skin => skin.cents === 0 ? 'Free' : `$${(skin.cents / 100).toFixed(2)} USD`;
+  const price = skin => skin.drawOnly ? 'Wheel exclusive' : skin.cents === 0 ? 'Free' : `$${(skin.cents / 100).toFixed(2)} USD`;
   function normalize(state) {
     const ownedSkins = [...new Set(['cream', ...(Array.isArray(state.ownedSkins) ? state.ownedSkins.filter(id => find(id)) : [])])];
     return { ...state, ownedSkins, skin: ownedSkins.includes(state.skin) ? state.skin : 'cream' };
@@ -18,7 +25,7 @@
   }
   function purchase(state, id) {
     const next = normalize(state);
-    if (!find(id)) return next;
+    if (!find(id) || find(id).drawOnly) return next;
     return equip({ ...next, ownedSkins: [...new Set([...next.ownedSkins, id])] }, id);
   }
   globalThis.RongrongSkins = Object.freeze({ catalog, find, price, normalize, equip, purchase });

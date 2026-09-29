@@ -98,3 +98,22 @@ Phase 1 不做，两套实现目前都只有浅色模式。以后要做的话先
 ## 12. 皮肤展示
 复用原宠物图片，以 CSS 混合底色与 emoji 主题装饰呈现皮肤。Cream 无混合；Mint 使用 `mood.calm`；Cherry 使用 `mood.tense`；Starlight 使用 `mood.tired`。使用 multiply 混合，主题装饰仅为外观，不改变心情语义。
 皮肤卡预览高度 128px、详情预览 192px；装饰字号 22px、内边距 12px；卡片网格最小列宽 128px。沿用现有卡片圆角 18px、间距 12px、正文 14px。
+
+## 13. 星愿转盘预览
+独立桌面页面最大宽 1200px、两列 1.55fr/1fr，断点 800px；手机单列，内边距 16px。背景沿用 background.screen，面板用 surface.card 与 surface.secondaryButton，边线 text.primary 10% 透明度。
+新增页面字号：标题 48px（手机 32px）、区块标题 22px、余额 32px、正文 14px、标签 11px；中文使用系统字体栈。间距扩展 32/48px，面板圆角 26px。
+转盘尺寸 min(360px, 100%)，7 个等角扇区（明确不代表概率），外环 12px、指针 24px、中心 80px、奖品缩略图 64px；结果图 192px、衣橱图 128px。旋转反馈 3s cubic-bezier(.16,1,.3,1)，减弱动态时关闭。
+Honey 使用 mood.happy；Aurora 使用 mood.sad；Celestial 使用 accent.plus 底色。装饰沿用 emoji；着色使用现有 alpha 轮廓遮罩。稀有度同时显示文字与概率。
+
+转盘追加规格：七格角度 360/7；手机奖品图 48px、名称 8px，图标环半径 94px（桌面112px）；卡片桌面七列，1000px 以下三列、520px 以下两列，图高112px。蜜桃沿用 accent.primary；中心微标8px；默认边线1px、聚焦3px，已获得标记同时使用文字。
+
+### 2026-09-29 转盘修订
+新增 skin.peach 浅橘色 #FFD9BD，替代蜜桃皮肤此前的主按钮橘色；转盘扇区、缩略图、穿戴预览和 Home 保持一致。主按钮橘色不变。
+转盘界面使用全英文。自定义充值输入框沿用18px圆角、12px内边距、14px正文、既有聚焦色；输入说明与错误为12px。四个充值入口为 $1 / $5 / $10 / Custom。
+
+### 手机页结构（替代第13节桌面两列预览）
+沿用主应用390px宽、44px外框圆角、最大844px高；480px以下全屏100dvh、最大430px，安全区适配。顶部Header与底部Tab固定，main滚动。Wheel/Wallet/Wardrobe/Odds为独立hash页面。
+页面标题26px（360px以下22px）、导航11px、余额32px；引导小标题8px。转盘最大300px、边框8px、中心64px、中心微标6px；皮肤环位置半径33cqw以随容器缩放，小图48px（窄屏40px）、标签8px。衣橱角色160px、奖品图112px、两列卡片。按钮最小触控高度44–48px；通知4秒。
+
+### 转盘与直购配色区分
+直购 Mint Cloud / Cherry Blossom / Starlight 保持原色。转盘替换三款：Pistachio Picnic 使用 skin.pistachio #E4E9B6；Cocoa Cloud 使用 skin.cocoa #DEC7B2；Silver Mist 使用 skin.silver #D4DBDE。对应转盘、衣橱、商店预览及 Home 使用相同色值。旧 wish-mint / wish-cherry / wish-starlight ID 保留，仅更新外观与展示名称，避免丢失已有奖励。

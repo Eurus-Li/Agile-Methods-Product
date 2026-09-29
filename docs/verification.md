@@ -42,3 +42,13 @@ npm run dev
 2026-09-22 已在本地 Chromium 验证上述功能，纯逻辑测试与相应功能分支 CI 通过。浏览器检查使用临时 Playwright 脚本，不属于仓库 CI；表格是后续人工复验步骤。未声称完成 Safari、真实 iPhone 或 iOS 原生验证。
 
 动画目前是去背角色整体的 CSS 变换，不是骨骼动画；选择活动不代表完成活动，不含计时器、完成奖励或真实支付。视觉素材生成只发生在开发阶段，demo 运行时使用本地文件。
+
+## Mobile Wishing Wheel preview
+- Wallet: verify $1/$5/$10 presets, Custom, blank/negative/100.01/1.001 rejection, and $100 acceptance. Confirm $1.23 yields exactly 123 coins and returns to Wheel. Cancel must leave the balance unchanged.
+- Wheel: confirm odds link opens the separate Odds & Rules page; browser back and the bottom tabs work. Insufficient balance leads to Wallet without deducting coins.
+- Wardrobe: check pale peach (#FFD9BD), owned/locked labels, two-column collection, equip and Home synchronization.
+- Mobile: 390px / 320px widths, short viewports, fixed bottom tabs and scrollable content, no horizontal overflow; dialog scrolls at large text sizes.
+- Current automated suite: 22 tests pass. Browser verified custom over-limit rejection, decimal coin conversion, and top-up return navigation.
+
+### 转盘配色与永久直购回归
+2026-09-29：24 项测试通过。原直购价格与所有权不变；验证抽满七奖、保存恢复、Plus 取消后仍能穿戴全部直购皮肤。旧转盘奖励 ID 保留，换色后仍计入已拥有并排除后续抽奖。

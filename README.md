@@ -93,3 +93,10 @@ Home 的 **Skins** 按钮、Me 衣橱或 Plus 页的 **Explore pet skins** 可�
 手绘头像、去背小狗与场景为开发时使用内置 image_gen 制作的本地素材；打开 demo 不调用生成服务。素材路径和提示词见上方协作文件。运行时由 app.js 应用新的角色层与头像，重新生成 HTML 模板后仍会生效。
 
 体验活动：选择心情 → View details → Select activity → 开心反馈 → Back to activities。刷新后保留活动选择，但不会重播庆祝。更新后若浏览器仍显示旧素材，可用 macOS 的 ⌘ Shift R 强制刷新。
+
+## 星愿转盘（本地预览）
+启动后访问 http://127.0.0.1:8000/wheel.html，或从皮肤商店进入 Lucky Wheel。模拟充值 → 确认抽奖 → 查看新皮肤 → 穿戴 → 返回 Home。七件专属皮肤不重复，集齐后关闭抽奖；当前概率随剩余权重更新。暂定七抽 $1/$2/$3/$4/$6/$8/$10，合计 $34，所有充值均无真实扣费。见 [转盘规格](docs/specs/skin-wheel.md)。
+
+### Mobile Wishing Wheel preview
+The preview uses the main app's phone-sized shell. Navigate between `wheel.html#wheel`, `#wallet`, `#wardrobe`, and `#odds`; the bottom tabs stay visible while each page scrolls. All interface copy is English.
+Wallet offers $1 / $5 / $10 presets and a custom $1–$100 amount (up to two decimal places). Successful demo top-ups return to the wheel; winning skins can be equipped in the wardrobe and on Home. The $100 per-top-up limit is checked by the input and transaction model; this remains a local demo, not server-backed payment validation.

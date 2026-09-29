@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import '../src/js/skins.js';
 const { catalog, price, normalize, purchase, equip } = globalThis.RongrongSkins;
 test('catalog uses free default and distinct one-time USD prices', () => {
-  assert.deepEqual(catalog.map(price), ['Free', '$0.99 USD', '$1.99 USD', '$2.99 USD']);
+  assert.deepEqual(catalog.filter(skin => !skin.drawOnly).map(price), ['Free', '$0.99 USD', '$1.99 USD', '$2.99 USD']);
 });
 test('old data migrates without losing journal or membership', () => {
   const old = { entries: { today: { mood: 'Calm' } }, plus: true };

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Wishing Wheel · Rongrong</title><link rel="icon" href="assets/favicon.svg">
+<link rel="stylesheet" href="src/styles/wheel.css">
+<script defer src="src/js/skins.js"></script><script defer src="src/js/wheel-model.js"></script><script defer src="src/js/wheel.js"></script>
+</head>
+<body>
+<div class="phone-shell">
+<header class="app-header"><div class="header-row"><a href="index.html#home" class="home-link" aria-label="Back to Rongrong Home">‹</a><a class="brand" href="#wheel" data-go="wheel">✿ Rongrong</a><a class="coin-pill" href="#wallet" data-go="wallet" aria-label="Open wallet">✦ <span id="header-balance">0</span><span class="coin-plus">＋</span></a></div><div class="demo-strip">DEMO PREVIEW <span>No real charges</span></div></header>
+<main id="page-content">
+<section data-page="wheel" aria-labelledby="wheel-title">
+<div class="page-heading"><p class="eyebrow">A LITTLE MORE YOU</p><h1 id="wheel-title" tabindex="-1">Make a little wish.</h1><p class="intro">Seven new looks. Every spin is something new.</p></div>
+<div class="wheel-panel"><div class="row"><span class="tag">7 skins · No repeats</span><a href="#odds" data-go="odds" class="text-link">Odds & rules ↗</a></div>
+<div class="wheel-scene"><div class="wheel-wrap"><div class="pointer" aria-hidden="true">▼</div><div id="wheel" class="wheel" aria-hidden="true"></div><div class="wheel-center" aria-hidden="true">✦<small>MAKE A WISH</small></div></div></div>
+<p class="wheel-note">Slot sizes show positions, not winning odds.</p>
+<div class="spin-area"><button class="primary spin-button" id="spin-button">Spin once · 100 coins</button><p id="next-price" class="subtle"></p><p class="status" id="status" role="status" aria-live="polite"></p><a class="text-link" id="add-coins" href="#wallet" data-go="wallet">Add demo coins →</a></div></div>
+<section class="panel price-track" aria-label="Spin prices"><div class="row"><strong>Your seven little wishes</strong><span id="draw-count" class="subtle">0 of 7 spins</span></div><div id="price-steps" class="price-steps"></div><p class="subtle">$34 for all seven. No duplicates, no extra spins.</p></section>
+<a href="#wardrobe" data-go="wardrobe" class="collection-link"><span>✧ Explore the collection<small>Preview all seven exclusive looks</small></span><span>→</span></a>
+</section>
+<section data-page="wallet" aria-labelledby="wallet-title" hidden>
+<div class="page-heading"><p class="eyebrow">A LITTLE SOMETHING TO SPEND</p><h1 id="wallet-title" tabindex="-1">Your star wallet.</h1><p class="intro">Choose an amount. Make room for a little wish.</p></div>
+<section class="wallet panel"><p class="eyebrow">AVAILABLE STAR COINS</p><div class="balance"><span class="currency-mark">✦</span><span id="balance">0</span></div><p class="subtle">$1 USD = 100 Star Coins</p><div class="row wallet-foot"><span>Total demo top-ups</span><strong id="total-topup">$0</strong></div></section>
+<section class="panel topup-panel"><h2>Add Star Coins</h2><p class="subtle">Choose a pack or enter your own amount.</p><div id="packs" class="packs"></div><div class="custom-topup" id="custom-topup" hidden><label for="custom-amount">Custom amount (USD)</label><div class="amount-field"><span>$</span><input id="custom-amount" type="number" min="1" max="100" step="0.01" inputmode="decimal" placeholder="1.00–100.00" aria-describedby="custom-help custom-error"></div><p class="subtle" id="custom-help">$1–$100 per top-up. Up to two decimal places.</p><p class="input-error" id="custom-error" role="status" aria-live="polite"></p><p class="subtle" id="custom-coins"></p></div><button id="topup-button" class="primary">Demo top-up · $1</button><p class="limit-note">Maximum $100 per top-up.<br>Demo coins only. No real payment or cash value.</p></section>
+<div class="wallet-next panel"><div><p class="eyebrow">YOUR NEXT WISH</p><strong id="wallet-next-price">100 coins · $1</strong></div><a href="#wheel" data-go="wheel" class="text-link">Back to wheel →</a></div>
+</section>
+<section data-page="wardrobe" aria-labelledby="wardrobe-title" hidden>
+<div class="page-heading"><p class="eyebrow">EVERY LOOK IS A LITTLE YOU</p><h1 id="wardrobe-title" tabindex="-1">Your little wardrobe.</h1><p class="intro">A new look. The same little companion.</p></div>
+<section class="tryon panel"><div class="row"><span class="tag">Currently wearing</span><a class="text-link" href="index.html#home">See on Home ↗</a></div><div class="pet-stage"><span class="pet-orbit" aria-hidden="true">✧</span><div id="equipped-pet"></div></div><h2 id="equipped-name">Classic Cream</h2><p class="subtle">Equip a skin below to wear it on Home, too.</p></section>
+<div class="section-heading"><h2>The wish collection</h2><span class="subtle" id="collection-count">0 of 7 owned</span></div><div class="collection-grid" id="collection-grid"></div>
+<details class="history panel"><summary>Your wish history <span>⌄</span></summary><div id="history-list"></div></details>
+</section>
+<section data-page="odds" aria-labelledby="odds-title" hidden>
+<a href="#wheel" data-go="wheel" class="text-link back-link">← Back to wheel</a><div class="page-heading"><p class="eyebrow">NO LITTLE SECRETS</p><h1 id="odds-title" tabindex="-1">Every wish, explained.</h1><p class="intro">The price and the odds, before you spin.</p></div>
+<section class="panel"><h2>Seven skins. No repeats.</h2><p class="body-copy">Every win leaves the pool. The remaining odds are recalculated from each skin’s original weight. Rarer skins have lower weights. The last skin has a 100% chance.</p><div class="odds-head"><span>Skin / rarity</span><span>Current odds</span></div><div id="odds-list"></div><p class="subtle" id="odds-summary"></p></section>
+<section class="panel rule-copy"><h2>Each spin, clearly priced</h2><p class="body-copy">Seven spins cost $1, $2, $3, $4, $6, $8 and $10. Complete the collection for $34.</p><p class="body-copy">Prices follow your collection progress. Refreshing or adding coins does not reset the price. Once you own all seven, spins and top-ups close.</p><p class="subtle">Equal-size slots show positions, not probabilities. $1 = 100 Star Coins. Top-ups are limited to $100 each and are simulated. No real charges or cash prizes.</p></section>
+<a href="#wheel" data-go="wheel" class="primary primary-link">Back to the wheel</a>
+</section>
+</main>
+<nav class="tab-dock" aria-label="Skin collection navigation"><a href="#wheel" data-go="wheel"><span aria-hidden="true">✧</span>Wheel</a><a href="#wardrobe" data-go="wardrobe"><span aria-hidden="true">♡</span>Wardrobe</a><a href="#wallet" data-go="wallet"><span aria-hidden="true">✦</span>Wallet</a></nav>
+<div id="notice" class="notice" role="status" aria-live="polite"></div>
+</div>
+<dialog id="modal" aria-labelledby="modal-title"><button class="close" id="close-modal" aria-label="Close dialog">×</button><div id="modal-content"></div></dialog>
+<noscript>Please enable JavaScript to try the Wishing Wheel.</noscript>
+</body></html>

@@ -389,10 +389,11 @@
   }
   function showSkins() {
     openDialog('A little more you');
-    paragraph('Pet skins · one-time purchases');
+    paragraph('Pet skins · Buy once, keep forever');
+    dialog.append(button('✦ Wishing Wheel · Exclusive skins', () => { location.href = 'wheel.html'; }));
     paragraph('Demo only — no real charges. Skins are separate from Plus and stay unlocked in this browser when membership ends.', dialog, 'muted');
     const grid = document.createElement('div'); grid.className = 'skin-grid';
-    for (const skin of skins.catalog) {
+    for (const skin of skins.catalog.filter(skin => !skin.drawOnly || state.ownedSkins.includes(skin.id))) {
       const owned = state.ownedSkins.includes(skin.id), equipped = state.skin === skin.id;
       const card = document.createElement('section'); card.className = 'skin-card';
       card.append(skinPreview(skin));
@@ -414,7 +415,7 @@
     openDialog(skin.name);
     const art = skinPreview(skin); art.classList.add('skin-detail'); dialog.append(art);
     paragraph(skin.description);
-    paragraph(`${skins.price(skin)} · one-time. Not a subscription. Plus does not include this skin.`);
+    paragraph(`${skins.price(skin)} · One-time purchase. Yours to keep. Plus does not include this skin.`);
     paragraph('Demo only: confirming unlocks and equips this skin in this browser. No payment is taken.', dialog, 'muted');
     dialog.append(button(`Simulate purchase · ${skins.price(skin)}`, () => {
       state = skins.purchase(state, skin.id); save(); closeDialog(); render();

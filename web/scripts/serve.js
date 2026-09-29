@@ -30,7 +30,7 @@ const server = createServer(async (request, response) => {
     const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
     const relativePath = pathname === '/' ? 'index.html' : pathname.slice(1);
     const file = resolve(root, relativePath);
-    const isPublic = relativePath === 'index.html' || ['src', 'assets'].some(folder => file.startsWith(resolve(root, folder) + sep));
+    const isPublic = ['index.html', 'wheel.html'].includes(relativePath) || ['src', 'assets'].some(folder => file.startsWith(resolve(root, folder) + sep));
     if (!file.startsWith(root + sep) || !isPublic || !mimeTypes[extname(file)]) {
       response.writeHead(404).end('Not found');
       return;

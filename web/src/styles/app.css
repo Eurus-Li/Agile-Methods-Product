@@ -134,3 +134,17 @@ dialog textarea { resize: vertical; min-height: 90px; }
   50% { opacity: 1; }
   to { transform: translateY(-24px); opacity: 0; }
 }
+
+.skin-art[data-skin="wish-mint"], .cutout-pet[data-skin="wish-mint"] .celebration-tint { background-color: #E4E9B6; }
+
+.skin-art[data-skin="wish-cherry"], .cutout-pet[data-skin="wish-cherry"] .celebration-tint { background-color: #DEC7B2; }
+
+.skin-art[data-skin="wish-starlight"], .cutout-pet[data-skin="wish-starlight"] .celebration-tint { background-color: #D4DBDE; }
+
+.skin-art[data-skin="wish-honey"], .cutout-pet[data-skin="wish-honey"] .celebration-tint { background-color: #FFE3B5; }
+
+.skin-art[data-skin="wish-aurora"], .cutout-pet[data-skin="wish-aurora"] .celebration-tint { background-color: #DCE6F2; }
+
+.skin-art[data-skin="wish-peach"], .cutout-pet[data-skin="wish-peach"] .celebration-tint { background-color: #FFD9BD; }
+
+.skin-art[data-skin="wish-celestial"], .cutout-pet[data-skin="wish-celestial"] .celebration-tint { background-color: #EDE0FA; }

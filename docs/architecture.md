@@ -97,3 +97,6 @@ iOS 尚无工程；未来 Model / SwiftData 增加同名语义字段，旧记录
 `app.js` 的 `setupCutoutPet` 共用于 Home 与活动庆祝：透明 PNG、同轮廓皮肤着色遮罩、主题装饰和配饰组成可动画的角色层。Home 的 `home-pet-scene` 使用独立背景图片；地面阴影不参与角色变换。`showActivityCelebration` 负责确认反馈及关闭后的焦点恢复，不增加持久化字段。
 
 `setupHome` 在 Home / Reply 的 Quick Moods 中加载五张 `mood-*-painted.png`，沿用心情标签与 aria-pressed。这些是运行时增强，不直接改动原 Pencil 导出；模板重建仍会加载 app.js 与 app.css。素材来源分别见 [角色/场景](pet-animation-asset.md)、[心情头像](mood-portrait-assets.md)。视觉参数见设计系统，验收步骤见 [verification.md](verification.md)。
+
+## 9. 独立星愿转盘预览
+wheel.html 加载共用 skins.js、纯逻辑 wheel-model.js 和页面交互 wheel.js。沿用现有存储键，在 wheel 字段保存整数余额、次数、累计模拟充值与七条记录。奖品所有权通过 ownedSkins 共用，穿戴后 Home 读取同一 skin。皮肤专属标记 drawOnly 阻止普通单购，商店仅展示已拥有的专属项。
