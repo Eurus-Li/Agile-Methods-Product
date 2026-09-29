@@ -56,7 +56,7 @@ One folder per feature, with View/ViewModel in one-to-one correspondence. **Do n
 
 ## 3. Data model / interface conventions
 
-- iOS Model field semantics mirror the state structure the web demo already validated (`rongrong-demo-v1` in `localStorage`): `nickname`, `birthday`, `outfit`, `plus`, `entries` (mood records keyed by date), `bond`, `started`. Reuse the validated product logic instead of redesigning it.
+- iOS Model field semantics mirror the state structure the web demo already validated (`rongrong-demo-v1` in `localStorage`): `nickname`, `birthday`, `outfit`, `plus`, `entries` (mood records keyed by date), `bond`, `started`. Profile fields `petName`, `callMe` and `goals` were added later (see [user profile spec](specs/user-profile.md)); their pure logic lives in `web/src/js/profile.js`. Reuse the validated product logic instead of redesigning it.
 - Model changes must spell out a SwiftData migration plan; don't assume users will reinstall the app.
 - Each feature's ViewModel exposes only read-only state + intent methods (e.g. `selectMood(_:)`), not writable `@State`/Models for the View to modify freely.
 

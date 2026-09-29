@@ -74,3 +74,7 @@ Rationale: first validate the full web flow of recommend → details → select 
 ### 2026-09-29 · Wishing Wheel
 Use seven exclusive skins sampled without replacement; remove owned items and renormalize remaining weights. Stop drawing and top-ups when complete. $1 equals 100 coins; seven draws cost $1/$2/$3/$4/$6/$8/$10, totaling $34. Top-ups are simulated and limited to $100 per transaction in local logic; production payments require server validation. Keep direct purchases permanent and independent of Plus.
 Rationale: validate the requested collection and outfit flow with separate mobile pages. The user approved publishing the preview to the repository. Revisit pricing after validation; no real payment integration is included.
+
+### 2026-09-29 · User profile
+Add `petName`, `callMe` and `goals` to `rongrong-demo-v1`. Call-me options and goals use fixed local catalogs (no free-text goals, max 3); goals are display-only and do not affect activity recommendations, replies or Bond. Birthday surprise is computed from `birthday` and adds no persisted state. Data backup is a local JSON download only; restore/import is deferred.
+Rationale: personalize the companion without new dependencies, backend or changes to the fixed activity catalog. Revisit: when goals should drive recommendations, or when a restore flow or real accounts are needed.

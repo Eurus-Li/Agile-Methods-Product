@@ -2,6 +2,7 @@
   'use strict';
   const skins = globalThis.RongrongSkins;
   const activities = globalThis.RongrongActivities;
+  const profile = globalThis.RongrongProfile;
   const journalAnalytics = globalThis.RongrongJournalAnalytics;
   const KEY = 'rongrong-demo-v1';
   const moods = ['Calm', 'Happy', 'Tired', 'Sad', 'Tense'];
@@ -19,7 +20,7 @@
   const dialog = document.querySelector('#dialog');
   const dateKey = (date = new Date()) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
   const today = dateKey();
-  const defaults = () => ({ nickname: 'Emma', birthday: '2000-09-15', outfit: 'Crown', skin: 'cream', ownedSkins: ['cream'], plus: false, entries: {}, bond: 0, started: today });
+  const defaults = () => ({ nickname: 'Emma', birthday: '2000-09-15', outfit: 'Crown', skin: 'cream', ownedSkins: ['cream'], plus: false, entries: {}, bond: 0, started: today, petName: profile.DEFAULT_PET_NAME, callMe: 'nickname', goals: [] });
   let state = defaults();
   try {
     const saved = JSON.parse(localStorage.getItem(KEY));
@@ -30,7 +31,7 @@
       state.bond = Number.isFinite(state.bond) ? Math.max(0, state.bond) : 0;
     }
   } catch { /* A fresh session also works when storage is unavailable. */ }
-  state = skins.normalize(state);
+  state = profile.normalize(skins.normalize(state));
   state.entries = Object.fromEntries(Object.entries(state.entries).map(([key, entry]) => [key, activities.normalizeEntry(entry)]));
   let route = 'home';
   let returnFromPlus = 'home';
@@ -40,6 +41,8 @@
   let recentExpanded = false;
   let toastTimer;
   let lastFocus;
+  let birthdayGreeted = false;
+  const birthdayToday = () => profile.isBirthday(state.birthday, today);
   const named = (name, root = app) => root.querySelector(`[data-pencil-name="${name}"]`);
   const allNamed = (name, root = app) => [...root.querySelectorAll(`[data-pencil-name="${name}"]`)];
   const text = (name, value, root = app) => { const element = named(name, root); if (element) element.textContent = value; };
@@ -115,6 +118,12 @@
   }
   function setupHome() {
     named('Header Actions').append(button(state.plus ? 'Plus ✓' : '✦ Plus', () => navigate('plus'), 'plus-shortcut'));
+    text('Name', state.petName);
+    text('Pet Hint', `Tap ${state.petName} to pet`);
+    if (birthdayToday()) {
+      text('Line', `Happy birthday, ${profile.address(state)}! 🎂`);
+      if (!birthdayGreeted) { birthdayGreeted = true; toast(`${state.petName} saved a birthday cake for you today 🎂`); }
+    }
     text('Days', `Day ${Math.max(1, Math.floor((new Date(today + 'T12:00:00') - new Date(state.started + 'T12:00:00')) / 86400000) + 1)} together`);
     const existing = state.entries[today];
     if (existing) text('Prompt', `Today: ${existing.mood.toLowerCase()} · check in again?`);
@@ -133,8 +142,8 @@
     }
     bind('Sprite Pip', () => {
       const sprite = named('Sprite Pip'); sprite.classList.remove('petting'); void sprite.offsetWidth; sprite.classList.add('petting');
-      text('Line', `That feels nice, ${String(state.nickname).slice(0, 30)} ♡`);
-    }, 'Pet Rongrong');
+      text('Line', `That feels nice, ${profile.address(state)} ♡`);
+    }, `Pet ${state.petName}`);
     const homePet = named('Sprite Pip');
     setupCutoutPet(homePet);
     named('Stage').classList.add('home-pet-scene');
@@ -400,7 +409,10 @@
   function setupMe() {
     text('Value', state.nickname, named('Nickname'));
     const birthday = new Date(`${state.birthday}T12:00:00`);
-    text('Value', Number.isNaN(birthday.getTime()) ? 'Not set' : birthday.toLocaleDateString('en-US', { month: 'long', day: 'numeric' }), named('Birthday'));
+    text('Value', Number.isNaN(birthday.getTime()) ? 'Not set' : `${birthday.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}${birthdayToday() ? ' · Today! 🎂' : ''}`, named('Birthday'));
+    text('Name', state.petName, named('Profile Card'));
+    text('Hint', `${state.petName} greets you your way and has a surprise on your birthday.`, named('About You'));
+    addProfileRows();
     text('L', `Lv.${level()} · Fluff stage`, named('Level'));
     text('Born', `Together since ${new Date(state.started + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`);
     named('Fill', named('Bond Bar')).style.width = `${30 + state.bond % 100 * .7}%`;
@@ -433,6 +445,95 @@
     form.addEventListener('submit', event => { event.preventDefault(); if (!input.value.trim()) { input.setCustomValidity('Please enter a nickname.'); input.reportValidity(); return; } state[field] = input.value.trim(); save(); closeDialog(); render(); toast('Profile updated'); });
     input.addEventListener('input', () => input.setCustomValidity('')); input.focus();
   }
+  function addProfileRows() {
+    const template = named('Nickname');
+    const hint = named('Hint', named('About You'));
+    const callMe = profile.callMeOptions.find(option => option.id === state.callMe);
+    const goals = state.goals.map(id => profile.findGoal(id)).map(goal => `${goal.emoji} ${goal.name}`);
+    const rows = [
+      ['Pet Name', '🐶', 'Pet name', state.petName, editPetName],
+      ['Call Me', '💬', `${state.petName} calls you`, callMe.id === 'nickname' ? `${callMe.label} · ${profile.address(state)}` : callMe.label, editCallMe],
+      ['Goals', '🌱', 'My little goals', goals.length ? goals.join(' · ') : 'Not set', editGoals]
+    ];
+    for (const [name, emoji, label, value, edit] of rows) {
+      const divider = document.createElement('div'); divider.className = 'profile-divider';
+      const row = template.cloneNode(true); row.dataset.pencilName = name; row.classList.add('profile-row');
+      const icon = document.createElement('span'); icon.className = 'profile-row-icon'; icon.textContent = emoji; icon.setAttribute('aria-hidden', 'true');
+      named('Icon Box', row).replaceChildren(icon);
+      text('Label', label, row); text('Value', value, row);
+      hint.before(divider, row);
+      actionable(row, edit, `Edit ${label.toLowerCase()}`);
+    }
+  }
+  function editPetName() {
+    openDialog('Your pet’s name');
+    const form = document.createElement('form');
+    const label = document.createElement('label'); label.htmlFor = 'pet-name'; label.textContent = 'What would you like to call your companion?';
+    const input = document.createElement('input'); input.id = 'pet-name'; input.type = 'text'; input.maxLength = profile.PET_NAME_MAX; input.value = state.petName;
+    const submit = button('Save', () => {}, 'primary'); submit.type = 'submit';
+    form.append(label, input);
+    paragraph(`Up to ${profile.PET_NAME_MAX} characters. Leave it empty to go back to ${profile.DEFAULT_PET_NAME}.`, form, 'muted');
+    form.append(submit); dialog.append(form);
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      state.petName = profile.cleanPetName(input.value); save(); closeDialog(); render(); toast(`Say hi to ${state.petName} ♡`);
+    });
+    input.focus();
+  }
+  function editCallMe() {
+    openDialog(`How should ${state.petName} call you?`);
+    const form = document.createElement('form');
+    const group = document.createElement('fieldset'); group.className = 'choice-list';
+    const legend = document.createElement('legend'); legend.textContent = 'Pick one'; group.append(legend);
+    for (const option of profile.callMeOptions) {
+      const choice = document.createElement('label'); choice.className = 'choice';
+      const input = document.createElement('input'); input.type = 'radio'; input.name = 'call-me'; input.value = option.id; input.checked = state.callMe === option.id;
+      choice.append(input, option.id === 'nickname' ? `${option.label} (${profile.address({ ...state, callMe: 'nickname' })})` : option.label);
+      group.append(choice);
+    }
+    const submit = button('Save', () => {}, 'primary'); submit.type = 'submit';
+    form.append(group, submit); dialog.append(form);
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      state = profile.normalize({ ...state, callMe: new FormData(form).get('call-me') });
+      save(); closeDialog(); render(); toast(`${state.petName} will call you ${profile.address(state)} ♡`);
+    });
+    group.querySelector('input:checked')?.focus();
+  }
+  function editGoals() {
+    openDialog('My little goals');
+    const form = document.createElement('form');
+    const group = document.createElement('fieldset'); group.className = 'choice-list';
+    const legend = document.createElement('legend'); legend.textContent = `Choose up to ${profile.GOALS_MAX}. They are just for you and stay on your profile.`; group.append(legend);
+    const boxes = profile.goalCatalog.map(goal => {
+      const choice = document.createElement('label'); choice.className = 'choice';
+      const input = document.createElement('input'); input.type = 'checkbox'; input.name = 'goals'; input.value = goal.id; input.checked = state.goals.includes(goal.id);
+      choice.append(input, `${goal.emoji} ${goal.name}`); group.append(choice); return input;
+    });
+    const status = paragraph('', group, 'muted'); status.setAttribute('role', 'status');
+    const update = () => {
+      const count = boxes.filter(box => box.checked).length;
+      for (const box of boxes) box.disabled = !box.checked && count >= profile.GOALS_MAX;
+      status.textContent = `${count} of ${profile.GOALS_MAX} chosen`;
+    };
+    boxes.forEach(box => box.addEventListener('change', update)); update();
+    const submit = button('Save', () => {}, 'primary'); submit.type = 'submit';
+    form.append(group, submit); dialog.append(form);
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      state.goals = profile.cleanGoals(boxes.filter(box => box.checked).map(box => box.value));
+      save(); closeDialog(); render(); toast(state.goals.length ? 'Your little goals are saved' : 'Goals cleared');
+    });
+    boxes[0].focus();
+  }
+  function exportData() {
+    const file = new Blob([JSON.stringify(profile.backup(state, new Date().toISOString()), null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(file);
+    const link = document.createElement('a'); link.href = url; link.download = profile.backupFileName(today);
+    document.body.append(link); link.click(); link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 0);
+    toast('Backup file downloaded');
+  }
   function wear(outfit) {
     if (!state.plus && !freeOutfits.includes(outfit)) { navigate('plus'); return; }
     state.outfit = outfit; save(); if (dialog.open) closeDialog(); render(); toast(`${outfit} on! Visit Rongrong to see it.`);
@@ -461,7 +562,7 @@
     applySkin(node, skins.find(state.skin));
     const dog = document.createElement('img'); dog.className = 'celebration-dog'; dog.src = 'assets/images/rongrong-cutout.png'; dog.alt = ''; dog.draggable = false;
     const tint = document.createElement('span'); tint.className = 'celebration-tint'; tint.setAttribute('aria-hidden', 'true');
-    const accessory = document.createElement('span'); accessory.className = 'celebration-accessory'; accessory.textContent = outfits[state.outfit]; accessory.setAttribute('aria-hidden', 'true');
+    const accessory = document.createElement('span'); accessory.className = 'celebration-accessory'; accessory.textContent = birthdayToday() ? `${outfits[state.outfit]} 🎂` : outfits[state.outfit]; accessory.setAttribute('aria-hidden', 'true');
     node.prepend(dog, tint); node.append(accessory);
   }
   function skinPreview(skin) {
@@ -508,6 +609,8 @@
     paragraph(`Rongrong Plus: ${state.plus ? 'demo membership active' : 'free plan'}`);
     dialog.append(button('Manage Rongrong Plus', () => navigate('plus')));
     paragraph('This demo stores your check-ins and profile in this browser. Rongrong’s replies are preset. No account or payment is connected.', dialog, 'muted');
+    dialog.append(button('Back up my data (.json)', exportData));
+    paragraph('Clearing this browser’s data removes everything. The backup file stays on your device and is not uploaded anywhere.', dialog, 'muted');
     dialog.append(button('Reset demo data', () => {
       openDialog('Reset this demo?'); paragraph('This deletes your check-ins, notes, profile changes, purchased skins and demo membership in this browser.');
       dialog.append(button('Delete demo data', () => { state = defaults(); save(); closeDialog(); navigate('home'); toast('Demo reset'); }, 'primary'), button('Keep my data', closeDialog));
@@ -532,7 +635,7 @@
     }, state.plus ? 'Manage demo membership' : 'Try monthly membership');
     bind('Restore demo', () => toast(state.plus ? 'Your demo membership is already active.' : 'No active demo membership in this browser.'), 'Restore demo');
     bind('Terms', () => { openDialog('Demo terms'); paragraph('Rongrong is an interactive prototype. The $4.99 monthly price is illustrative. There is no checkout, charge, renewal or real subscription. Demo membership only changes features stored in this browser.'); });
-    bind('Privacy', () => { openDialog('Demo privacy'); paragraph('Your nickname, birthday, mood check-ins, notes and demo preferences are stored locally in this browser. The demo does not send these to a server. Clear them with Settings → Reset demo data.'); });
+    bind('Privacy', () => { openDialog('Demo privacy'); paragraph('Your nickname, birthday, pet name, goals, mood check-ins, notes and demo preferences are stored locally in this browser. The demo does not send these to a server. Clear them with Settings → Reset demo data.'); });
   }
   window.addEventListener('hashchange', render);
   render();

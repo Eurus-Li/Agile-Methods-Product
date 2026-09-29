@@ -68,3 +68,11 @@
 - Lightened Peach Picnic to #FFD9BD. Replaced colors duplicated from direct purchases with Pistachio Picnic (pale yellow-green), Cocoa Cloud (cocoa brown) and Silver Mist (silver gray). Existing reward IDs, ownership and history remain compatible.
 - Kept original direct-purchase prices and permanent ownership, separate from Plus. Shop copy now states “Buy once, keep forever”; demo records remain local to the browser.
 - Updated README, specifications, architecture, design tokens and decisions. All 24 web logic tests pass, including permanent purchase ownership after wheel completion, reload and membership cancellation, plus compatibility of recolored rewards.
+
+## 2026-09-29 · User profile personalization
+- Pet Naming: name your companion (max 20 characters, empty restores Rongrong); shown on Home, the pet hint and the Me card.
+- Call-Me Preference: nickname / dear / friend / sunshine, used in the pet tap line and birthday greeting.
+- Birthday Surprise: on the birthday (Feb 29 → Feb 28 in non-leap years) Home shows a greeting, a one-time toast and a 🎂 accessory next to the worn one; Me shows "Today!". Nothing extra is saved.
+- Personal Goals: pick up to three from a fixed list of six; display-only on Me.
+- Data Backup (Export): Settings → Back up my data downloads `rongrong-backup-{date}.json` locally; nothing is uploaded. Restore is not included yet.
+- Old data migrates with defaults; 6 new profile logic tests, 30 web tests pass. Browser-checked at 390px and 320px, including persistence across reload and the wheel page keeping profile fields.

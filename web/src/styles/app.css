@@ -153,7 +153,7 @@ dialog textarea { resize: vertical; min-height: 90px; }
 .cutout-pet[data-skin="mint"] .celebration-tint { background: var(--skin-mint); }
 .cutout-pet[data-skin="cherry"] .celebration-tint { background: var(--skin-cherry); }
 .cutout-pet[data-skin="starlight"] .celebration-tint { background: var(--skin-starlight); }
-.celebration-accessory { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); font-size: 22px; }
+.celebration-accessory { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); font-size: 22px; white-space: nowrap; }
 .celebration-hearts { position: absolute; top: 12px; color: var(--color-accent-primary); font-size: 22px; pointer-events: none; }
 @media (prefers-reduced-motion: no-preference) {
   .celebration-pet { animation: activity-happy-hop .5s ease-in-out 3; }
@@ -184,3 +184,16 @@ dialog textarea { resize: vertical; min-height: 90px; }
 .skin-art[data-skin="wish-peach"], .cutout-pet[data-skin="wish-peach"] .celebration-tint { background-color: #FFD9BD; }
 
 .skin-art[data-skin="wish-celestial"], .cutout-pet[data-skin="wish-celestial"] .celebration-tint { background-color: #EDE0FA; }
+
+/* User profile rows reuse the Pencil "About you" row; choice lists reuse dialog input tokens. */
+.profile-divider { background-color: #EADCD1; flex-shrink: 0; height: 1px; width: 100%; }
+.profile-row-icon { font-size: 17px; line-height: 1; }
+.screen .profile-row [data-pencil-name="Text"] { min-width: 0; }
+.screen .profile-row [data-pencil-name="Value"] { white-space: normal !important; overflow-wrap: anywhere; }
+.screen [data-pencil-name="Name"] { overflow-wrap: anywhere; }
+.choice-list { border: 0; margin: 0; padding: 0; }
+.choice-list legend { font-size: 14px; line-height: 1.65; padding: 0; margin-bottom: 8px; }
+dialog .choice { display: flex; align-items: center; gap: 12px; margin: 8px 0; padding: 12px; border-radius: 12px; background: var(--color-surface-card); font-size: 14px; cursor: pointer; }
+dialog .choice input { display: inline-block; width: 18px; height: 18px; margin: 0; flex-shrink: 0; accent-color: var(--color-accent-primary); }
+dialog .choice:has(input:disabled) { opacity: .5; cursor: default; }
+dialog .choice:has(input:checked) { outline: 1.5px solid var(--color-accent-primary); }
