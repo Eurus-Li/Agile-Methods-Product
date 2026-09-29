@@ -62,6 +62,10 @@ dialog textarea { resize: vertical; min-height: 90px; }
 .primary { background: #ff8a5b; border-radius: 24px; padding: 13px 18px; color: #3a302b; font-weight: 700; width: 100%; margin-top: 16px; }
 .secondary { background: #f2e5db; border-radius: 18px; padding: 12px; width: 100%; margin-top: 10px; }
 .entry-mood { display: inline-block; padding: 6px 12px; border-radius: 16px; font-weight: 700; }
+.entry-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.entry-pet { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
+.entry-header .entry-mood { margin: 0; }
+.entry-reply { background: #FBF3EC; border-radius: 18px; padding: 12px; }
 .muted { color: #927c6d; font-size: 12px; }
 .wardrobe-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .wardrobe-grid button { background: #f4e9e0; padding: 16px 8px; border-radius: 16px; }
@@ -69,6 +73,38 @@ dialog textarea { resize: vertical; min-height: 90px; }
 @keyframes slide-in { from { transform: translateY(40px); opacity: 0; } }
 @media (max-width: 480px) { body { padding: 0; background: #fbf3ec; } #app { width: min(430px, 100%); border-radius: 0; box-shadow: none; } .screen { height: 100dvh; border-radius: 0 !important; min-height: 480px; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+/* Journal records and analysis use the shared card, spacing and mood tokens. */
+.calendar-day.birthday { font-size: 16px; }
+.journal-insights { display: grid; gap: 12px; width: 100%; padding-bottom: 16px; }
+.insight-card { background: #FFFFFF; border-radius: 18px; padding: 16px; box-shadow: 0 24px 80px rgba(100,75,57,0.15); }
+.insight-card h2 { font-size: 17px; margin: 0; }
+.insight-card h3 { font-size: 15px; margin: 16px 0 8px; }
+.insight-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.insight-toggle { color: #B56B42; font-size: 12px; font-weight: 700; padding: 8px; }
+.recent-mood-row { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 12px; align-items: center; width: 100%; padding: 12px 0; text-align: left; border-top: 1px solid #F2E5DB; }
+.recent-mood-row img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
+.recent-mood-copy { display: grid; gap: 4px; min-width: 0; }
+.recent-mood-copy strong { font-size: 14px; }
+.recent-mood-copy span { color: #897567; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.recent-mood-row time { color: #897567; font-size: 11px; }
+.empty-insight { color: #897567; font-size: 12px; margin: 8px 0; }
+.mood-trend { display: grid; gap: 8px; margin-top: 16px; }
+.mood-trend-row { display: grid; grid-template-columns: 48px minmax(0, 1fr) 18px; align-items: center; gap: 8px; font-size: 11px; }
+.mood-trend-row i { height: 8px; overflow: hidden; border-radius: 8px; background: #F2E5DB; }
+.mood-trend-row b { display: block; height: 100%; min-width: 0; border-radius: inherit; transition: width .2s ease; }
+.mood-trend-row strong { text-align: right; }
+.mood-timeline { display: flex; gap: 8px; align-items: flex-end; min-height: 48px; overflow-x: auto; padding: 4px 0 8px; }
+.mood-timeline-point { width: 28px; height: 28px; flex: 0 0 28px; border-radius: 50%; position: relative; }
+.mood-timeline-point small { position: absolute; top: 30px; left: 50%; transform: translateX(-50%); color: #897567; font-size: 10px; }
+.weekly-patterns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.week-pattern { display: grid; gap: 4px; border-left: 4px solid #F2E5DB; border-radius: 12px; padding: 8px 12px; background: #FBF3EC; }
+.week-pattern span, .week-pattern small { color: #897567; font-size: 11px; }
+.week-pattern strong { font-size: 14px; }
+.analysis-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px; }
+.analysis-summary > div { display: grid; gap: 4px; align-content: center; min-height: 76px; padding: 12px; border-radius: 18px; background: #FBF3EC; text-align: center; }
+.analysis-summary strong { font-size: 15px; overflow-wrap: anywhere; }
+.analysis-summary span { color: #897567; font-size: 11px; }
 
 /* Pet skins use the shared palette and the same artwork in shop and Home. */
 :root { --skin-mint: #DDEBDC; --skin-cherry: #F4D8D8; --skin-starlight: #E6DFF4; }
