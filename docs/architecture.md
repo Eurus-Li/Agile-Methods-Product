@@ -100,3 +100,7 @@ There is no iOS project yet; the future Model / SwiftData will add fields with t
 
 ## 9. Wishing Wheel
 `wheel.html` loads shared `skins.js`, pure transaction logic in `wheel-model.js`, and page interactions in `wheel.js`. The existing storage key holds `wheel` with integer coin balance, acquired draw count, total simulated top-ups and up to seven history records. `ownedSkins` and `skin` are shared with Home. `drawOnly` prevents direct purchases of exclusive rewards; the original shop displays them only when owned. Hash routes provide Wheel, Wallet, Wardrobe and Odds pages.
+
+## 10. Journal analytics
+
+`web/src/js/journal-analytics.js` contains DOM-free calculations for recent-entry sorting, monthly mood counts, calendar-week patterns and the preferred activity across history. `app.js` renders those results as Recent moods, monthly distribution, Weekly patterns and summary cards. It adds no persisted fields and continues to read `rongrong-demo-v1.entries`. Pure-logic tests live in `web/tests/journal-analytics.test.js`; product boundaries are documented in the [Journal spec](specs/journal-insights.md).
