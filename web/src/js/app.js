@@ -2,6 +2,7 @@
   'use strict';
   const skins = globalThis.RongrongSkins;
   const activities = globalThis.RongrongActivities;
+  const journalAnalytics = globalThis.RongrongJournalAnalytics;
   const KEY = 'rongrong-demo-v1';
   const moods = ['Calm', 'Happy', 'Tired', 'Sad', 'Tense'];
   const colors = { Calm: '#ddebdc', Happy: '#ffe3b5', Tired: '#e6dff4', Sad: '#dce6f2', Tense: '#f4d8d8' };
@@ -36,6 +37,7 @@
   let selectedDate = today;
   let calendarDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
   let calendarMode = 'month';
+  let recentExpanded = false;
   let toastTimer;
   let lastFocus;
   const named = (name, root = app) => root.querySelector(`[data-pencil-name="${name}"]`);
@@ -269,9 +271,10 @@
       for (let i = 0; i < offset; i++) grid.append(document.createElement('span'));
       for (let day = 1; day <= new Date(year, month + 1, 0).getDate(); day++) {
         const key = dateKey(new Date(year, month, day)); const entry = state.entries[key];
-        const node = button(String(day), () => showEntry(key), `calendar-day${key === today ? ' today' : ''}${entry ? ' has-entry' : ''}`);
+        const birthday = state.birthday?.slice(5) === key.slice(5);
+        const node = button(birthday ? '🎂' : String(day), () => showEntry(key), `calendar-day${key === today ? ' today' : ''}${entry ? ' has-entry' : ''}${birthday ? ' birthday' : ''}`);
         if (entry) node.style.backgroundColor = colors[entry.mood];
-        node.setAttribute('aria-label', `${key}${entry ? `, ${entry.mood}` : ', no entry'}`);
+        node.setAttribute('aria-label', `${key}${birthday ? ', birthday' : ''}${entry ? `, ${entry.mood}` : ', no entry'}`);
         if (key === today) node.setAttribute('aria-current', 'date'); grid.append(node);
       }
     }
@@ -284,6 +287,7 @@
     text('V', streak(), named('Day streak'));
     text('Title', `${calendarDate.toLocaleDateString('en-US', { month: 'long' })} report`, named('Monthly Report Button'));
     bind('Monthly Report Button', showReport, 'Open monthly report');
+    renderJournalInsights();
   }
   function mostFrequent(entries) {
     if (!entries.length) return '—';
@@ -297,8 +301,11 @@
       if (key === today) dialog.append(button('Check in with Rongrong', () => navigate('home'), 'primary'));
       return;
     }
-    paragraph(entry.mood, dialog, 'entry-mood').style.backgroundColor = colors[entry.mood];
-    paragraph(replies[entry.mood]);
+    const entryHeader = document.createElement('div'); entryHeader.className = 'entry-header';
+    const portrait = document.createElement('img'); portrait.className = 'entry-pet'; portrait.src = `assets/images/mood-${entry.mood.toLowerCase()}-painted.png`; portrait.alt = `Rongrong feeling ${entry.mood.toLowerCase()}`;
+    const moodLabel = paragraph(`${{ Calm: '😌', Happy: '🥰', Tired: '🥱', Sad: '😢', Tense: '😠' }[entry.mood]} ${entry.mood}`, entryHeader, 'entry-mood');
+    moodLabel.style.backgroundColor = colors[entry.mood]; entryHeader.prepend(portrait); dialog.append(entryHeader);
+    paragraph(replies[entry.mood], dialog, 'entry-reply');
     if (entry.saved) paragraph('♡ Saved reply', dialog, 'muted');
     const chosen = activities.find(entry.activityId);
     paragraph(chosen ? `Selected activity: ${chosen.name}` : 'No activity selected for this day.', dialog, 'activity-meta');
@@ -306,6 +313,80 @@
     const label = document.createElement('label'); label.htmlFor = 'entry-note'; label.textContent = 'A little note about your day';
     const input = document.createElement('textarea'); input.id = 'entry-note'; input.maxLength = 1000; input.value = entry.note || ''; input.placeholder = 'What would you like to remember?';
     dialog.append(label, input, button('Save note', () => { entry.note = input.value.trim(); save(); closeDialog(); toast('Your note is saved'); }, 'primary'));
+  }
+  function renderJournalInsights() {
+    const content = named('Content');
+    const old = content.querySelector('.journal-insights');
+    if (old) old.remove();
+    const panel = document.createElement('section'); panel.className = 'journal-insights'; panel.setAttribute('aria-label', 'Journal insights');
+    const recentEntries = journalAnalytics.recent(state.entries);
+    const shownEntries = recentExpanded ? recentEntries : recentEntries.slice(0, 3);
+    const recentSection = document.createElement('section'); recentSection.className = 'insight-card recent-moods';
+    const recentHeader = document.createElement('div'); recentHeader.className = 'insight-heading';
+    const recentTitle = document.createElement('h2'); recentTitle.textContent = 'Recent moods'; recentHeader.append(recentTitle);
+    if (recentEntries.length > 3) {
+      recentHeader.append(button(recentExpanded ? 'See less' : 'See all', () => { recentExpanded = !recentExpanded; renderJournalInsights(); }, 'insight-toggle'));
+    }
+    recentSection.append(recentHeader);
+    if (!shownEntries.length) paragraph('Your recent check-ins will appear here.', recentSection, 'empty-insight');
+    for (const [key, entry] of shownEntries) {
+      const row = button('', () => showEntry(key), 'recent-mood-row');
+      const image = document.createElement('img'); image.src = `assets/images/mood-${entry.mood.toLowerCase()}-painted.png`; image.alt = '';
+      const copy = document.createElement('span'); copy.className = 'recent-mood-copy';
+      const title = document.createElement('strong'); title.textContent = entry.mood;
+      const note = document.createElement('span'); note.textContent = entry.note || replies[entry.mood];
+      const date = document.createElement('time'); date.dateTime = key; date.textContent = new Date(`${key}T12:00:00`).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      copy.append(title, note); row.append(image, copy, date); recentSection.append(row);
+    }
+
+    const analysis = document.createElement('section'); analysis.className = 'insight-card mood-analysis';
+    const analysisTitle = document.createElement('h2'); analysisTitle.textContent = `${calendarDate.toLocaleDateString('en-US', { month: 'long' })} insights`; analysis.append(analysisTitle);
+    const counts = journalAnalytics.monthlyMoodCounts(state.entries, calendarDate, moods);
+    const monthlyTotal = Object.values(counts).reduce((sum, count) => sum + count, 0);
+    const trend = document.createElement('div'); trend.className = 'mood-trend'; trend.setAttribute('aria-label', 'Monthly mood distribution');
+    for (const mood of moods) {
+      const row = document.createElement('div'); row.className = 'mood-trend-row';
+      const label = document.createElement('span'); label.textContent = mood;
+      const track = document.createElement('i'); const fill = document.createElement('b');
+      fill.style.width = `${monthlyTotal ? counts[mood] / monthlyTotal * 100 : 0}%`; fill.style.backgroundColor = colors[mood]; track.append(fill);
+      const value = document.createElement('strong'); value.textContent = counts[mood]; row.append(label, track, value); trend.append(row);
+    }
+    analysis.append(trend);
+
+    const timelineTitle = document.createElement('h3'); timelineTitle.textContent = 'Mood timeline'; analysis.append(timelineTitle);
+    const timeline = document.createElement('div'); timeline.className = 'mood-timeline';
+    const monthEntries = journalAnalytics.entriesForMonth(state.entries, calendarDate).sort(([left], [right]) => left.localeCompare(right));
+    if (!monthEntries.length) paragraph('Your monthly trend will appear here.', timeline, 'empty-insight');
+    for (const [key, entry] of monthEntries) {
+      const point = button('', () => showEntry(key), 'mood-timeline-point');
+      point.style.backgroundColor = colors[entry.mood];
+      point.setAttribute('aria-label', `${key}: ${entry.mood}`);
+      const day = document.createElement('small'); day.textContent = String(Number(key.slice(8)));
+      point.append(day); timeline.append(point);
+    }
+    analysis.append(timeline);
+
+    const weeks = journalAnalytics.weeklyPatterns(state.entries, calendarDate, moods);
+    const weekTitle = document.createElement('h3'); weekTitle.textContent = 'Weekly patterns'; analysis.append(weekTitle);
+    const weekGrid = document.createElement('div'); weekGrid.className = 'weekly-patterns';
+    if (!weeks.length) paragraph('Log a mood to start comparing weeks.', weekGrid, 'empty-insight');
+    for (const week of weeks) {
+      const item = document.createElement('div'); item.className = 'week-pattern';
+      const label = document.createElement('span'); label.textContent = `Week ${week.week}`;
+      const value = document.createElement('strong'); value.textContent = week.dominantMood;
+      const detail = document.createElement('small'); detail.textContent = `${week.total} logged ${week.total === 1 ? 'day' : 'days'}`;
+      item.style.borderColor = colors[week.dominantMood]; item.append(label, value, detail); weekGrid.append(item);
+    }
+    analysis.append(weekGrid);
+
+    const preferred = journalAnalytics.preferredActivity(state.entries, activities.catalog);
+    const summary = document.createElement('div'); summary.className = 'analysis-summary';
+    const totalItem = document.createElement('div'); totalItem.innerHTML = `<strong>${Object.keys(state.entries).length}</strong><span>Total logged days</span>`;
+    const activityItem = document.createElement('div');
+    const activityValue = document.createElement('strong'); activityValue.textContent = preferred?.name || '—';
+    const activityLabel = document.createElement('span'); activityLabel.textContent = preferred ? `Preferred activity · ${preferred.count} selections` : 'Preferred activity';
+    activityItem.append(activityValue, activityLabel); summary.append(totalItem, activityItem); analysis.append(summary);
+    panel.append(recentSection, analysis); content.append(panel);
   }
   function showReport() {
     const prefix = dateKey(calendarDate).slice(0, 7);
