@@ -1,99 +1,109 @@
 # Rongrong
 
-A mental-wellness companion product: raise a virtual companion, log your daily mood, write a Journal, dress Rongrong up, and try a simulated Plus membership. There is currently a **web demo** whose interaction logic works end to end ([web/](web/)); the next goal is a **native iOS app** ([ios/](ios/), not started yet).
+一款心理健康陪伴产品：养一只虚拟小伙伴，记录每日心情、写 Journal、给 Rongrong 换装，并有一个模拟的 Plus 会员方案。当前有一个交互逻辑已经跑通的 **web demo**（[web/](web/)），下一步目标是做成 **iOS 原生 App**（[ios/](ios/)，尚未开始）。
 
-## Quick start (web demo)
+## 快速启动（web demo）
 
 ```sh
 cd web
 npm run dev
 ```
 
-Open **http://127.0.0.1:8000**. The project has no npm dependencies, so there is no need to run `npm install` first. `npm start` is the same as `npm run dev`; press `Ctrl+C` to stop the server.
+打开 **http://127.0.0.1:8000**。项目没有 npm 依赖，无需先执行 `npm install`。`npm start` 与 `npm run dev` 相同，按 `Ctrl+C` 停止服务。
 
-If the port is in use, pick another one:
+端口被占用时可以指定其他端口：
 
 ```sh
 PORT=8001 npm run dev
 ```
 
-Also supported: double-clicking `web/index.html`; opening `web/index.html` with VS Code Live Server; or `cd web && python3 -m http.server 8000 --bind 127.0.0.1`.
+也支持：直接双击 `web/index.html`；VS Code Live Server 打开 `web/index.html`；或 `cd web && python3 -m http.server 8000 --bind 127.0.0.1`。
 
-### Common commands (run inside `web/`)
+### 常用命令（在 `web/` 下执行）
 
-| Command | Purpose |
+| 命令 | 用途 |
 | --- | --- |
-| `npm run dev` / `npm start` | Start the local demo server |
-| `npm test` | Test the pure logic for activity recommendations, selection and skins |
-| `npm run check` | Check JavaScript syntax of the app and server |
-| `npm run build:templates` | Regenerate `index.html` and images from the design sources |
+| `npm run dev` / `npm start` | 启动本地演示服务 |
+| `npm test` | 验证活动推荐、选择与皮肤纯逻辑 |
+| `npm run check` | 检查应用和服务器 JavaScript 语法 |
+| `npm run build:templates` | 根据设计源文件重新生成 `index.html` 和图片 |
 
-## Features and demo flow
+## 功能与演示流程
 
-1. **Home**: Tap Rongrong on the home screen to interact; the dog and its accessories hop lightly while the cream window-light/plant illustration behind stays fixed. Pick Calm, Happy, Tired, Sad or Tense from five matching hand-painted portraits to log today's mood.
-2. **Reply**: Read the matching reply, hug Rongrong, save the reply; browse three mood-based activity recommendations, view their duration and steps, then select one. Home can reopen today's activity, and Journal shows activities for past dates.
-3. **Journal**: Switch month or year, tap a date with an entry to view the reply, save a text note, and see the monthly summary.
-4. **Me**: Change nickname and birthday, pick an accessory or open the wardrobe; accessories show on Rongrong on Home.
-5. **Plus**: Enter via the Plus button on Home or a locked accessory to simulate starting a membership, checking restore status, or ending the membership.
+1. **Home**：点击去背的 Rongrong 与它互动，小狗和配饰会轻跳，后方奶油色窗光/植物插画保持固定；通过五张同风格手绘头像选择 Calm、Happy、Tired、Sad 或 Tense，记录当天心情。
+2. **Reply**：查看对应回复、拥抱 Rongrong、收藏回复；浏览三个心情推荐活动，查看时间与步骤，再选择一项。Home 可再次打开当天活动，Journal 可查看历史日期的活动。
+3. **Journal**：切换月份或年份，点击有记录的日期查看回复、保存文字备注，查看月度汇总。
+4. **Me**：修改昵称和生日，选择配饰或打开衣橱；配饰会显示在 Home 的 Rongrong 上。
+5. **Plus**：通过 Home 的 Plus 按钮或锁定配饰进入，模拟开通会员、检查恢复状态或结束会员。
 
-Pages are navigated via URL hash: `#home`, `#reply`, `#journal`, `#me`, `#plus`. Clear demo data via **Me → Settings → Reset demo data**.
+页面通过 URL hash 导航：`#home`、`#reply`、`#journal`、`#me`、`#plus`。通过 **Me → Settings → Reset demo data** 可以清空演示数据。
 
-## Development and design updates
+## 开发与更新设计
 
-- Page interactions or local state: edit `web/src/js/app.js`; the activity catalog and recommendation rules live in `web/src/js/activities.js`, skin rules in `web/src/js/skins.js`.
-- Responsive layout or interaction styles: edit `web/src/styles/app.css`.
-- Updating the original page designs: replace the corresponding HTML in `web/design/exports/`, then run `npm run build:templates` in `web/` (the first time you need `python3 -m pip install -r requirements-dev.txt`) to regenerate `index.html`. Manual edits to `index.html` are overwritten on the next generation.
+- 修改页面交互或本地状态：编辑 `web/src/js/app.js`；活动目录与推荐规则在 `web/src/js/activities.js`，皮肤规则在 `web/src/js/skins.js`。
+- 修改响应式布局或交互样式：编辑 `web/src/styles/app.css`。
+- 更新原始页面设计：替换 `web/design/exports/` 中相应的 HTML，然后在 `web/` 目录跑 `npm run build:templates`（首次需要 `python3 -m pip install -r requirements-dev.txt`）重新生成 `index.html`。手工改 `index.html` 会在下次生成时被覆盖。
 
-## Data and demo scope
+## 数据与演示范围
 
-- Nickname, birthday, moods, notes, daily activity selection, accessories, skins and their purchase records, and simulated membership status are stored in browser `localStorage` under the key `rongrong-demo-v1`.
-- Rongrong's replies are preset text; at runtime there is no AI, account system, cloud sync or real payment.
+- 昵称、生日、心情、备注、每日活动选择、配饰、皮肤及其购买记录和模拟会员状态保存在浏览器 `localStorage`，键名 `rongrong-demo-v1`。
+- Rongrong 回复为预设文本；运行时没有接入 AI、账号系统、云端同步或真实支付。
 
-## Collaboration files at a glance
+## 协作文件一览
 
-| File | What it's for |
+| 文件 | 干什么用 |
 |---|---|
-| [AGENTS.md](AGENTS.md) | Project rules; AI coding assistants read this before starting |
-| [docs/design-system.md](docs/design-system.md) | Color / typography / spacing / component tokens |
-| [docs/architecture.md](docs/architecture.md) | Tech stack, module breakdown, iOS component mapping |
-| [docs/changelog.md](docs/changelog.md) | Development log and feature update history |
-| [docs/decisions.md](docs/decisions.md) | Technical/product choices that have been settled |
-| [docs/specs/](docs/specs/) | Interaction flow for each feature |
-| [docs/pet-animation-asset.md](docs/pet-animation-asset.md) | Cutout character, home background and generation prompts |
-| [docs/mood-portrait-assets.md](docs/mood-portrait-assets.md) | Five hand-painted mood portraits, asset paths and prompts |
-| [docs/verification.md](docs/verification.md) | Automated check commands, browser acceptance steps and known scope |
-| [docs/technical-debt-review.md](docs/technical-debt-review.md) | Technical debt / security review record |
-| [prototypes/plus-standalone/](prototypes/plus-standalone/README.md) | Early paywall prototype, superseded by web/, reference only |
-| [.github/workflows/ci.yml](.github/workflows/ci.yml) | Checks that run automatically on every push |
-| [.github/pull_request_template.md](.github/pull_request_template.md) | Definition of Done checklist before merging |
+| [AGENTS.md](AGENTS.md) | 项目规则，AI 编码助手开工前先读 |
+| [docs/design-system.md](docs/design-system.md) | 颜色/字体/间距/组件 Token |
+| [docs/architecture.md](docs/architecture.md) | 技术栈、模块划分、iOS 组件映射 |
+| [docs/changelog.md](docs/changelog.md) | 开发日志与功能更新记录 |
+| [docs/decisions.md](docs/decisions.md) | 已经定过的技术/产品选型 |
+| [docs/specs/](docs/specs/) | 每个功能的交互流程 |
+| [docs/pet-animation-asset.md](docs/pet-animation-asset.md) | 去背角色、首页背景及生成提示词 |
+| [docs/mood-portrait-assets.md](docs/mood-portrait-assets.md) | 五种手绘心情头像、素材路径及提示词 |
+| [docs/verification.md](docs/verification.md) | 自动检查命令、浏览器验收步骤与已知范围 |
+| [docs/technical-debt-review.md](docs/technical-debt-review.md) | 技术债/安全审查记录 |
+| [prototypes/plus-standalone/](prototypes/plus-standalone/README.md) | 早期付费墙原型，已被 web/ 取代，仅供参考 |
+| [.github/workflows/ci.yml](.github/workflows/ci.yml) | 每次 push 自动跑的检查 |
+| [.github/pull_request_template.md](.github/pull_request_template.md) | 合并前的 Definition of Done 清单 |
 
-## Commercialization: pet skins
+## Commercialization：宠物皮肤
 
-Open the shop via the **Skins** button on Home, the wardrobe in Me, or **Explore pet skins** on the Plus page. After previewing, confirm a simulated purchase and the skin is applied to Home immediately; it can be combined with accessories.
+Home 的 **Skins** 按钮、Me 衣橱或 Plus 页的 **Explore pet skins** 可打开商店。预览后确认模拟购买，皮肤立即应用到 Home，可与配饰叠加使用。
 
-| Skin | One-time sample price | Look |
+| 皮肤 | 一次性示例价格 | 外观 |
 | --- | --- | --- |
-| Classic Cream | Free | Original cream |
-| Mint Cloud | US$0.99 | Mint with leaves |
-| Cherry Blossom | US$1.99 | Blossom pink with flowers |
-| Starlight | US$2.99 | Lavender with moon and stars |
+| Classic Cream | 免费 | 原始奶油色 |
+| Mint Cloud | US$0.99 | 薄荷色与叶子 |
+| Cherry Blossom | US$1.99 | 樱花粉与花朵 |
+| Starlight | US$2.99 | 薰衣草色与月亮星星 |
 
-Skins are separate from the US$4.99/month Plus accessory membership; ending the membership does not affect purchased skins. **All transactions are simulated locally; no real charges are made.** `skin` and `ownedSkins` are stored in the existing localStorage, persist across refreshes, and are cleared by resetting demo data. Older data is automatically backfilled with the free default skin.
+皮肤独立于 US$4.99/月的 Plus 配饰会员；结束会员不影响已购皮肤。**所有交易均为本地模拟，不会真实扣款。** `skin` 和 `ownedSkins` 存入现有 localStorage，刷新后保留，重置演示数据会清除。旧数据自动补充免费默认皮肤。
 
-Run `npm test` to verify skin pricing, purchase and wearing logic. Product spec: [pet-skins.md](docs/specs/pet-skins.md).
+运行 `npm test` 验证皮肤定价、购买和穿戴逻辑。产品规格见 [pet-skins.md](docs/specs/pet-skins.md)。
 
-## Release 1.1: mood activities
+## Release 1.1：心情活动
 
-Each of the five moods recommends three free activities. Card → **View details** → **Select activity**; closing the details does not select the activity. After confirming, the cutout Rongrong hops, sways and floats hearts on its own while the background stays fixed, then stops after a short celebration; the system reduce-motion setting is respected. Each date keeps one selection; re-checking in with the same mood keeps it, changing the mood clears it. Selections are stored only on this device; there is no timer or completion reward. Spec: [mood-activities.md](docs/specs/mood-activities.md).
+五种心情各推荐三个免费活动。卡片 → **View details** → **Select activity**；关闭详情不会选择活动。确认选择后，去背后的 Rongrong 会独立轻跳、摇摆并飘出爱心，背景保持固定，短暂庆祝后停下；支持系统减弱动态效果。每个日期保留一项选择，同心情重新打卡保留，改心情清空。选择只保存于本机，不提供计时或完成奖励。规格见 [mood-activities.md](docs/specs/mood-activities.md)。
 
-## Visual assets and animation
+## 视觉素材与动画
 
-The home screen and the activity confirmation dialog use a transparent dog layer; skin tinting is confined to the character's outline, and accessories move with the character. The window-light/plant background and ground shadow on the home screen stay fixed. The animation is a CSS whole-body translate, rotate and scale; skeletal animation of ears, tail or legs is not implemented yet. When the system reduce-motion setting is on, the static character and text feedback remain.
+首页与活动确认视窗使用透明小狗图层；皮肤着色限制在角色轮廓内，配饰跟随角色运动。首页的窗光/植物背景和地面阴影保持固定。动画为 CSS 整体位移、旋转与伸缩，尚未实现耳朵、尾巴或四肢的骨骼动画。系统开启减弱动态效果时保留静态角色与文字反馈。
 
-The hand-painted portraits, cutout dog and scene are local assets made during development with the built-in image_gen; opening the demo does not call any generation service. Asset paths and prompts are in the collaboration files above. At runtime app.js applies the new character layer and portraits, so they still take effect after regenerating the HTML templates.
+手绘头像、去背小狗与场景为开发时使用内置 image_gen 制作的本地素材；打开 demo 不调用生成服务。素材路径和提示词见上方协作文件。运行时由 app.js 应用新的角色层与头像，重新生成 HTML 模板后仍会生效。
 
-Try the activity flow: pick a mood → View details → Select activity → happy feedback → Back to activities. After a refresh the activity selection is kept but the celebration does not replay. If the browser still shows old assets after an update, force-refresh with ⌘ Shift R on macOS.
+体验活动：选择心情 → View details → Select activity → 开心反馈 → Back to activities。刷新后保留活动选择，但不会重播庆祝。更新后若浏览器仍显示旧素材，可用 macOS 的 ⌘ Shift R 强制刷新。
 
-## Wishing Wheel
-Open `wheel.html` or enter through the pet skin shop. The English mobile experience has Wheel, Wallet, Wardrobe and Odds & Rules pages, with persistent bottom navigation. Seven exclusive skins are drawn without replacement, with lower weights for rarer rewards. The seven draws cost $1 / $2 / $3 / $4 / $6 / $8 / $10 ($34 total).
-Top up $1, $5, $10 or a custom $1–$100 amount (up to two decimals); $1 buys 100 coins. Payments are simulated locally. Collected skins can be equipped on Home. Original direct-purchase skins retain their prices and permanent ownership independently of Plus. See the [wheel spec](docs/specs/skin-wheel.md).
+## 星愿转盘
+
+打开 `web/wheel.html`，或从宠物皮肤商店进入。界面保持全英文，并适配手机尺寸，拆分为抽奖（Wheel）、充值（Wallet）、衣橱（Wardrobe）和概率规则（Odds & Rules）页面，通过固定底部导航切换。
+
+- 奖池共七款专属皮肤，稀有度越高，初始中奖概率越低。抽中后移出奖池，不会重复获得；剩余概率自动重新计算，集齐后停止抽奖和充值。
+- 七次抽奖价格依次为 **US$1 / $2 / $3 / $4 / $6 / $8 / $10**，合计 **US$34**。
+- 充值支持 **US$1、$5、$10** 和自定义金额；单笔 **US$1–$100**，最多两位小数，**US$1 = 100 星币**。输入页面与本地交易逻辑均校验单笔上限。
+- 抽中的皮肤可以在衣橱穿戴，并同步到 Home。原直购皮肤保留原价，**一次购买、永久拥有**，不受 Plus 会员到期影响。
+- 转盘中的重复配色已替换为 Pistachio Picnic（浅黄绿）、Cocoa Cloud（可可棕）和 Silver Mist（银灰）；Peach Picnic 使用浅橘色。已有奖励与抽奖记录保留。
+
+**充值和抽奖均为本地模拟，不产生真实扣款。** 钱包、所有权和穿戴记录保存在当前浏览器，刷新后保留；重置演示数据会清除。当前没有后端，未来接入真实支付时需在服务端再次校验充值限制。
+
+运行 `npm test` 可验证抽奖概率、不重复规则、充值上限及永久直购所有权。详细规格见 [skin-wheel.md](docs/specs/skin-wheel.md)。
