@@ -108,3 +108,6 @@ Custom top-up input: radius 18px, padding 12px, body 14px and helper/error copy 
 ## 14. User profile
 New About-you rows clone the Pencil Nickname row (36px icon box, 11px label, 15px bold value, 1px `#EADCD1` divider from the export) and use a 17px emoji instead of a line icon. Choice lists in dialogs reuse `surface.card`, 12px padding and radius, 14px body, `accent.primary` for the checked outline and control accent; disabled options at 50% opacity. The birthday 🎂 sits on the same line as the worn accessory at the existing accessory size.
 Growth dialog: 38px stage emoji (same as the Home accessory), 15px bold stage line, 8px progress bar with 4px radius in `accent.primary` on `surface.card`, stage list items on `surface.card` with 12px padding and radius; locked stages use `text.muted`.
+
+## 15. Companion chat
+Chat bubbles: 14px body, 1.5 line height, 12px padding, `radius.card` (18px), max 85% width; pet bubbles on `surface.card`, user bubbles on `surface.secondaryButton`; the thinking bubble is italic `text.muted`. Log max height 45dvh with 8px gaps; the textarea reuses dialog input styles; Send is the primary button at auto width.

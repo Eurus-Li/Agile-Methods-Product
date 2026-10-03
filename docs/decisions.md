@@ -78,3 +78,7 @@ Rationale: validate the requested collection and outfit flow with separate mobil
 ### 2026-09-29 · User profile
 Add `petName`, `callMe` and `goals` to `rongrong-demo-v1`. Call-me options and goals use fixed local catalogs (no free-text goals, max 3); goals are display-only and do not affect activity recommendations, replies or Bond. Birthday surprise is computed from `birthday` and adds no persisted state. Data backup is a local JSON download only; restore/import is deferred.
 Rationale: personalize the companion without new dependencies, backend or changes to the fixed activity catalog. Revisit: when goals should drive recommendations, or when a restore flow or real accounts are needed.
+
+### 2026-10-03 · Companion chat via Groq gpt-oss
+**Exception to "Backend / account system" (2026-09-15): needs a team heads-up.** Home chat uses the open-weight `openai/gpt-oss-20b` on Groq. The key stays on the local dev server (`scripts/serve.js` `/api/chat`, reading the git-ignored `web/.env.local`), so the browser never holds it and nothing is committed. Chat history is memory-only; crisis messages are answered locally and never sent. Without a key every other feature still works fully offline.
+Rationale: an API key in a static page would be readable by anyone; a tiny same-origin proxy on the existing dev server is the smallest safe option. Revisit: before any public deployment (the proxy is dev-only; a real deployment needs a hosted backend, rate limiting and a privacy review) and when building the iOS app.

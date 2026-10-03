@@ -4,6 +4,7 @@
   const activities = globalThis.RongrongActivities;
   const profile = globalThis.RongrongProfile;
   const journalAnalytics = globalThis.RongrongJournalAnalytics;
+  const chat = globalThis.RongrongChat;
   const KEY = 'rongrong-demo-v1';
   const moods = ['Calm', 'Happy', 'Tired', 'Sad', 'Tense'];
   const colors = { Calm: '#ddebdc', Happy: '#ffe3b5', Tired: '#e6dff4', Sad: '#dce6f2', Tense: '#f4d8d8' };
@@ -42,6 +43,9 @@
   let toastTimer;
   let lastFocus;
   let birthdayGreeted = false;
+  // Chat turns stay in memory for this tab only; they are never written to storage.
+  let chatHistory = [];
+  let chatBusy = false;
   const birthdayToday = () => profile.isBirthday(state.birthday, today);
   const named = (name, root = app) => root.querySelector(`[data-pencil-name="${name}"]`);
   const allNamed = (name, root = app) => [...root.querySelectorAll(`[data-pencil-name="${name}"]`)];
@@ -158,6 +162,7 @@
     const skinControl = button(`Skins · ${skins.find(state.skin).name}`, showSkins, 'skin-shortcut');
     named('Stage').append(skinControl);
     if (route === 'home') {
+      named('Content').append(button(`💬 Talk to ${state.petName}`, openChat, 'secondary chat-shortcut'));
       const chosen = activities.find(existing?.activityId);
       named('Content').append(button(chosen ? `Your activity · ${chosen.name}` : 'Explore activities for your mood', () => {
         if (!existing) { toast('Choose a mood first to find three activities for you.'); named('Calm', named('Quick Moods'))?.focus(); return; }
@@ -475,6 +480,60 @@
       actionable(row, edit, `Edit ${label.toLowerCase()}`);
     }
   }
+  function openChat() {
+    openDialog(`Talk to ${state.petName}`);
+    paragraph(`${state.petName} replies with the open gpt-oss model through Groq. Messages are not saved, and ${state.petName} is a companion, not a therapist.`, dialog, 'muted');
+    const log = document.createElement('div'); log.className = 'chat-log'; log.setAttribute('role', 'log'); log.setAttribute('aria-live', 'polite'); log.setAttribute('aria-label', 'Conversation');
+    const bubble = (role, content, extra = '') => {
+      const node = document.createElement('p'); node.className = `chat-bubble chat-${role}${extra}`; node.textContent = content;
+      log.append(node); log.scrollTop = log.scrollHeight; return node;
+    };
+    if (!chatHistory.length) bubble('assistant', `Hi ${profile.address(state)}! I'm all ears. How is your day going?`);
+    for (const turn of chatHistory) bubble(turn.role, turn.content);
+    const form = document.createElement('form'); form.className = 'chat-form';
+    const label = document.createElement('label'); label.htmlFor = 'chat-input'; label.className = 'visually-hidden'; label.textContent = `Message ${state.petName}`;
+    const input = document.createElement('textarea'); input.id = 'chat-input'; input.rows = 2; input.maxLength = chat.config.maxInput; input.placeholder = `Say something to ${state.petName}…`;
+    const send = button('Send', () => {}, 'primary chat-send'); send.type = 'submit';
+    form.append(label, input, send); dialog.append(log, form);
+    input.addEventListener('keydown', event => { if (event.key === 'Enter' && !event.shiftKey && !event.isComposing) { event.preventDefault(); form.requestSubmit(); } });
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      const message = chat.cleanInput(input.value);
+      if (!message || chatBusy) return;
+      input.value = ''; chatBusy = true; send.disabled = true;
+      const crisis = chat.isCrisis(message);
+      // Crisis turns stay on screen but are marked local so they are never sent to the model later.
+      chatHistory.push({ role: 'user', content: message, local: crisis }); bubble('user', message);
+      const address = profile.address(state);
+      let reply;
+      if (crisis) reply = chat.crisisReply(address);
+      else {
+        const thinking = bubble('assistant', `${state.petName} is thinking…`, ' chat-thinking');
+        reply = await askCompanion(address);
+        thinking.remove();
+      }
+      chatHistory.push({ role: 'assistant', content: reply, local: crisis }); bubble('assistant', reply);
+      chatBusy = false; send.disabled = false; if (dialog.open) input.focus();
+    });
+    input.focus();
+  }
+  async function askCompanion(address) {
+    const context = {
+      petName: state.petName, address, mood: state.entries[today]?.mood,
+      goals: state.goals.map(id => profile.findGoal(id)?.name).filter(Boolean)
+    };
+    try {
+      const response = await fetch(chat.config.path, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ history: chatHistory.filter(turn => !turn.local).map(({ role, content }) => ({ role, content })), context }),
+        signal: AbortSignal.timeout(chat.config.timeoutMs + 5000)
+      });
+      const data = await response.json().catch(() => ({}));
+      if (response.ok && typeof data.reply === 'string') return data.reply;
+      if (data.error === 'missing_key') toast('Chat is off: add GROQ_API_KEY to web/.env.local and restart npm run dev.');
+    } catch { /* Network errors fall through to the gentle fallback reply. */ }
+    return chat.fallbackReply(address);
+  }
   function showGrowth() {
     const { stage, next, toNext, progress, bond } = profile.growth(state.bond);
     openDialog(`${state.petName}’s growth`);
@@ -645,7 +704,7 @@
     paragraph('Clearing this browser’s data removes everything. The backup file stays on your device and is not uploaded anywhere.', dialog, 'muted');
     dialog.append(button('Reset demo data', () => {
       openDialog('Reset this demo?'); paragraph('This deletes your check-ins, notes, profile changes, purchased skins and demo membership in this browser.');
-      dialog.append(button('Delete demo data', () => { state = defaults(); save(); closeDialog(); navigate('home'); toast('Demo reset'); }, 'primary'), button('Keep my data', closeDialog));
+      dialog.append(button('Delete demo data', () => { state = defaults(); chatHistory = []; save(); closeDialog(); navigate('home'); toast('Demo reset'); }, 'primary'), button('Keep my data', closeDialog));
     }));
   }
   function setupPlus() {
@@ -667,7 +726,7 @@
     }, state.plus ? 'Manage demo membership' : 'Try monthly membership');
     bind('Restore demo', () => toast(state.plus ? 'Your demo membership is already active.' : 'No active demo membership in this browser.'), 'Restore demo');
     bind('Terms', () => { openDialog('Demo terms'); paragraph('Rongrong is an interactive prototype. The $4.99 monthly price is illustrative. There is no checkout, charge, renewal or real subscription. Demo membership only changes features stored in this browser.'); });
-    bind('Privacy', () => { openDialog('Demo privacy'); paragraph('Your nickname, birthday, pet name, goals, mood check-ins, notes and demo preferences are stored locally in this browser. The demo does not send these to a server. Clear them with Settings → Reset demo data.'); });
+    bind('Privacy', () => { openDialog('Demo privacy'); paragraph('Your nickname, birthday, pet name, goals, mood check-ins, notes and demo preferences are stored locally in this browser. The demo does not send these to a server. Chat messages are sent through your local dev server to Groq to get a reply and are not saved. Clear the rest with Settings → Reset demo data.'); });
   }
   window.addEventListener('hashchange', render);
   render();

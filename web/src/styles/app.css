@@ -207,3 +207,14 @@ dialog .growth-current { font-weight: 700; font-size: 15px; text-align: center; 
 .growth-stages { list-style: none; padding: 0; margin: 12px 0; display: grid; gap: 8px; font-size: 14px; }
 .growth-stages li { background: var(--color-surface-card); border-radius: 12px; padding: 12px; }
 .growth-stages li[data-reached="false"] { color: var(--color-text-muted); }
+
+/* Companion chat reuses dialog, card and secondary-button tokens; bubbles use the card radius. */
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.chat-log { display: flex; flex-direction: column; gap: 8px; max-height: 45dvh; overflow-y: auto; margin: 12px 0; }
+dialog .chat-bubble { margin: 0; max-width: 85%; padding: 12px; border-radius: var(--radius-card); font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+.chat-assistant { align-self: flex-start; background: var(--color-surface-card); }
+.chat-user { align-self: flex-end; background: #F2E5DB; }
+dialog .chat-thinking { color: var(--color-text-muted); font-style: italic; }
+.chat-form { display: flex; gap: 8px; align-items: flex-end; }
+dialog .chat-form textarea { min-height: 48px; resize: none; }
+.chat-form .chat-send { width: auto; margin-top: 0; flex-shrink: 0; }

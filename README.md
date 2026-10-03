@@ -47,7 +47,8 @@ PORT=8001 npm run dev
 ## 数据与演示范围
 
 - 昵称、生日、心情、备注、每日活动选择、配饰、皮肤及其购买记录和模拟会员状态保存在浏览器 `localStorage`，键名 `rongrong-demo-v1`。
-- Rongrong 回复为预设文本；运行时没有接入 AI、账号系统、云端同步或真实支付。
+- 心情回复为预设文本。首页「Talk to」聊天会经由本地开发服务器调用 Groq 上的开源模型 gpt-oss（见下方「陪伴聊天」）；聊天内容不保存。没有账号系统、云端同步或真实支付。
+- 昵称之外，宠物名字、称呼偏好和个人小目标也保存在同一个 `localStorage` 键中；成长阶段由 bond 计算，不另外保存。
 
 ## 协作文件一览
 
@@ -107,3 +108,16 @@ Home 的 **Skins** 按钮、Me 衣橱或 Plus 页的 **Explore pet skins** 可�
 **充值和抽奖均为本地模拟，不产生真实扣款。** 钱包、所有权和穿戴记录保存在当前浏览器，刷新后保留；重置演示数据会清除。当前没有后端，未来接入真实支付时需在服务端再次校验充值限制。
 
 运行 `npm test` 可验证抽奖概率、不重复规则、充值上限及永久直购所有权。详细规格见 [skin-wheel.md](docs/specs/skin-wheel.md)。
+
+## 陪伴聊天（Groq gpt-oss）
+
+首页的「💬 Talk to {宠物名}」可以和宠物聊天，回复来自 Groq 上的开源模型 `openai/gpt-oss-20b`。API key 只放在本地开发服务器，浏览器拿不到，也不会进 Git。
+
+1. 在 [console.groq.com](https://console.groq.com) 取得 API key。
+2. 复制 `web/.env.example` 为 `web/.env.local`（已被 `.gitignore` 忽略），填入 `GROQ_API_KEY=gsk_...`。
+3. 重新执行 `npm run dev`，终端显示 `Companion chat: Groq openai/gpt-oss-20b` 即已启用。
+
+- 没有 key 时聊天会显示温和的备用回复，并提示设定 key；其他功能不受影响。
+- 提到自伤／自杀的讯息不会送给模型，直接显示固定的求助资讯（台湾 1925、美国 988）。
+- 想换成较大的模型，在 `.env.local` 加 `GROQ_MODEL=openai/gpt-oss-120b`。
+- 规格见 [docs/specs/companion-chat.md](docs/specs/companion-chat.md)。

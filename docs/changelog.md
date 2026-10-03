@@ -81,3 +81,9 @@
 - Four growth stages derived from bond: Fluff (0) → Sprout (200) → Bloom (500) → Glow (1000); no new stored field.
 - Home shows the current stage next to the days together; Me shows it next to the level, and tapping the level opens a growth dialog with progress, bond to the next stage and all stages.
 - Check-ins and hugs that cross a threshold show a "grew into" toast. 3 new growth tests; 38 web tests pass.
+
+## 2026-10-03 · Companion Chat (Groq gpt-oss)
+- Home "💬 Talk to {petName}" opens a chat; replies come from `openai/gpt-oss-20b` on Groq in the pet's voice, using the call-me preference, today's mood and goals.
+- Key stays on the local dev server (`/api/chat` in `serve.js`, `web/.env.local`); same-origin JSON only; history is memory-only.
+- Crisis messages get a fixed help reply (Taiwan 1925, US 988) and are never sent to the model. Without a key the pet gives a gentle fallback.
+- 9 new tests (6 logic, 3 server against a fake Groq); 47 web tests pass. Browser-checked reply, crisis, missing key and 320px layout with a fake Groq; not yet run against the real Groq API.

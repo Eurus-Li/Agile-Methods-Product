@@ -45,6 +45,7 @@ document = '''<!doctype html>
 <script src="src/js/activities.js" defer></script>
 <script src="src/js/profile.js" defer></script>
 <script src="src/js/journal-analytics.js" defer></script>
+<script src="src/js/companion-chat.js" defer></script>
 <script src="src/js/app.js" defer></script>
 </head><body>
 <main id="app" aria-label="Rongrong companion"></main>

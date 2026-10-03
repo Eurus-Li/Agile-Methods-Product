@@ -104,3 +104,7 @@ There is no iOS project yet; the future Model / SwiftData will add fields with t
 ## 10. Journal analytics
 
 `web/src/js/journal-analytics.js` contains DOM-free calculations for recent-entry sorting, monthly mood counts, calendar-week patterns and the preferred activity across history. `app.js` renders those results as Recent moods, monthly distribution, Weekly patterns and summary cards. It adds no persisted fields and continues to read `rongrong-demo-v1.entries`. Pure-logic tests live in `web/tests/journal-analytics.test.js`; product boundaries are documented in the [Journal spec](specs/journal-insights.md).
+
+## 10. Companion chat (Groq gpt-oss)
+
+`web/scripts/serve.js` serves the static demo and one JSON endpoint, `POST /api/chat`, which forwards to Groq's OpenAI-compatible Chat Completions API with the server-side `GROQ_API_KEY`. Prompt building, input sanitizing, crisis detection and response parsing live in `web/src/js/companion-chat.js`, shared by the browser and the server and unit-tested in Node. This is the only network request in the web demo and a documented exception to the no-backend decision; see the [spec](specs/companion-chat.md). The iOS app must not ship a Groq key in the binary: it needs a hosted proxy before chat can be enabled there.
