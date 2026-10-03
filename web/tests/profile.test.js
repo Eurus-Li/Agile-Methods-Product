@@ -39,3 +39,21 @@ test('backup wraps normalized state without mutating it and survives a JSON roun
   assert.equal(state.petName, '  Mochi ');
   assert.equal(backupFileName('2026-09-29'), 'rongrong-backup-2026-09-29.json');
 });
+const { growth, stageUp, growthStages } = globalThis.RongrongProfile;
+test('growth stages follow bond thresholds and report progress to the next stage', () => {
+  assert.deepEqual(growthStages.map(stage => stage.minBond), [0, 200, 500, 1000]);
+  assert.equal(growth(0).stage.id, 'fluff');
+  assert.equal(growth(199).stage.id, 'fluff');
+  assert.equal(growth(200).stage.id, 'sprout');
+  assert.deepEqual({ toNext: growth(350).toNext, progress: growth(350).progress, next: growth(350).next.id }, { toNext: 150, progress: 0.5, next: 'bloom' });
+  assert.deepEqual({ stage: growth(5000).stage.id, next: growth(5000).next, toNext: growth(5000).toNext, progress: growth(5000).progress }, { stage: 'glow', next: null, toNext: 0, progress: 1 });
+});
+test('invalid bond is treated as zero', () => {
+  for (const value of [NaN, -50, undefined, '300', Infinity]) assert.equal(growth(value).stage.id, 'fluff');
+});
+test('stageUp only fires when a threshold is crossed', () => {
+  assert.equal(stageUp(185, 200).id, 'sprout');
+  assert.equal(stageUp(490, 505).id, 'bloom');
+  assert.equal(stageUp(200, 215), null);
+  assert.equal(stageUp(1000, 1015), null);
+});

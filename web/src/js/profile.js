@@ -54,8 +54,31 @@
     return { app: 'rongrong', format: 'rongrong-demo-v1', exportedAt, data: normalize(state) };
   }
   const backupFileName = dateKey => `rongrong-backup-${dateKey}.json`;
+  // Growth stages are derived from bond only, so they need no stored field.
+  const growthStages = Object.freeze([
+    { id: 'fluff', name: 'Fluff', emoji: '☁️', minBond: 0, description: 'A soft little puff, just getting to know you.' },
+    { id: 'sprout', name: 'Sprout', emoji: '🌱', minBond: 200, description: 'Feeling at home and growing a little braver.' },
+    { id: 'bloom', name: 'Bloom', emoji: '🌸', minBond: 500, description: 'Happy and blooming from your time together.' },
+    { id: 'glow', name: 'Glow', emoji: '✨', minBond: 1000, description: 'Glowing with all the care you have shared.' }
+  ].map(Object.freeze));
+  const cleanBond = bond => Number.isFinite(bond) ? Math.max(0, bond) : 0;
+  function growth(bond) {
+    const value = cleanBond(bond);
+    const index = growthStages.findLastIndex(stage => value >= stage.minBond);
+    const stage = growthStages[index], next = growthStages[index + 1] || null;
+    return {
+      stage, next, index, bond: value,
+      toNext: next ? next.minBond - value : 0,
+      progress: next ? (value - stage.minBond) / (next.minBond - stage.minBond) : 1
+    };
+  }
+  // Returns the newly reached stage when bond crosses a threshold, otherwise null.
+  function stageUp(previousBond, nextBond) {
+    const before = growth(previousBond), after = growth(nextBond);
+    return after.index > before.index ? after.stage : null;
+  }
   globalThis.RongrongProfile = Object.freeze({
-    DEFAULT_PET_NAME, PET_NAME_MAX, GOALS_MAX, callMeOptions, goalCatalog,
-    findGoal, cleanPetName, cleanGoals, normalize, address, isBirthday, backup, backupFileName
+    DEFAULT_PET_NAME, PET_NAME_MAX, GOALS_MAX, callMeOptions, goalCatalog, growthStages,
+    findGoal, cleanPetName, cleanGoals, normalize, address, isBirthday, backup, backupFileName, growth, stageUp
   });
 })();

@@ -99,6 +99,13 @@
     return count;
   }
   const level = () => 7 + Math.floor(state.bond / 100);
+  // Adds bond and announces a new growth stage; returns the stage reached, if any.
+  function addBond(amount) {
+    const reached = profile.stageUp(state.bond, state.bond + amount);
+    state.bond += amount;
+    if (reached) toast(`${state.petName} grew into the ${reached.name} stage ${reached.emoji}`);
+    return reached;
+  }
   function render() {
     route = location.hash.slice(1);
     if (!['home', 'reply', 'journal', 'me', 'plus'].includes(route)) { route = 'home'; history.replaceState(null, '', '#home'); }
@@ -124,7 +131,8 @@
       text('Line', `Happy birthday, ${profile.address(state)}! 🎂`);
       if (!birthdayGreeted) { birthdayGreeted = true; toast(`${state.petName} saved a birthday cake for you today 🎂`); }
     }
-    text('Days', `Day ${Math.max(1, Math.floor((new Date(today + 'T12:00:00') - new Date(state.started + 'T12:00:00')) / 86400000) + 1)} together`);
+    const stage = profile.growth(state.bond).stage;
+    text('Days', `Day ${Math.max(1, Math.floor((new Date(today + 'T12:00:00') - new Date(state.started + 'T12:00:00')) / 86400000) + 1)} together · ${stage.emoji} ${stage.name}`);
     const existing = state.entries[today];
     if (existing) text('Prompt', `Today: ${existing.mood.toLowerCase()} · check in again?`);
     for (const mood of moods) {
@@ -136,7 +144,7 @@
       actionable(tile, () => {
         const previous = state.entries[today];
         state.entries[today] = activities.changeMood({ ...previous, note: previous?.note || '', saved: previous?.saved || false, hugged: previous?.hugged || false, created: previous?.created || new Date().toISOString() }, mood);
-        if (!previous) state.bond += 15;
+        if (!previous) addBond(15);
         selectedDate = today; save(); navigate('reply');
       }, `Feeling ${mood.toLowerCase()}`);
     }
@@ -174,11 +182,12 @@
     bind('Close', () => navigate('home'), 'Close reply', sheet);
     named('Scrim').addEventListener('click', () => navigate('home'));
     bind('Hug Button', () => {
-      if (entry && !entry.hugged) { entry.hugged = true; state.bond += 5; save(); }
+      const grown = entry && !entry.hugged ? (entry.hugged = true, addBond(5)) : null;
+      if (entry) save();
       text('Label', 'Hug received ♡', named('Hug Button', sheet));
       text('Label', `Bond Lv.${level()}`, named('Bond', sheet));
       named('Fill', named('Bond', sheet)).style.width = `${30 + state.bond % 100 * .7}%`;
-      toast('Rongrong is hugging you right back ♡');
+      if (!grown) toast('Rongrong is hugging you right back ♡');
     }, 'Hug Rongrong', sheet);
     bind('Save Button', () => {
       if (!entry) { toast('Choose a mood on Home to start your journal.'); return; }
@@ -413,7 +422,8 @@
     text('Name', state.petName, named('Profile Card'));
     text('Hint', `${state.petName} greets you your way and has a surprise on your birthday.`, named('About You'));
     addProfileRows();
-    text('L', `Lv.${level()} · Fluff stage`, named('Level'));
+    text('L', `Lv.${level()} · ${profile.growth(state.bond).stage.name} stage`, named('Level'));
+    bind('Level', showGrowth, `${state.petName}’s growth`);
     text('Born', `Together since ${new Date(state.started + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`);
     named('Fill', named('Bond Bar')).style.width = `${30 + state.bond % 100 * .7}%`;
     text('V', Object.keys(state.entries).length, named('Entries'));
@@ -464,6 +474,28 @@
       hint.before(divider, row);
       actionable(row, edit, `Edit ${label.toLowerCase()}`);
     }
+  }
+  function showGrowth() {
+    const { stage, next, toNext, progress, bond } = profile.growth(state.bond);
+    openDialog(`${state.petName}’s growth`);
+    const hero = paragraph(stage.emoji, dialog, 'growth-hero'); hero.setAttribute('aria-hidden', 'true');
+    paragraph(`${stage.name} stage · Lv.${level()}`, dialog, 'growth-current');
+    paragraph(stage.description);
+    const bar = document.createElement('div'); bar.className = 'growth-bar';
+    bar.setAttribute('role', 'progressbar'); bar.setAttribute('aria-valuemin', '0'); bar.setAttribute('aria-valuemax', '100');
+    bar.setAttribute('aria-valuenow', String(Math.round(progress * 100)));
+    bar.setAttribute('aria-label', next ? `Progress to ${next.name}` : 'All stages reached');
+    const fill = document.createElement('span'); fill.style.width = `${Math.round(progress * 100)}%`; bar.append(fill); dialog.append(bar);
+    paragraph(next ? `${toNext} more bond to ${next.emoji} ${next.name} · ${bond} bond so far` : `Every stage reached · ${bond} bond so far`, dialog, 'muted');
+    const list = document.createElement('ol'); list.className = 'growth-stages';
+    for (const item of profile.growthStages) {
+      const reached = bond >= item.minBond;
+      const row = document.createElement('li'); row.dataset.reached = String(reached);
+      row.textContent = `${item.emoji} ${item.name} · ${item.minBond} bond${item.id === stage.id ? ' · Now' : reached ? ' · ✓ Reached' : ' · Locked'}`;
+      list.append(row);
+    }
+    dialog.append(list);
+    paragraph('Grow together: daily check-in +15 bond · first hug of the day +5 bond.', dialog, 'muted');
   }
   function editPetName() {
     openDialog('Your pet’s name');

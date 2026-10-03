@@ -15,6 +15,7 @@ Make Rongrong feel like *your* companion: the user can name the pet, choose how 
 | 生日驚喜 | **Birthday Surprise** | none (uses `birthday`) |
 | 個人小目標 | **Personal Goals** | `goals` |
 | 匯出／備份資料 | **Data Backup (Export)** | none |
+| 成長進度 | **Avatar Growth** | none (derived from `bond`) |
 
 ## User stories
 
@@ -23,6 +24,7 @@ Make Rongrong feel like *your* companion: the user can name the pet, choose how 
 - As a user, I want a small surprise on my birthday, so that I feel remembered.
 - As a user, I want to note what I'm working on for myself, so that my profile reflects my intentions.
 - As a user, I want to download my data, so that I don't lose it when the browser data is cleared.
+- As a user, I want to see my companion grow as we spend time together, so that I feel my daily check-ins matter.
 
 ## Core interaction flow
 
@@ -36,6 +38,7 @@ Make Rongrong feel like *your* companion: the user can name the pet, choose how 
    - Me → Birthday row shows "· Today! 🎂".
 5. **Personal Goals:** multi-select from a fixed catalog of 6 goals, at most 3 (other options are disabled once 3 are chosen). Shown on the Me row. Goals are display-only: they do **not** change mood replies, activity recommendations or Bond.
 6. **Data Backup (Export):** Settings → "Back up my data (.json)" downloads `rongrong-backup-{yyyy-MM-dd}.json` locally. Nothing is uploaded. Restoring from a file is out of scope for this release.
+7. **Avatar Growth:** four stages derived from `bond`: ☁️ Fluff (0), 🌱 Sprout (200), 🌸 Bloom (500), ✨ Glow (1000). Home shows "Day N together · {emoji} {stage}"; Me shows "Lv.X · {stage} stage". Tapping the level opens a growth dialog with the current stage, a progress bar to the next stage, bond still needed, every stage with Reached / Now / Locked, and how to earn bond (check-in +15, first hug +5). Crossing a threshold shows a toast "{petName} grew into the {stage} stage". Stages never go down because bond never decreases.
 
 ## Data fields
 
@@ -69,6 +72,7 @@ Goal catalog ids: `sleep`, `calm`, `kind`, `move`, `connect`, `focus`.
 - [ ] On the birthday date: greeting, one-time toast, 🎂 accessory, "Today!" on Me; on other dates none of these appear.
 - [ ] A 4th goal cannot be selected; goals do not affect activity recommendations.
 - [ ] Backup downloads a valid JSON file containing the current state, and the page makes no network request to send it.
+- [ ] Stage, progress and bond-to-next match the thresholds; the stage-up toast appears only when a threshold is crossed.
 - [ ] 320px width has no horizontal overflow; all controls are keyboard reachable with accessible names.
 
 ## iOS notes

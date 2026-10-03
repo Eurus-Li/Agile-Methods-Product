@@ -197,3 +197,13 @@ dialog .choice { display: flex; align-items: center; gap: 12px; margin: 8px 0; p
 dialog .choice input { display: inline-block; width: 18px; height: 18px; margin: 0; flex-shrink: 0; accent-color: var(--color-accent-primary); }
 dialog .choice:has(input:disabled) { opacity: .5; cursor: default; }
 dialog .choice:has(input:checked) { outline: 1.5px solid var(--color-accent-primary); }
+
+/* Avatar growth dialog reuses dialog type sizes, card surface and the primary accent. */
+.screen [data-pencil-name="Level"] { cursor: pointer; }
+dialog .growth-hero { font-size: 38px; text-align: center; margin: 0; line-height: 1.2; }
+dialog .growth-current { font-weight: 700; font-size: 15px; text-align: center; margin: 8px 0 0; }
+.growth-bar { height: 8px; border-radius: 4px; background: var(--color-surface-card); overflow: hidden; }
+.growth-bar > span { display: block; height: 100%; background: var(--color-accent-primary); border-radius: inherit; }
+.growth-stages { list-style: none; padding: 0; margin: 12px 0; display: grid; gap: 8px; font-size: 14px; }
+.growth-stages li { background: var(--color-surface-card); border-radius: 12px; padding: 12px; }
+.growth-stages li[data-reached="false"] { color: var(--color-text-muted); }

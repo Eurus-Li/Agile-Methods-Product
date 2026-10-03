@@ -76,3 +76,8 @@
 - Personal Goals: pick up to three from a fixed list of six; display-only on Me.
 - Data Backup (Export): Settings → Back up my data downloads `rongrong-backup-{date}.json` locally; nothing is uploaded. Restore is not included yet.
 - Old data migrates with defaults; 6 new profile logic tests, 30 web tests pass. Browser-checked at 390px and 320px, including persistence across reload and the wheel page keeping profile fields.
+
+## 2026-10-03 · Avatar Growth
+- Four growth stages derived from bond: Fluff (0) → Sprout (200) → Bloom (500) → Glow (1000); no new stored field.
+- Home shows the current stage next to the days together; Me shows it next to the level, and tapping the level opens a growth dialog with progress, bond to the next stage and all stages.
+- Check-ins and hugs that cross a threshold show a "grew into" toast. 3 new growth tests; 38 web tests pass.
