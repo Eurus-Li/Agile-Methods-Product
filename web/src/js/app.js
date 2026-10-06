@@ -198,6 +198,7 @@
       named('Fill', named('Bond', sheet)).style.width = `${30 + state.bond % 100 * .7}%`;
       if (!grown) toast('Rongrong is hugging you right back ♡');
     }, 'Hug Rongrong', sheet);
+    if (entry?.hugged) text('Label', 'Hug received ♡', named('Hug Button', sheet));
     bind('Save Button', () => {
       if (!entry) { toast('Choose a mood on Home to start your journal.'); return; }
       entry.saved = !entry.saved; save(); updateSaved(); toast(entry.saved ? 'Reply saved to your journal' : 'Reply bookmark removed');

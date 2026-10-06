@@ -15,7 +15,7 @@ As a user, I want to quickly log today's mood and get a caring response, so that
 1. The Home page shows 5 hand-painted expression portraits of the same Rongrong with matching text options: Calm / Happy / Tired / Sad / Tense (color values in [design-system.md](../design-system.md)).
 2. The user taps one → today's record is written (if today already has a record, overwrite mood and keep the existing note/saved/hugged state) → navigate to the Reply page.
 3. The Reply page shows the matching copy (one of five fixed messages), the current Bond level bar, a Hug button and a Save (bookmark) button.
-4. The first check-in of the day gives bond +15; the first tap of Hug gives +5, and repeated taps add nothing.
+4. The first check-in of the day gives bond +15; the first tap of Hug gives +5, and repeated taps add nothing. Once hugged, the button shows "Hug received ♡" whenever that day's Reply is reopened.
 5. Reply shows three activity cards for the mood; details, selection and migration rules are in the [activity spec](mood-activities.md). Re-checking in with the same mood keeps activityId; changing the mood clears it.
 6. Closing Reply or tapping the backdrop → back to Home.
 7. The Home dog is a transparent character layer in front of a fixed cream hand-painted window-light and plant scene. Petting it by tap or keyboard Enter/Space makes only the character and accessories hop; the background and ground shadow stay still. The current skin is kept, the reduce-motion setting is respected, and no data or rewards are added.
