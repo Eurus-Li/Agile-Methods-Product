@@ -1,0 +1,218 @@
+{
+  "app": "rongrong",
+  "format": "rongrong-demo-v1",
+  "exportedAt": "2026-10-05T13:00:00.000Z",
+  "data": {
+    "nickname": "Emma",
+    "birthday": "2000-09-15",
+    "outfit": "Crown",
+    "skin": "mint",
+    "ownedSkins": [
+      "cream",
+      "mint"
+    ],
+    "plus": false,
+    "entries": {
+      "2026-09-08": {
+        "mood": "Tense",
+        "note": "First week back at school. A lot on my list.",
+        "saved": true,
+        "hugged": true,
+        "created": "2026-09-08T12:10:00.000Z",
+        "activityId": "one-step"
+      },
+      "2026-09-09": {
+        "mood": "Tired",
+        "note": "",
+        "saved": false,
+        "hugged": true,
+        "created": "2026-09-09T12:11:00.000Z",
+        "activityId": "water"
+      },
+      "2026-09-10": {
+        "mood": "Calm",
+        "note": "",
+        "saved": false,
+        "hugged": true,
+        "created": "2026-09-10T12:12:00.000Z",
+        "activityId": "music"
+      },
+      "2026-09-11": {
+        "mood": "Tense",
+        "note": "Group project meeting ran long.",
+        "saved": false,
+        "hugged": true,
+        "created": "2026-09-11T12:13:00.000Z",
+        "activityId": "rest"
+      },
+      "2026-09-13": {
+        "mood": "Happy",
+        "note": "Brunch with Mia.",
+        "saved": true,
+        "hugged": true,
+        "created": "2026-09-13T12:14:00.000Z",
+        "activityId": "celebrate"
+      },
+      "2026-09-14": {
+        "mood": "Calm",
+        "note": "",
+        "saved": false,
+        "hugged": true,
+        "created": "2026-09-14T12:15:00.000Z",
+        "activityId": "notice"
+      },
+      "2026-09-15": {
+        "mood": "Happy",
+        "note": "Birthday! Family video call.",
+        "saved": false,
+        "hugged": true,
+        "created": "2026-09-15T12:16:00.000Z",
+        "activityId": "connect"
+      },
+      "2026-09-16": {
+        "mood": "Tired",
+        "note": "",
+        "saved": false,
+        "hugged": true,
+        "created": "2026-09-16T12:17:00.000Z",
+        "activityId": "rest"
+      },
+      "2026-09-18": {
+        "mood": "Sad",
+        "note": "Missed home today.",
+        "saved": true,
+        "hugged": true,
+        "created": "2026-09-18T12:18:00.000Z",
+        "activityId": "comfort"
+      },
+      "2026-09-19": {
+        "mood": "Calm",
+        "note": "",
+        "saved": false,
+        "hugged": true,
+        "created": "2026-09-19T12:19:00.000Z",
+        "activityId": null
+      },
+      "2026-09-20": {
+        "mood": "Calm",
+        "note": "",
+        "saved": false,
+        "hugged": true,
+        "created": "2026-09-20T12:20:00.000Z",
+        "activityId": "gratitude"
+      },
+      "2026-09-21": {
+        "mood": "Happy",
+        "note": "Long walk in the park.",
+        "saved": false,
+        "hugged": true,
+        "created": "2026-09-21T12:21:00.000Z",
+        "activityId": "gratitude"
+      },
+      "2026-09-22": {
+        "mood": "Tense",
+        "note": "Midterm schedule came out.",
+        "saved": true,
+        "hugged": true,
+        "created": "2026-09-22T12:22:00.000Z",
+        "activityId": "notice"
+      },
+      "2026-09-24": {
+        "mood": "Tired",
+        "note": "",
+        "saved": false,
+        "hugged": true,
+        "created": "2026-09-24T12:23:00.000Z",
+        "activityId": "water"
+      },
+      "2026-09-25": {
+        "mood": "Sad",
+        "note": "",
+        "saved": false,
+        "hugged": true,
+        "created": "2026-09-25T12:24:00.000Z",
+        "activityId": "music"
+      },
+      "2026-09-26": {
+        "mood": "Calm",
+        "note": "",
+        "saved": false,
+        "hugged": true,
+        "created": "2026-09-26T12:25:00.000Z",
+        "activityId": "notice"
+      },
+      "2026-09-27": {
+        "mood": "Happy",
+        "note": "Finished the first draft!",
+        "saved": true,
+        "hugged": true,
+        "created": "2026-09-27T12:26:00.000Z",
+        "activityId": "celebrate"
+      },
+      "2026-09-28": {
+        "mood": "Tired",
+        "note": "",
+        "saved": false,
+        "hugged": true,
+        "created": "2026-09-28T12:27:00.000Z",
+        "activityId": "rest"
+      },
+      "2026-09-30": {
+        "mood": "Tense",
+        "note": "Two deadlines this week.",
+        "saved": false,
+        "hugged": true,
+        "created": "2026-09-30T12:28:00.000Z",
+        "activityId": "one-step"
+      },
+      "2026-10-01": {
+        "mood": "Tired",
+        "note": "",
+        "saved": false,
+        "hugged": true,
+        "created": "2026-10-01T12:29:00.000Z",
+        "activityId": "water"
+      },
+      "2026-10-02": {
+        "mood": "Calm",
+        "note": "Slept a bit better.",
+        "saved": true,
+        "hugged": true,
+        "created": "2026-10-02T12:30:00.000Z",
+        "activityId": "music"
+      },
+      "2026-10-03": {
+        "mood": "Happy",
+        "note": "Called grandma.",
+        "saved": false,
+        "hugged": true,
+        "created": "2026-10-03T12:31:00.000Z",
+        "activityId": "connect"
+      },
+      "2026-10-04": {
+        "mood": "Calm",
+        "note": "",
+        "saved": false,
+        "hugged": true,
+        "created": "2026-10-04T12:32:00.000Z",
+        "activityId": "gratitude"
+      },
+      "2026-10-05": {
+        "mood": "Happy",
+        "note": "Presentation went well.",
+        "saved": false,
+        "hugged": true,
+        "created": "2026-10-05T12:33:00.000Z",
+        "activityId": "celebrate"
+      }
+    },
+    "bond": 480,
+    "started": "2026-09-08",
+    "petName": "Rongrong",
+    "callMe": "nickname",
+    "goals": [
+      "sleep",
+      "kind"
+    ]
+  }
+}

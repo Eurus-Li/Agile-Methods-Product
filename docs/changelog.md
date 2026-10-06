@@ -87,3 +87,9 @@
 - Key stays on the local dev server (`/api/chat` in `serve.js`, `web/.env.local`); same-origin JSON only; history is memory-only.
 - Crisis messages get a fixed help reply (Taiwan 1925, US 988) and are never sent to the model. Without a key the pet gives a gentle fallback.
 - 9 new tests (6 logic, 3 server against a fake Groq); 47 web tests pass. Browser-checked reply, crisis, missing key and 320px layout with a fake Groq; not yet run against the real Groq API.
+
+## 2026-10-06 · Restore from backup
+- Settings → Restore from backup loads a file exported by Back up my data. Files must be `app: 'rongrong'` / `format: 'rongrong-demo-v1'`; anything else shows a toast and changes nothing.
+- Restored data goes through the same load flow as stored data (entries, outfit, bond, skins, profile, activities), then a confirmation dialog shows pet name, check-in count and backup date before replacing local data.
+- Added `web/demo/rongrong-demo-backup.json` for presentations (24 check-ins over 4 weeks, 6-day streak ending yesterday, today empty, bond 480 so today's check-in +15 and hug +5 reach Bloom). It is not linked from the app.
+- 3 new restore tests; 52 web tests pass. Browser-checked invalid file, Keep my data, Replace my data, the demo check-in → hug → Bloom path and 320px layout.

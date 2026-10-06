@@ -36,7 +36,11 @@ PORT=8001 npm run dev
 4. **Me**：修改昵称和生日，选择配饰或打开衣橱；配饰会显示在 Home 的 Rongrong 上。
 5. **Plus**：通过 Home 的 Plus 按钮或锁定配饰进入，模拟开通会员、检查恢复状态或结束会员。
 
-页面通过 URL hash 导航：`#home`、`#reply`、`#journal`、`#me`、`#plus`。通过 **Me → Settings → Reset demo data** 可以清空演示数据。
+页面通过 URL hash 导航：`#home`、`#reply`、`#journal`、`#me`、`#plus`。通过 **Me → Settings → Reset demo data** 可以清空演示数据；**Back up my data** 导出 JSON 备份，**Restore from backup** 读回备份（确认后覆盖当前数据）。
+
+### 演示用备份
+
+[`web/demo/rongrong-demo-backup.json`](web/demo/rongrong-demo-backup.json) 是上台演示用的预置数据（App 界面不会出现）：过去 4 周 24 笔心情、截至 2026-10-05 连续 6 天、2026-10-06 留空、bond 480。演示时先 Restore 这个文件，再现场打卡（+15）并拥抱（+5），Rongrong 正好升到 🌸 Bloom。日期是固定的，演示日期不是 2026-10-06 时需要整体平移日期。
 
 ## 开发与更新设计
 
@@ -49,6 +53,7 @@ PORT=8001 npm run dev
 - 昵称、生日、心情、备注、每日活动选择、配饰、皮肤及其购买记录和模拟会员状态保存在浏览器 `localStorage`，键名 `rongrong-demo-v1`。
 - 心情回复为预设文本。首页「Talk to」聊天会经由本地开发服务器调用 Groq 上的开源模型 gpt-oss（见下方「陪伴聊天」）；聊天内容不保存。没有账号系统、云端同步或真实支付。
 - 昵称之外，宠物名字、称呼偏好和个人小目标也保存在同一个 `localStorage` 键中；成长阶段由 bond 计算，不另外保存。
+- 备份与还原都只在本机读写文件，不上传；还原会经过与读取 `localStorage` 相同的校验流程。
 
 ## 协作文件一览
 

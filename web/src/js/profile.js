@@ -54,6 +54,19 @@
     return { app: 'rongrong', format: 'rongrong-demo-v1', exportedAt, data: normalize(state) };
   }
   const backupFileName = dateKey => `rongrong-backup-${dateKey}.json`;
+  const BACKUP_MAX_CHARS = 1_000_000;
+  // Validates a backup file's text; the caller still runs data through the normal load/normalize flow.
+  function readBackup(text) {
+    if (typeof text !== 'string') return { ok: false, error: 'This file could not be read.' };
+    if (text.length > BACKUP_MAX_CHARS) return { ok: false, error: 'This file is too large to be a Rongrong backup.' };
+    let file;
+    try { file = JSON.parse(text); } catch { return { ok: false, error: 'This file is not valid JSON.' }; }
+    const isObject = value => value !== null && typeof value === 'object' && !Array.isArray(value);
+    if (!isObject(file) || file.app !== 'rongrong') return { ok: false, error: 'This file is not a Rongrong backup.' };
+    if (file.format !== 'rongrong-demo-v1') return { ok: false, error: 'This backup format is not supported.' };
+    if (!isObject(file.data)) return { ok: false, error: 'This backup has no data to restore.' };
+    return { ok: true, data: file.data, exportedAt: typeof file.exportedAt === 'string' ? file.exportedAt : null };
+  }
   // Growth stages are derived from bond only, so they need no stored field.
   const growthStages = Object.freeze([
     { id: 'fluff', name: 'Fluff', emoji: '☁️', minBond: 0, description: 'A soft little puff, just getting to know you.' },
@@ -78,7 +91,7 @@
     return after.index > before.index ? after.stage : null;
   }
   globalThis.RongrongProfile = Object.freeze({
-    DEFAULT_PET_NAME, PET_NAME_MAX, GOALS_MAX, callMeOptions, goalCatalog, growthStages,
-    findGoal, cleanPetName, cleanGoals, normalize, address, isBirthday, backup, backupFileName, growth, stageUp
+    DEFAULT_PET_NAME, PET_NAME_MAX, GOALS_MAX, BACKUP_MAX_CHARS, callMeOptions, goalCatalog, growthStages,
+    findGoal, cleanPetName, cleanGoals, normalize, address, isBirthday, backup, backupFileName, readBackup, growth, stageUp
   });
 })();

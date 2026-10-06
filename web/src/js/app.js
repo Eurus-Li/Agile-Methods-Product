@@ -22,18 +22,22 @@
   const dateKey = (date = new Date()) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
   const today = dateKey();
   const defaults = () => ({ nickname: 'Emma', birthday: '2000-09-15', outfit: 'Crown', skin: 'cream', ownedSkins: ['cream'], plus: false, entries: {}, bond: 0, started: today, petName: profile.DEFAULT_PET_NAME, callMe: 'nickname', goals: [] });
-  let state = defaults();
-  try {
-    const saved = JSON.parse(localStorage.getItem(KEY));
+  // Shared by loading from storage and restoring a backup: invalid fields fall back to defaults.
+  function hydrate(saved) {
+    let next = defaults();
     if (saved && typeof saved === 'object') {
-      state = { ...state, ...saved };
-      state.entries = Object.fromEntries(Object.entries(saved.entries || {}).filter(([key, entry]) => /^\d{4}-\d{2}-\d{2}$/.test(key) && entry && moods.includes(entry.mood)));
-      if (!(state.outfit in outfits)) state.outfit = 'Crown';
-      state.bond = Number.isFinite(state.bond) ? Math.max(0, state.bond) : 0;
+      next = { ...next, ...saved };
+      next.entries = Object.fromEntries(Object.entries(saved.entries || {}).filter(([key, entry]) => /^\d{4}-\d{2}-\d{2}$/.test(key) && entry && moods.includes(entry.mood)));
+      if (!(next.outfit in outfits)) next.outfit = 'Crown';
+      next.bond = Number.isFinite(next.bond) ? Math.max(0, next.bond) : 0;
     }
-  } catch { /* A fresh session also works when storage is unavailable. */ }
-  state = profile.normalize(skins.normalize(state));
-  state.entries = Object.fromEntries(Object.entries(state.entries).map(([key, entry]) => [key, activities.normalizeEntry(entry)]));
+    next = profile.normalize(skins.normalize(next));
+    next.entries = Object.fromEntries(Object.entries(next.entries).map(([key, entry]) => [key, activities.normalizeEntry(entry)]));
+    return next;
+  }
+  let state;
+  try { state = hydrate(JSON.parse(localStorage.getItem(KEY))); }
+  catch { state = hydrate(null); /* A fresh session also works when storage is unavailable. */ }
   let route = 'home';
   let returnFromPlus = 'home';
   let selectedDate = today;
@@ -625,6 +629,28 @@
     setTimeout(() => URL.revokeObjectURL(url), 0);
     toast('Backup file downloaded');
   }
+  function chooseBackup() {
+    const input = document.createElement('input');
+    input.type = 'file'; input.accept = '.json,application/json';
+    input.addEventListener('change', async () => {
+      const file = input.files[0];
+      if (!file) return;
+      const result = profile.readBackup(await file.text().catch(() => null));
+      if (!result.ok) { toast(result.error); return; }
+      confirmRestore(hydrate(result.data), result.exportedAt);
+    });
+    input.click();
+  }
+  function confirmRestore(next, exportedAt) {
+    openDialog('Restore this backup?');
+    const saved = exportedAt && !Number.isNaN(Date.parse(exportedAt)) ? new Date(exportedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'an unknown date';
+    const count = Object.keys(next.entries).length;
+    paragraph(`${next.petName} · ${count} check-in${count === 1 ? '' : 's'} · backed up ${saved}`);
+    paragraph('This replaces your check-ins, notes, profile, skins and demo membership in this browser. Download a backup first if you want to keep them.', dialog, 'muted');
+    dialog.append(button('Replace my data', () => {
+      state = next; chatHistory = []; save(); closeDialog(); navigate('home'); toast('Backup restored');
+    }, 'primary'), button('Keep my data', closeDialog));
+  }
   function wear(outfit) {
     if (!state.plus && !freeOutfits.includes(outfit)) { navigate('plus'); return; }
     state.outfit = outfit; save(); if (dialog.open) closeDialog(); render(); toast(`${outfit} on! Visit Rongrong to see it.`);
@@ -700,8 +726,8 @@
     paragraph(`Rongrong Plus: ${state.plus ? 'demo membership active' : 'free plan'}`);
     dialog.append(button('Manage Rongrong Plus', () => navigate('plus')));
     paragraph('This demo stores your check-ins and profile in this browser. Rongrong’s replies are preset. No account or payment is connected.', dialog, 'muted');
-    dialog.append(button('Back up my data (.json)', exportData));
-    paragraph('Clearing this browser’s data removes everything. The backup file stays on your device and is not uploaded anywhere.', dialog, 'muted');
+    dialog.append(button('Back up my data (.json)', exportData), button('Restore from backup', chooseBackup));
+    paragraph('Clearing this browser’s data removes everything. Backup files stay on your device and are not uploaded anywhere.', dialog, 'muted');
     dialog.append(button('Reset demo data', () => {
       openDialog('Reset this demo?'); paragraph('This deletes your check-ins, notes, profile changes, purchased skins and demo membership in this browser.');
       dialog.append(button('Delete demo data', () => { state = defaults(); chatHistory = []; save(); closeDialog(); navigate('home'); toast('Demo reset'); }, 'primary'), button('Keep my data', closeDialog));

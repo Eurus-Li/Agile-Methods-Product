@@ -57,3 +57,31 @@ test('stageUp only fires when a threshold is crossed', () => {
   assert.equal(stageUp(200, 215), null);
   assert.equal(stageUp(1000, 1015), null);
 });
+const { readBackup, BACKUP_MAX_CHARS } = globalThis.RongrongProfile;
+test('readBackup accepts an exported backup and round-trips its data', () => {
+  const file = backup({ nickname: 'Emma', petName: 'Mochi', bond: 480 }, '2026-10-06T09:00:00.000Z');
+  const result = readBackup(JSON.stringify(file));
+  assert.deepEqual(result, { ok: true, data: file.data, exportedAt: '2026-10-06T09:00:00.000Z' });
+  assert.equal(readBackup(JSON.stringify({ ...file, exportedAt: 42 })).exportedAt, null);
+});
+test('readBackup rejects files that are not a supported Rongrong backup', () => {
+  const valid = { app: 'rongrong', format: 'rongrong-demo-v1', exportedAt: '2026-10-06T09:00:00.000Z', data: {} };
+  for (const text of [
+    'not json', 'null', '[]', '"rongrong"',
+    JSON.stringify({ ...valid, app: 'other' }),
+    JSON.stringify({ ...valid, format: 'rongrong-demo-v2' }),
+    JSON.stringify({ ...valid, data: null }),
+    JSON.stringify({ ...valid, data: [] }),
+    JSON.stringify({ ...valid, data: 'x' })
+  ]) {
+    const result = readBackup(text);
+    assert.equal(result.ok, false, text);
+    assert.equal(typeof result.error, 'string');
+  }
+  assert.equal(readBackup(null).ok, false);
+  assert.equal(readBackup(' '.repeat(BACKUP_MAX_CHARS + 1)).ok, false);
+});
+test('restored data still goes through profile normalization', () => {
+  const { data } = readBackup(JSON.stringify({ app: 'rongrong', format: 'rongrong-demo-v1', data: { petName: '   ', callMe: 'boss', goals: ['sleep', 'nope', 'sleep'] } }));
+  assert.deepEqual(normalize(data), { petName: 'Rongrong', callMe: 'nickname', goals: ['sleep'] });
+});
