@@ -61,7 +61,7 @@ prototypes/
 
 ## Don'ts
 
-- Don't introduce a backend / network requests (the current decision is fully local; see `docs/decisions.md` #2).
+- Don't introduce a backend or remote storage of user data (data stays local; see `docs/decisions.md` #2). Network requests are allowed only for external AI services such as companion chat, with API keys kept server-side and the app still working offline without them.
 - Don't introduce CocoaPods, TypeScript, or any tool that conflicts with the settled tech stack unless you update `docs/decisions.md` first.
 - Don't add abstractions, configuration or dependencies nobody asked for just to "look more professional".
 - Don't add new features to `prototypes/plus-standalone/`; don't touch the `feature/pip-frontend` branch.
